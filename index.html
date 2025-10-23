@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
+    <!-- Configurações básicas da página -->
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
+    />
     <title>FiloStudy | Portal de Estudos Filogenéticos</title>
     <meta
       name="description"
       content="FiloStudy - Portal educativo para estudo de filos com mapa interativo, cadastro e chaves dicotômicas."
     />
+
+    <!-- Arquivos de estilo -->
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link
@@ -18,8 +24,11 @@
   </head>
 
   <body>
+    <!-- CABEÇALHO E NAVEGAÇÃO -->
     <header>
+      <!-- Barra de navegação principal -->
       <nav class="navbar">
+        <!-- Logotipo da aplicação -->
         <div class="logo">
           <img
             src="assets/tardigrade-icon.png"
@@ -29,7 +38,7 @@
           <span>FiloStudy</span>
         </div>
 
-        <!-- Menu Desktop -->
+        <!-- Menu de navegação para desktop (telas grandes) -->
         <div class="nav-links desktop-nav">
           <a href="#home" class="nav-item">Início</a>
           <a href="#mapa-filos" class="nav-item">Mapa de Filos</a>
@@ -38,7 +47,7 @@
           <a href="#sobre" class="nav-item">Sobre</a>
         </div>
 
-        <!-- Botão Menu Mobile -->
+        <!-- Botão hambúrguer para abrir menu mobile (3 linhas) -->
         <button
           class="mobile-menu-btn"
           onclick="toggleMobileMenu()"
@@ -49,9 +58,10 @@
           <span class="hamburger-line"></span>
         </button>
 
-        <!-- Menu Mobile -->
+        <!-- Menu lateral para dispositivos móveis -->
         <div class="mobile-nav" id="mobile-nav">
           <div class="mobile-nav-content">
+            <!-- Botão X para fechar o menu mobile -->
             <button
               class="mobile-nav-close"
               onclick="toggleMobileMenu()"
@@ -59,6 +69,7 @@
             >
               <i class="fas fa-times"></i>
             </button>
+            <!-- Links de navegação do menu mobile -->
             <nav class="mobile-nav-links">
               <a
                 href="#home"
@@ -106,10 +117,12 @@
       </nav>
     </header>
 
+    <!-- CONTEÚDO PRINCIPAL -->
     <main>
-      <!-- Página Inicial -->
+      <!-- SEÇÃO: Página Inicial (Home) -->
       <section id="home" class="container hero-section">
         <div class="hero-content">
+          <!-- Título principal -->
           <h1>FiloStudy</h1>
           <p class="hero-subtitle">
             Portal Educativo para Estudos Filogenéticos
@@ -119,25 +132,30 @@
             dos filos do reino animal
           </p>
 
+          <!-- Grid de botões do menu principal -->
           <div class="menu-buttons">
+            <!-- Botão: Mapa de Filos -->
             <button class="menu-btn" onclick="showSection('mapa-filos')">
               <i class="fas fa-map"></i>
               <h3>Mapa de Filos</h3>
               <p>Visualize a distribuição geográfica dos diferentes filos</p>
             </button>
 
+            <!-- Botão: Cadastrar Filos -->
             <button class="menu-btn" onclick="showSection('cadastrar')">
               <i class="fas fa-plus-circle"></i>
               <h3>Cadastrar Filos</h3>
               <p>Adicione novos registros de espécimes encontrados</p>
             </button>
 
+            <!-- Botão: Chave Dicotômica -->
             <button class="menu-btn" onclick="showSection('chave-dicotomica')">
               <i class="fas fa-code-branch"></i>
               <h3>Chave Dicotômica</h3>
               <p>Identifique filos através de características distintivas</p>
             </button>
 
+            <!-- Botão: Sobre -->
             <button class="menu-btn" onclick="showSection('sobre')">
               <i class="fas fa-info-circle"></i>
               <h3>Sobre o Projeto</h3>
@@ -147,8 +165,9 @@
         </div>
       </section>
 
-      <!-- Mapa de Filos -->
+      <!-- SEÇÃO: Mapa de Filos (escondida por padrão) -->
       <section id="mapa-filos" class="container section hidden">
+        <!-- Cabeçalho da seção com botão voltar -->
         <div class="section-header">
           <button class="back-btn" onclick="showSection('home')">
             <i class="fas fa-arrow-left"></i> Voltar
@@ -156,21 +175,26 @@
           <h2>Mapa de Filos</h2>
         </div>
 
+        <!-- Container de estatísticas (3 cards) -->
         <div class="stats-container">
+          <!-- Card de estatística: Total de registros -->
           <div class="stat-box">
             <span id="total-registros">0</span>
             <p>Registros</p>
           </div>
+          <!-- Card de estatística: Total de filos -->
           <div class="stat-box">
             <span id="total-filos">0</span>
             <p>Filos</p>
           </div>
+          <!-- Card de estatística: Total de espécies -->
           <div class="stat-box">
             <span id="total-especies">0</span>
             <p>Espécies</p>
           </div>
         </div>
 
+        <!-- Filtro dropdown para selecionar filo específico -->
         <div class="filter-container">
           <select id="filo-filter">
             <option value="">Todos os Filos</option>
@@ -185,11 +209,14 @@
           </select>
         </div>
 
+        <!-- Mapa interativo Leaflet -->
         <div id="map"></div>
 
+        <!-- Seção de tabela de registros -->
         <div class="records-section">
           <h3>Registros Recentes</h3>
           <div class="table-container">
+            <!-- Tabela de registros filogenéticos -->
             <table id="records-table">
               <thead>
                 <tr>
@@ -208,7 +235,7 @@
         </div>
       </section>
 
-      <!-- Cadastrar Filos -->
+      <!-- SEÇÃO: Cadastrar Filos (formulário de registro) -->
       <section id="cadastrar" class="container section hidden">
         <div class="section-header">
           <button class="back-btn" onclick="showSection('home')">
@@ -217,10 +244,13 @@
           <h2>Cadastrar Novo Filo</h2>
         </div>
 
+        <!-- Formulário de cadastro -->
         <form id="form">
+          <!-- Grupo de campos: Classificação Taxonômica -->
           <fieldset>
             <legend>Classificação Taxonômica</legend>
             <div class="form-group">
+              <!-- Campo: Seletor de Filo -->
               <label for="filo">Filo</label>
               <select id="filo" name="filo" required>
                 <option value="">Selecione o Filo</option>
@@ -237,25 +267,32 @@
                 <option value="Outro">Outro</option>
               </select>
 
+              <!-- Campo: Classe -->
               <label for="classe">Classe</label>
               <input type="text" id="classe" name="classe" required />
 
+              <!-- Campo: Ordem (opcional) -->
               <label for="ordem">Ordem (opcional)</label>
               <input type="text" id="ordem" name="ordem" />
 
+              <!-- Campo: Família (opcional) -->
               <label for="familia">Família (opcional)</label>
               <input type="text" id="familia" name="familia" />
 
+              <!-- Campo: Gênero -->
               <label for="genero">Gênero</label>
               <input type="text" id="genero" name="genero" required />
 
+              <!-- Campo: Espécie -->
               <label for="especie">Espécie</label>
               <input type="text" id="especie" name="especie" required />
             </div>
           </fieldset>
 
+          <!-- Grupo de campos: Localização -->
           <fieldset>
             <legend>Informações de Localização</legend>
+            <!-- Container de coordenadas (latitude, longitude e botão GPS) -->
             <div class="form-group coordinates-container">
               <label for="latitude" class="sr-only">Latitude</label>
               <input
@@ -275,6 +312,7 @@
                 step="any"
                 required
               />
+              <!-- Botão para obter localização GPS atual -->
               <button
                 type="button"
                 id="getLocation"
@@ -287,9 +325,11 @@
             </div>
 
             <div class="form-group">
+              <!-- Campo: Nome da Localidade -->
               <label for="localidade">Nome da localidade</label>
               <input type="text" id="localidade" name="localidade" required />
 
+              <!-- Campo: Habitat -->
               <label for="habitat">Habitat</label>
               <select id="habitat" name="habitat" required>
                 <option value="">Selecione o Habitat</option>
@@ -303,9 +343,11 @@
             </div>
           </fieldset>
 
+          <!-- Grupo de campos: Observação -->
           <fieldset>
             <legend>Dados da Observação</legend>
             <div class="form-group">
+              <!-- Campo: Quantidade -->
               <label for="quantidade">Quantidade observada</label>
               <input
                 type="number"
@@ -315,20 +357,25 @@
                 required
               />
 
+              <!-- Campo: Tamanho -->
               <label for="tamanho">Tamanho aproximado (mm)</label>
               <input type="number" id="tamanho" name="tamanho" step="0.1" />
 
+              <!-- Campo: Nome do Pesquisador -->
               <label for="pesquisador">Nome do pesquisador/observador</label>
               <input type="text" id="pesquisador" name="pesquisador" required />
 
+              <!-- Campo: Instituição -->
               <label for="instituicao">Instituição (opcional)</label>
               <input type="text" id="instituicao" name="instituicao" />
             </div>
           </fieldset>
 
+          <!-- Grupo de campos: Características e Observações -->
           <fieldset>
             <legend>Características e Observações</legend>
             <div class="form-group">
+              <!-- Campo: Características (textarea) -->
               <label for="caracteristicas"
                 >Principais características observadas</label
               >
@@ -339,6 +386,7 @@
                 required
               ></textarea>
 
+              <!-- Campo: Observações (textarea) -->
               <label for="observacoes">Observações adicionais</label>
               <textarea
                 id="observacoes"
@@ -348,6 +396,7 @@
             </div>
           </fieldset>
 
+          <!-- Upload de fotos -->
           <div class="form-group file-upload-container">
             <label for="foto" class="file-label">
               <i class="fas fa-camera"></i>
@@ -361,14 +410,18 @@
               multiple
               hidden
             />
+            <!-- Container para preview de imagens -->
             <div class="image-preview-container" id="image-preview"></div>
           </div>
 
+          <!-- Botões de ação do formulário -->
           <div class="form-actions">
+            <!-- Botão: Salvar -->
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-save"></i>
               Salvar Registro
             </button>
+            <!-- Botão: Limpar -->
             <button type="reset" class="btn btn-secondary">
               <i class="fas fa-eraser"></i>
               Limpar Formulário
@@ -377,7 +430,7 @@
         </form>
       </section>
 
-      <!-- Chave Dicotômica -->
+      <!-- SEÇÃO: Chave Dicotômica (identificação interativa) -->
       <section id="chave-dicotomica" class="container section hidden">
         <div class="section-header">
           <button class="back-btn" onclick="showSection('home')">
@@ -386,7 +439,9 @@
           <h2>Chave Dicotômica dos Filos</h2>
         </div>
 
+        <!-- Container da chave dicotômica -->
         <div class="dichotomous-key">
+          <!-- Introdução explicativa -->
           <div class="key-intro">
             <p>
               Use esta chave dicotômica para identificar o filo do organismo que
@@ -394,9 +449,11 @@
             </p>
           </div>
 
+          <!-- Passo atual da chave -->
           <div id="key-step" class="key-step">
             <h3 id="step-title">Passo 1</h3>
             <div id="step-content">
+              <!-- Pergunta atual -->
               <div class="key-question">
                 <p>
                   <strong
@@ -405,6 +462,7 @@
                   >
                 </p>
               </div>
+              <!-- Opções de resposta -->
               <div class="key-options">
                 <button class="key-option" onclick="nextStep('tecidos-sim')">
                   <i class="fas fa-check"></i>
@@ -418,15 +476,18 @@
             </div>
           </div>
 
+          <!-- Resultado final (escondido até identificação completa) -->
           <div class="key-result" id="key-result" style="display: none">
             <h3>Resultado da Identificação</h3>
             <div id="result-content"></div>
+            <!-- Botão para recomeçar -->
             <button class="btn btn-primary" onclick="resetKey()">
               <i class="fas fa-redo"></i>
               Recomeçar Identificação
             </button>
           </div>
 
+          <!-- Histórico de escolhas do usuário -->
           <div class="key-history">
             <h4>Histórico de Escolhas:</h4>
             <ul id="choice-history"></ul>
@@ -434,7 +495,7 @@
         </div>
       </section>
 
-      <!-- Sobre -->
+      <!-- SEÇÃO: Sobre o Projeto -->
       <section id="sobre" class="container section hidden">
         <div class="section-header">
           <button class="back-btn" onclick="showSection('home')">
@@ -443,7 +504,9 @@
           <h2>Sobre o FiloStudy</h2>
         </div>
 
+        <!-- Conteúdo da página Sobre -->
         <div class="about-content">
+          <!-- Seção: Equipe -->
           <div class="about-section">
             <h3><i class="fas fa-users"></i> Equipe do Projeto</h3>
             <div class="team-grid">
@@ -474,6 +537,7 @@
             </div>
           </div>
 
+          <!-- Seção: Objetivos -->
           <div class="about-section">
             <h3><i class="fas fa-bullseye"></i> Objetivos do Projeto</h3>
             <ul>
@@ -493,6 +557,7 @@
             </ul>
           </div>
 
+          <!-- Seção: Bibliografia -->
           <div class="about-section">
             <h3><i class="fas fa-book"></i> Bibliografia e Fontes</h3>
             <div class="references">
@@ -530,6 +595,7 @@
             </div>
           </div>
 
+          <!-- Seção: Tecnologias -->
           <div class="about-section">
             <h3><i class="fas fa-code"></i> Tecnologias Utilizadas</h3>
             <div class="tech-grid">
@@ -552,6 +618,7 @@
             </div>
           </div>
 
+          <!-- Seção: Contato -->
           <div class="about-section">
             <h3><i class="fas fa-envelope"></i> Contato</h3>
             <p>
@@ -567,15 +634,19 @@
       </section>
     </main>
 
+    <!-- RODAPÉ -->
     <footer>
       <p>© 2025 FiloStudy - Portal Educativo de Estudos Filogenéticos</p>
     </footer>
 
+    <!-- Container de notificações (toast) -->
     <div id="notification"></div>
 
+    <!-- SCRIPTS EXTERNOS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/pt-br.min.js"></script>
-    <script src="script-fixed.js" defer></script>
+    <!-- Script principal da aplicação -->
+    <script src="script.js" defer></script>
   </body>
 </html>
