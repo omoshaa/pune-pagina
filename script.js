@@ -1,5 +1,5 @@
 // ===================================
-// FILOSTUDY - Portal de Estudos Filogenéticos
+// TARDISTUDY - Portal de Estudos de Tardigrada
 // Script principal da aplicação
 // ===================================
 
@@ -66,7 +66,7 @@ window.addEventListener("resize", () => {
 
 /**
  * Função: Mostra uma seção e esconde todas as outras
- * @param {string} sectionId - ID da seção a ser exibida (ex: 'home', 'mapa-filos')
+ * @param {string} sectionId - ID da seção a ser exibida (ex: 'home', 'mapa-tardigrada')
  */
 function showSection(sectionId) {
   // Fechar menu mobile se estiver aberto
@@ -87,11 +87,11 @@ function showSection(sectionId) {
 
     // Inicializar componentes específicos da seção após um delay
     setTimeout(() => {
-      if (sectionId === "mapa-filos" && !map) {
+      if (sectionId === "mapa-tardigrada" && !map) {
         // Se for seção do mapa E mapa ainda não foi criado
         initMap(); // Inicializa o mapa Leaflet
         renderAll(); // Renderiza marcadores e estatísticas
-      } else if (sectionId === "mapa-filos" && map) {
+      } else if (sectionId === "mapa-tardigrada" && map) {
         // Se mapa já existe, apenas redimensiona
         map.invalidateSize(); // Fix para mapa aparecer corretamente
       }
@@ -116,50 +116,77 @@ function showSection(sectionId) {
 
 // Carrega registros do LocalStorage OU usa dados de exemplo
 let filoRecords = JSON.parse(localStorage.getItem("filoRecords")) || [
-  // Registro de exemplo 1: Tardígrado
+  // Registro de exemplo 1: Tardígrado Eutardigrada
   {
     id: "1a2b3c", // ID único de 6 caracteres
     latitude: -23.5505, // Coordenada GPS
     longitude: -46.6333,
-    filo: "Tardigrada",
     classe: "Eutardigrada",
-    ordem: "Ramazzottiida",
-    familia: "Ramazzottiidae",
-    genero: "Ramazzottius",
-    especie: "oberhaeuseri",
-    quantidade: 15, // Número de indivíduos observados
-    tamanho: 0.3, // Tamanho em mm
+    ordem: "Parachela",
+    superfamilia: "Macrobiotoidea",
+    familia: "Macrobiotidae",
+    genero: "Macrobiotus",
+    especie: "harmsworthi",
+    quantidade: 12, // Número de indivíduos observados
+    tamanho: 350, // Tamanho em micrometros
     localidade: "Parque Ibirapuera, SP",
-    habitat: "Terrestre",
+    habitat: "Terrestre - Musgo",
     pesquisador: "Ana Silva",
     instituicao: "USP",
     caracteristicas:
-      "Tardígrado com cutícula lisa, garras duplas bem desenvolvidas",
-    observacoes: "Encontrado em musgo de árvore. Resistente à dessecação.",
-    fotos: [], // Array de URLs de fotos (não implementado)
-    data: "2025-09-22T19:00:00Z", // Data no formato ISO
+      "Dois macroplacóides, garras duplas assimétricas, cutícula lisa",
+    observacoes:
+      "Encontrado em musgo de árvore. Estado ativo e tun observados.",
+    fotos: [],
+    data: "2025-09-22T19:00:00Z",
   },
-  // Registro de exemplo 2: Borboleta
+  // Registro de exemplo 2: Tardígrado Heterotardigrada
   {
     id: "4d5e6f",
     latitude: -15.7801,
     longitude: -47.9292,
-    filo: "Arthropoda",
-    classe: "Insecta",
-    ordem: "Lepidoptera",
-    familia: "Nymphalidae",
-    genero: "Morpho",
-    especie: "menelaus",
-    quantidade: 3,
-    tamanho: 120, // 120mm de envergadura
+    classe: "Heterotardigrada",
+    ordem: "Echiniscoidea",
+    superfamilia: "",
+    familia: "Echiniscidae",
+    genero: "Echiniscus",
+    especie: "testudo",
+    quantidade: 8,
+    tamanho: 180, // Tamanho em micrometros
     localidade: "Parque Nacional de Brasília, DF",
-    habitat: "Terrestre",
+    habitat: "Terrestre - Líquen",
     pesquisador: "João Costa",
     instituicao: "UnB",
-    caracteristicas: "Borboleta com asas azuis iridescentes, dimorfismo sexual",
-    observacoes: "Observado durante voo nupcial no período matutino.",
+    caracteristicas:
+      "Cirros laterais A presentes, placas dorsais bem desenvolvidas, quatro garras por perna",
+    observacoes:
+      "Encontrado em líquen sobre rocha. Resistência extrema observada.",
     fotos: [],
     data: "2025-09-23T19:00:00Z",
+  },
+  // Registro de exemplo 3: Milnesium (Apochela)
+  {
+    id: "7g8h9i",
+    latitude: -22.9068,
+    longitude: -43.1729,
+    classe: "Eutardigrada",
+    ordem: "Apochela",
+    superfamilia: "",
+    familia: "Milnesiidae",
+    genero: "Milnesium",
+    especie: "tardigradum",
+    quantidade: 5,
+    tamanho: 1200, // Tamanho em micrometros (maior espécie)
+    localidade: "Tijuca, Rio de Janeiro, RJ",
+    habitat: "Terrestre - Folhiço",
+    pesquisador: "Maria Santos",
+    instituicao: "UFRJ",
+    caracteristicas:
+      "Papilas cefálicas presentes, ganchos com ramo secundário não conectado, ovos lisos",
+    observacoes:
+      "Maior tardígrado observado. Comportamento predatório em outros tardígrados.",
+    fotos: [],
+    data: "2025-09-24T19:00:00Z",
   },
 ];
 
@@ -255,9 +282,11 @@ function renderMarkers() {
  * @returns {Array} Array de registros filtrados ou todos os registros
  */
 function getFilteredRecords() {
-  const filter = document.getElementById("filo-filter")?.value; // Valor do dropdown
+  const filter = document.getElementById("grupo-filter")?.value; // Valor do dropdown
   return filter
-    ? filoRecords.filter((record) => record.filo === filter) // Filtra por filo
+    ? filoRecords.filter(
+        (record) => record.classe === filter || record.ordem === filter
+      ) // Filtra por grupo
     : filoRecords; // Ou retorna todos
 }
 
@@ -267,13 +296,14 @@ function getFilteredRecords() {
 
 /**
  * Função: Atualiza os 3 cards de estatísticas
- * Conta: total de registros, filos únicos, espécies únicas
+ * Conta: total de registros, grupos únicos, espécies únicas
  */
 function updateStats() {
   const totalRegistros = filoRecords.length; // Conta registros
 
-  // Conta filos únicos usando Set (remove duplicatas)
-  const totalFilos = [...new Set(filoRecords.map((r) => r.filo))].length;
+  // Conta grupos únicos de Tardigrada usando Set (remove duplicatas)
+  const totalGrupos = [...new Set(filoRecords.map((r) => r.classe || r.ordem))]
+    .length;
 
   // Conta espécies únicas (genero + especie)
   const totalEspecies = [
@@ -282,7 +312,7 @@ function updateStats() {
 
   // Atualiza o HTML dos contadores
   document.getElementById("total-registros").textContent = totalRegistros;
-  document.getElementById("total-filos").textContent = totalFilos;
+  document.getElementById("total-grupos").textContent = totalGrupos;
   document.getElementById("total-especies").textContent = totalEspecies;
 }
 
@@ -373,59 +403,194 @@ function getLocation() {
 // Sistema de identificação interativa de filos
 // ============================================================
 
-// Objeto que define todos os passos da chave dicotômica
+// Objeto que define todos os passos da chave dicotômica de Tardigrada
 const keySteps = {
-  // Passo inicial
+  // Passo inicial - Cirros laterais A
   1: {
     title: "Passo 1",
-    question: "O organismo possui células organizadas em tecidos verdadeiros?",
+    question: "Cirros laterais A presentes (seta / cA)?",
     options: [
-      { text: "Sim - Possui tecidos organizados", next: "tecidos-sim" },
-      { text: "Não - Células não organizadas em tecidos", next: "tecidos-nao" },
+      { text: "Sim - Cirros laterais A presentes", next: "heterotardigrada" },
+      { text: "Não - Cirros laterais A ausentes", next: "eutardigrada" },
     ],
   },
-  // Resultado: sem tecidos = Porifera
-  "tecidos-nao": {
-    title: "Resultado",
-    result: "Porifera",
-    description: "Esponjas - organismos aquáticos sem tecidos verdadeiros",
-  },
-  // Com tecidos: pergunta sobre simetria
-  "tecidos-sim": {
-    title: "Passo 2",
-    question: "O organismo apresenta simetria radial ou bilateral?",
+
+  // Ramo Heterotardigrada
+  heterotardigrada: {
+    title: "Heterotardigrada - Passo 2",
+    question: "Cirro mediano geralmente presente (cirro no centro da cabeça)?",
     options: [
-      { text: "Simetria radial", next: "radial" },
-      { text: "Simetria bilateral", next: "bilateral" },
+      { text: "Sim - Cirro mediano presente", next: "arthrotardigrada" },
+      { text: "Não - Cirro mediano ausente", next: "echiniscoidea_inicio" },
     ],
   },
-  // Resultado: simetria radial = Cnidaria
-  radial: {
+
+  // Resultado: Arthrotardigrada
+  arthrotardigrada: {
     title: "Resultado",
-    result: "Cnidaria",
+    result: "Arthrotardigrada (Ordem)",
     description:
-      "Águas-vivas, corais, anêmonas - organismos com simetria radial",
+      "Ex.: Styraconyx hallasi - Tardigrados com cirro mediano presente",
   },
-  // Simetria bilateral: pergunta sobre esqueleto
-  bilateral: {
-    title: "Passo 3",
-    question: "O organismo possui esqueleto interno?",
+
+  // Echiniscoidea - início
+  echiniscoidea_inicio: {
+    title: "Echiniscoidea - Passo 3",
+    question:
+      "Quatro garras por perna em adultos; com placas dorsais-laterais?",
     options: [
-      { text: "Sim - Possui esqueleto interno", next: "esqueleto-sim" },
-      { text: "Não - Sem esqueleto interno", next: "esqueleto-nao" },
+      {
+        text: "Sim - Quatro garras e placas dorsais-laterais",
+        next: "echiniscidae",
+      },
+      { text: "Não - Características diferentes", next: "carphaniidae" },
     ],
   },
-  // Resultado: com esqueleto = Chordata
-  "esqueleto-sim": {
+
+  // Resultado: Família Echiniscidae
+  echiniscidae: {
     title: "Resultado",
-    result: "Chordata",
-    description: "Vertebrados - peixes, anfíbios, répteis, aves, mamíferos",
+    result: "Família Echiniscidae",
+    description:
+      "Tardigrados com quatro garras por perna e placas dorsais-laterais",
   },
-  // Resultado: sem esqueleto = Arthropoda
-  "esqueleto-nao": {
+
+  // Resultado: Família Carphaniidae
+  carphaniidae: {
     title: "Resultado",
-    result: "Arthropoda",
-    description: "Artrópodes - insetos, crustáceos, aracnídeos",
+    result: "Família Carphaniidae",
+    description:
+      "Um gênero: Carphania - características distintas de Echiniscidae",
+  },
+
+  // Ramo Eutardigrada
+  eutardigrada: {
+    title: "Eutardigrada - Passo 2",
+    question:
+      "Cabeça com papilas cefálicas (incluindo duas papilas laterais) e ganchos com ramo secundário não conectado ao primário (ovos lisos dentro do exúvio)?",
+    options: [
+      {
+        text: "Sim - Papilas cefálicas e ganchos com ramo secundário desconectado",
+        next: "apochela",
+      },
+      { text: "Não - Características diferentes", next: "parachela_inicio" },
+    ],
+  },
+
+  // Resultado: Apochela
+  apochela: {
+    title: "Resultado",
+    result: "Apochela",
+    description:
+      "Ex.: Milnesium - Tardigrados com papilas cefálicas e ganchos específicos",
+  },
+
+  // Parachela - início
+  parachela_inicio: {
+    title: "Parachela - Passo 3",
+    question:
+      "Duas garras duplas em cada perna assimétricas (sequência 2-1-2-1) e ovos postos dentro do exúvio OU dois ganchos duplos por perna?",
+    options: [
+      {
+        text: "Sim - Garras duplas assimétricas ou ganchos duplos",
+        next: "parachela_superfamilias",
+      },
+      {
+        text: "Não - Garras simétricas e tubo bucal com lâmina ventral",
+        next: "macrobiotoidea",
+      },
+    ],
+  },
+
+  // Macrobiotoidea
+  macrobiotoidea: {
+    title: "Macrobiotoidea - Passo 4",
+    question: "Macroplacóides: três macroplacóides presentes?",
+    options: [
+      { text: "Sim - Três macroplacóides", next: "macrobiotidae_tres" },
+      { text: "Não - Dois macroplacóides", next: "macrobiotus" },
+    ],
+  },
+
+  // Resultado: Macrobiotidae (três macroplacóides)
+  macrobiotidae_tres: {
+    title: "Resultado",
+    result: "Macrobiotidae - Três macroplacóides",
+    description:
+      "Verificar Mesobiotus / Paramacrobiotus etc. - com três macroplacóides",
+  },
+
+  // Resultado: Macrobiotus
+  macrobiotus: {
+    title: "Resultado",
+    result: "Macrobiotus",
+    description: "Dois macroplacóides; pode haver microplacóide",
+  },
+
+  // Parachela - superfamílias
+  parachela_superfamilias: {
+    title: "Parachela - Passo 4",
+    question:
+      "Garras internas e externas semelhantes em forma (ganchos com ângulo reto) ou de formas diferentes (garras externas tipo Hypsibius com arco)?",
+    options: [
+      {
+        text: "Sim - Garras semelhantes (ganchos com ângulo reto)",
+        next: "isohypsibioidea",
+      },
+      {
+        text: "Não - Garras diferentes (externas tipo Hypsibius)",
+        next: "hypsibioidea",
+      },
+    ],
+  },
+
+  // Isohypsibioidea
+  isohypsibioidea: {
+    title: "Isohypsibioidea - Passo 5",
+    question: "Lâmina ventral no tubo bucal presente?",
+    options: [
+      { text: "Sim - Lâmina ventral presente", next: "doryphoribius" },
+      { text: "Não - Lâmina ventral ausente", next: "isohypsibiidae_lamelas" },
+    ],
+  },
+
+  // Resultado: Doryphoribius
+  doryphoribius: {
+    title: "Resultado",
+    result: "Doryphoribius",
+    description: "Limnoterrestre - com lâmina ventral no tubo bucal",
+  },
+
+  // Isohypsibiidae - lamelas
+  isohypsibiidae_lamelas: {
+    title: "Isohypsibiidae - Passo 6",
+    question:
+      "Lamelas peribuccais ao redor da abertura bucal presentes (cerca de 30) ou ausentes?",
+    options: [
+      { text: "Sim - Lamelas peribuccais presentes", next: "pseudobiotus" },
+      { text: "Não - Lamelas peribuccais ausentes", next: "isohypsibius" },
+    ],
+  },
+
+  // Resultado: Pseudobiotus
+  pseudobiotus: {
+    title: "Resultado",
+    result: "Pseudobiotus",
+    description: "Muitas lamelas peribuccais (cerca de 30)",
+  },
+
+  // Resultado: Isohypsibius
+  isohypsibius: {
+    title: "Resultado",
+    result: "Isohypsibius",
+    description: "Lamelas peribuccais ausentes",
+  },
+
+  // Resultado: Hypsibioidea
+  hypsibioidea: {
+    title: "Resultado",
+    result: "Hypsibioidea → Família Hypsibiidae",
+    description: "Garras externas tipo Hypsibius com arco característico",
   },
 };
 
@@ -437,10 +602,21 @@ function nextStep(stepId) {
   const step = keySteps[stepId]; // Busca dados do passo
   if (!step) return; // Proteção
 
-  // Adiciona escolha atual ao histórico
+  // Adiciona escolha atual ao histórico (pergunta + resposta)
   const currentStepData = keySteps[currentStep];
-  if (currentStepData) {
-    choiceHistory.push(currentStepData.question);
+  if (currentStepData && currentStepData.question) {
+    // Encontra qual opção foi escolhida
+    const chosenOption = currentStepData.options?.find(
+      (opt) => opt.next === stepId
+    );
+    const response = chosenOption
+      ? chosenOption.text
+      : "Resposta não identificada";
+
+    choiceHistory.push({
+      question: currentStepData.question,
+      answer: response,
+    });
   }
 
   // Verifica se é um resultado final ou próximo passo
@@ -512,6 +688,17 @@ function resetKey() {
   choiceHistory = []; // Limpa histórico
   document.getElementById("key-step").style.display = "block";
   document.getElementById("key-result").style.display = "none";
+
+  // Oculta exibição do caminho
+  const pathDisplay = document.getElementById("path-display");
+  const pathBtn = document.getElementById("path-btn");
+  if (pathDisplay) {
+    pathDisplay.style.display = "none";
+  }
+  if (pathBtn) {
+    pathBtn.innerHTML = '<i class="fas fa-route"></i> Mostrar Caminho';
+  }
+
   showStep(keySteps[1], 1); // Mostra primeiro passo
 }
 
@@ -521,7 +708,15 @@ function resetKey() {
 function updateChoiceHistory() {
   const historyList = document.getElementById("choice-history");
   historyList.innerHTML = choiceHistory
-    .map((choice) => `<li>${choice}</li>`)
+    .map((entry, index) => {
+      if (typeof entry === "object") {
+        return `<li><strong>Passo ${index + 1}:</strong> ${
+          entry.question
+        }<br><em>Resposta: ${entry.answer}</em></li>`;
+      } else {
+        return `<li>${entry}</li>`;
+      }
+    })
     .join("");
 }
 
@@ -545,8 +740,9 @@ function renderRecordsTable() {
     .map(
       (record) => `
     <tr>
-      <td>${record.filo}</td>
-      <td>${record.classe}</td>
+      <td>${record.classe || record.ordem}</td>
+      <td>${record.familia}</td>
+      <td>${record.genero}</td>
       <td><em>${record.genero} ${record.especie}</em></td>
       <td>${record.localidade}</td>
       <td>${record.pesquisador}</td>
@@ -663,10 +859,10 @@ function init() {
     getLocationBtn.addEventListener("click", getLocation);
   }
 
-  // ===== EVENT LISTENER PARA FILTRO DE FILOS =====
-  const filoFilter = document.getElementById("filo-filter");
-  if (filoFilter) {
-    filoFilter.addEventListener("change", renderAll); // Re-renderiza ao mudar filtro
+  // ===== EVENT LISTENER PARA FILTRO DE GRUPOS =====
+  const grupoFilter = document.getElementById("grupo-filter");
+  if (grupoFilter) {
+    grupoFilter.addEventListener("change", renderAll); // Re-renderiza ao mudar filtro
   }
 
   // ===== EVENT LISTENER PARA BOTÕES DE DELETE =====
@@ -683,8 +879,8 @@ function init() {
   setTimeout(() => {
     // Só inicializa mapa se estivermos na seção do mapa
     if (
-      document.getElementById("mapa-filos") &&
-      !document.getElementById("mapa-filos").classList.contains("hidden")
+      document.getElementById("mapa-tardigrada") &&
+      !document.getElementById("mapa-tardigrada").classList.contains("hidden")
     ) {
       initMap();
     }
@@ -704,4 +900,49 @@ if (document.readyState === "loading") {
 } else {
   // Já está pronto: executa imediatamente
   init();
+}
+
+/**
+ * Função: Mostra o caminho percorrido até o momento
+ */
+function showPath() {
+  const pathDisplay = document.getElementById("path-display");
+  const pathSteps = document.getElementById("path-steps");
+  const pathBtn = document.getElementById("path-btn");
+
+  if (pathDisplay.style.display === "none" || !pathDisplay.style.display) {
+    // Mostrar caminho
+    if (choiceHistory.length === 0) {
+      pathSteps.innerHTML =
+        '<li style="text-align: center; font-style: italic;">Nenhuma escolha feita ainda.</li>';
+    } else {
+      pathSteps.innerHTML = choiceHistory
+        .map((entry, index) => {
+          if (typeof entry === "object") {
+            return `<li><strong>${entry.question}</strong><br><em>→ ${entry.answer}</em></li>`;
+          } else {
+            return `<li><strong>Pergunta ${index + 1}:</strong> ${entry}</li>`;
+          }
+        })
+        .join("");
+    }
+
+    pathDisplay.style.display = "block";
+    pathBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Ocultar Caminho';
+  } else {
+    // Ocultar caminho
+    pathDisplay.style.display = "none";
+    pathBtn.innerHTML = '<i class="fas fa-route"></i> Mostrar Caminho';
+  }
+}
+
+/**
+ * Função: Escape HTML para prevenir XSS
+ * @param {string} text - Texto para escapar
+ * @returns {string} - Texto escapado
+ */
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
 }

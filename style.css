@@ -1840,166 +1840,247 @@ html {
   margin-bottom: 20px;
 }
 
+/* Estilos específicos para a chave dicotômica de Tardigrada */
+.key-intro {
+  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+  padding: 20px;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+  border-left: 4px solid var(--primary);
+}
+
+.key-intro p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.key-step {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+#step-title {
+  color: var(--primary-dark);
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#step-title::before {
+  content: "🔬";
+  font-size: 1.2em;
+}
+
+.key-question strong {
+  color: var(--primary-dark);
+  font-size: 1.1rem;
+}
+
+/* Melhorias para botões da chave */
+.key-option {
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+  border: 2px solid transparent;
+  padding: 18px 24px;
+  border-radius: var(--radius-small);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  font-size: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.key-option:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateX(8px);
+  border-color: var(--primary-dark);
+  box-shadow: var(--shadow-medium);
+}
+
+.key-option:active {
+  transform: translateX(4px);
+}
+
+.key-option i {
+  margin-right: 12px;
+  font-size: 1.1em;
+}
+
+/* Resultados específicos para Tardigrada */
+.result-card {
+  background: linear-gradient(135deg, var(--bg-secondary), var(--mint));
+  padding: 24px;
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  border: 2px solid var(--accent);
+  position: relative;
+}
+
+.result-card::before {
+  content: "🦄"; /* Ícone representando microorganismo */
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  font-size: 2rem;
+  opacity: 0.3;
+}
+
 .result-card h4 {
   color: var(--primary-dark);
   margin-bottom: 12px;
+  font-size: 1.4rem;
+  font-weight: 700;
 }
 
-/* Estilos para histórico de escolhas */
-.key-history ul {
-  list-style: none;
-  padding: 0;
+.result-card p {
+  color: var(--text-primary);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Histórico melhorado */
+.key-history {
+  background: var(--bg-secondary);
+  padding: 20px;
+  border-radius: var(--radius);
+  margin-top: 24px;
+}
+
+.key-history h4 {
+  color: var(--primary-dark);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.key-history h4::before {
+  content: "📋";
+  font-size: 1.1em;
 }
 
 .key-history li {
   background: var(--bg-card);
-  padding: 8px 16px;
-  margin-bottom: 4px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
   border-radius: var(--radius-small);
   border-left: 4px solid var(--primary);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
 }
 
-/* Estilos para formulários melhorados */
-select {
-  background: var(--bg-card);
-  border: var(--border-light);
-  padding: 12px;
-  border-radius: var(--radius-small);
-  color: var(--text-primary);
-  font-size: 1rem;
-  width: 100%;
-}
-
-select:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(129, 199, 132, 0.2);
-}
-
-/* Filtro de filos */
-.filter-container {
-  margin-bottom: 24px;
-  text-align: center;
-}
-
-.filter-container select {
-  max-width: 300px;
-}
-
-/* Estilos para tabelas */
-.table-container {
-  overflow-x: auto;
-  background: var(--bg-card);
-  border-radius: var(--radius);
+.key-history li:hover {
+  transform: translateX(4px);
   box-shadow: var(--shadow-soft);
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid rgba(129, 199, 132, 0.1);
-}
-
-th {
-  background: var(--bg-secondary);
-  font-weight: 600;
-  color: var(--primary-dark);
-}
-
-tr:hover {
-  background: rgba(129, 199, 132, 0.05);
-}
-
-/* Botões pequenos para ações */
-.btn-sm {
-  padding: 6px 12px;
-  font-size: 0.85rem;
-}
-
-.btn-danger {
-  background: #f44336;
+/* Controles da chave */
+.dichotomous-key .btn {
+  background: var(--primary);
   color: white;
-}
-
-.btn-danger:hover {
-  background: #d32f2f;
-}
-
-/* Upload de arquivo */
-.file-upload-container {
-  margin-top: 20px;
-}
-
-.file-label {
+  border: none;
+  padding: 12px 24px;
+  border-radius: var(--radius-small);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: var(--bg-card);
-  padding: 12px 20px;
-  border-radius: var(--radius-small);
-  cursor: pointer;
-  border: 2px dashed var(--primary-light);
-  transition: all 0.3s ease;
 }
 
-.file-label:hover {
-  background: var(--primary-light);
-  color: white;
+.dichotomous-key .btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
 }
 
-.image-preview-container {
-  margin-top: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-/* Seção sobre */
-.about-section {
-  background: var(--bg-card);
-  padding: 32px;
-  border-radius: var(--radius);
-  margin-bottom: 32px;
-  box-shadow: var(--shadow-soft);
-}
-
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
+/* Controles de navegação da chave */
+.key-controls {
+  text-align: center;
   margin-top: 20px;
 }
 
-.team-member {
-  background: var(--bg-secondary);
-  padding: 20px;
-  border-radius: var(--radius-small);
-}
-
-.tech-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
-}
-
-.tech-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
+.key-navigation {
+  text-align: center;
+  margin-top: 16px;
   padding: 16px;
   background: var(--bg-secondary);
   border-radius: var(--radius-small);
 }
 
-.tech-item i {
-  font-size: 2rem;
-  color: var(--primary);
+.btn-secondary {
+  background: var(--text-secondary);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: var(--text-primary);
+}
+
+/* Exibição do caminho */
+.path-display {
+  background: var(--bg-secondary);
+  padding: 20px;
+  border-radius: var(--radius);
+  margin-top: 16px;
+  border-left: 4px solid var(--accent);
+  display: none;
+}
+
+.path-display h4 {
+  color: var(--primary-dark);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.path-display h4::before {
+  content: "🗺️";
+  font-size: 1.1em;
+}
+
+.path-steps {
+  list-style: none;
+  padding: 0;
+  counter-reset: step-counter;
+}
+
+.path-steps li {
+  counter-increment: step-counter;
+  background: var(--bg-card);
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  border-radius: var(--radius-small);
+  position: relative;
+  padding-left: 50px;
+}
+
+.path-steps li::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--primary);
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
 }

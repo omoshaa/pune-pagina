@@ -7,10 +7,10 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
     />
-    <title>FiloStudy | Portal de Estudos Filogenéticos</title>
+    <title>TardiStudy | Portal de Estudos de Tardigrada</title>
     <meta
       name="description"
-      content="FiloStudy - Portal educativo para estudo de filos com mapa interativo, cadastro e chaves dicotômicas."
+      content="TardiStudy - Portal educativo especializado no estudo de Tardigrada com mapa interativo, cadastro e chaves dicotômicas."
     />
 
     <!-- Arquivos de estilo -->
@@ -32,16 +32,16 @@
         <div class="logo">
           <img
             src="assets/tardigrade-icon.png"
-            alt="Logotipo do FiloStudy"
+            alt="Logotipo do TardiStudy"
             class="logo-img"
           />
-          <span>FiloStudy</span>
+          <span>TardiStudy</span>
         </div>
 
         <!-- Menu de navegação para desktop (telas grandes) -->
         <div class="nav-links desktop-nav">
           <a href="#home" class="nav-item">Início</a>
-          <a href="#mapa-filos" class="nav-item">Mapa de Filos</a>
+          <a href="#mapa-tardigrada" class="nav-item">Mapa de Tardigrada</a>
           <a href="#cadastrar" class="nav-item">Cadastrar</a>
           <a href="#chave-dicotomica" class="nav-item">Chave Dicotômica</a>
           <a href="#sobre" class="nav-item">Sobre</a>
@@ -80,12 +80,12 @@
                 <span>Início</span>
               </a>
               <a
-                href="#mapa-filos"
+                href="#mapa-tardigrada"
                 class="mobile-nav-item"
                 onclick="toggleMobileMenu()"
               >
                 <i class="fas fa-map"></i>
-                <span>Mapa de Filos</span>
+                <span>Mapa de Tardigrada</span>
               </a>
               <a
                 href="#cadastrar"
@@ -123,28 +123,28 @@
       <section id="home" class="container hero-section">
         <div class="hero-content">
           <!-- Título principal -->
-          <h1>FiloStudy</h1>
+          <h1>TardiStudy</h1>
           <p class="hero-subtitle">
-            Portal Educativo para Estudos Filogenéticos
+            Portal Educativo Especializado em Tardigrada
           </p>
           <p class="hero-description">
-            Explore, aprenda e contribua para o conhecimento sobre a diversidade
-            dos filos do reino animal
+            Explore, aprenda e contribua para o conhecimento sobre os
+            fascinantes tardígrados - os organismos mais resistentes do planeta
           </p>
 
           <!-- Grid de botões do menu principal -->
           <div class="menu-buttons">
-            <!-- Botão: Mapa de Filos -->
-            <button class="menu-btn" onclick="showSection('mapa-filos')">
+            <!-- Botão: Mapa de Tardigrada -->
+            <button class="menu-btn" onclick="showSection('mapa-tardigrada')">
               <i class="fas fa-map"></i>
-              <h3>Mapa de Filos</h3>
-              <p>Visualize a distribuição geográfica dos diferentes filos</p>
+              <h3>Mapa de Tardigrada</h3>
+              <p>Visualize a distribuição geográfica dos tardígrados</p>
             </button>
 
-            <!-- Botão: Cadastrar Filos -->
+            <!-- Botão: Cadastrar Tardígrados -->
             <button class="menu-btn" onclick="showSection('cadastrar')">
               <i class="fas fa-plus-circle"></i>
-              <h3>Cadastrar Filos</h3>
+              <h3>Cadastrar Tardígrados</h3>
               <p>Adicione novos registros de espécimes encontrados</p>
             </button>
 
@@ -152,27 +152,30 @@
             <button class="menu-btn" onclick="showSection('chave-dicotomica')">
               <i class="fas fa-code-branch"></i>
               <h3>Chave Dicotômica</h3>
-              <p>Identifique filos através de características distintivas</p>
+              <p>
+                Identifique espécimes de Tardigrada usando características
+                morfológicas
+              </p>
             </button>
 
             <!-- Botão: Sobre -->
             <button class="menu-btn" onclick="showSection('sobre')">
               <i class="fas fa-info-circle"></i>
               <h3>Sobre o Projeto</h3>
-              <p>Conheça a equipe, fontes e bibliografia</p>
+              <p>Conheça a equipe, fontes e bibliografia sobre Tardigrada</p>
             </button>
           </div>
         </div>
       </section>
 
-      <!-- SEÇÃO: Mapa de Filos (escondida por padrão) -->
-      <section id="mapa-filos" class="container section hidden">
+      <!-- SEÇÃO: Mapa de Tardigrada (escondida por padrão) -->
+      <section id="mapa-tardigrada" class="container section hidden">
         <!-- Cabeçalho da seção com botão voltar -->
         <div class="section-header">
           <button class="back-btn" onclick="showSection('home')">
             <i class="fas fa-arrow-left"></i> Voltar
           </button>
-          <h2>Mapa de Filos</h2>
+          <h2>Mapa de Tardigrada</h2>
         </div>
 
         <!-- Container de estatísticas (3 cards) -->
@@ -182,10 +185,10 @@
             <span id="total-registros">0</span>
             <p>Registros</p>
           </div>
-          <!-- Card de estatística: Total de filos -->
+          <!-- Card de estatística: Total de grupos -->
           <div class="stat-box">
-            <span id="total-filos">0</span>
-            <p>Filos</p>
+            <span id="total-grupos">0</span>
+            <p>Grupos</p>
           </div>
           <!-- Card de estatística: Total de espécies -->
           <div class="stat-box">
@@ -194,18 +197,19 @@
           </div>
         </div>
 
-        <!-- Filtro dropdown para selecionar filo específico -->
+        <!-- Filtro dropdown para selecionar grupo específico -->
         <div class="filter-container">
-          <select id="filo-filter">
-            <option value="">Todos os Filos</option>
-            <option value="Porifera">Porifera</option>
-            <option value="Cnidaria">Cnidaria</option>
-            <option value="Platyhelminthes">Platyhelminthes</option>
-            <option value="Nematoda">Nematoda</option>
-            <option value="Arthropoda">Arthropoda</option>
-            <option value="Mollusca">Mollusca</option>
-            <option value="Chordata">Chordata</option>
-            <option value="Tardigrada">Tardigrada</option>
+          <select id="grupo-filter">
+            <option value="">Todos os Grupos</option>
+            <option value="Heterotardigrada">Heterotardigrada</option>
+            <option value="Eutardigrada">Eutardigrada</option>
+            <option value="Arthrotardigrada">Arthrotardigrada</option>
+            <option value="Echiniscoidea">Echiniscoidea</option>
+            <option value="Apochela">Apochela</option>
+            <option value="Parachela">Parachela</option>
+            <option value="Macrobiotoidea">Macrobiotoidea</option>
+            <option value="Isohypsibioidea">Isohypsibioidea</option>
+            <option value="Hypsibioidea">Hypsibioidea</option>
           </select>
         </div>
 
@@ -216,12 +220,13 @@
         <div class="records-section">
           <h3>Registros Recentes</h3>
           <div class="table-container">
-            <!-- Tabela de registros filogenéticos -->
+            <!-- Tabela de registros de Tardigrada -->
             <table id="records-table">
               <thead>
                 <tr>
-                  <th>Filo</th>
-                  <th>Classe</th>
+                  <th>Grupo</th>
+                  <th>Família</th>
+                  <th>Gênero</th>
                   <th>Espécie</th>
                   <th>Local</th>
                   <th>Pesquisador</th>
@@ -241,51 +246,74 @@
           <button class="back-btn" onclick="showSection('home')">
             <i class="fas fa-arrow-left"></i> Voltar
           </button>
-          <h2>Cadastrar Novo Filo</h2>
+          <h2>Cadastrar Novo Tardígrado</h2>
         </div>
 
         <!-- Formulário de cadastro -->
         <form id="form">
-          <!-- Grupo de campos: Classificação Taxonômica -->
+          <!-- Grupo de campos: Classificação Taxonômica de Tardigrada -->
           <fieldset>
-            <legend>Classificação Taxonômica</legend>
+            <legend>Classificação Taxonômica de Tardigrada</legend>
             <div class="form-group">
-              <!-- Campo: Seletor de Filo -->
-              <label for="filo">Filo</label>
-              <select id="filo" name="filo" required>
-                <option value="">Selecione o Filo</option>
-                <option value="Porifera">Porifera (Esponjas)</option>
-                <option value="Cnidaria">Cnidaria (Águas-vivas, Corais)</option>
-                <option value="Platyhelminthes">
-                  Platyhelminthes (Vermes Achatados)
-                </option>
-                <option value="Nematoda">Nematoda (Vermes Cilíndricos)</option>
-                <option value="Arthropoda">Arthropoda (Artrópodes)</option>
-                <option value="Mollusca">Mollusca (Moluscos)</option>
-                <option value="Chordata">Chordata (Cordados)</option>
-                <option value="Tardigrada">Tardigrada (Tardígrados)</option>
-                <option value="Outro">Outro</option>
+              <!-- Campo: Seletor de Classe -->
+              <label for="classe">Classe</label>
+              <select id="classe" name="classe" required>
+                <option value="">Selecione a Classe</option>
+                <option value="Heterotardigrada">Heterotardigrada</option>
+                <option value="Eutardigrada">Eutardigrada</option>
               </select>
 
-              <!-- Campo: Classe -->
-              <label for="classe">Classe</label>
-              <input type="text" id="classe" name="classe" required />
+              <!-- Campo: Ordem -->
+              <label for="ordem">Ordem</label>
+              <select id="ordem" name="ordem" required>
+                <option value="">Selecione a Ordem</option>
+                <option value="Arthrotardigrada">Arthrotardigrada</option>
+                <option value="Echiniscoidea">Echiniscoidea</option>
+                <option value="Apochela">Apochela</option>
+                <option value="Parachela">Parachela</option>
+              </select>
 
-              <!-- Campo: Ordem (opcional) -->
-              <label for="ordem">Ordem (opcional)</label>
-              <input type="text" id="ordem" name="ordem" />
+              <!-- Campo: Superfamília (opcional) -->
+              <label for="superfamilia">Superfamília (opcional)</label>
+              <select id="superfamilia" name="superfamilia">
+                <option value="">Selecione a Superfamília</option>
+                <option value="Macrobiotoidea">Macrobiotoidea</option>
+                <option value="Isohypsibioidea">Isohypsibioidea</option>
+                <option value="Hypsibioidea">Hypsibioidea</option>
+              </select>
 
-              <!-- Campo: Família (opcional) -->
-              <label for="familia">Família (opcional)</label>
-              <input type="text" id="familia" name="familia" />
+              <!-- Campo: Família -->
+              <label for="familia">Família</label>
+              <select id="familia" name="familia" required>
+                <option value="">Selecione a Família</option>
+                <option value="Echiniscidae">Echiniscidae</option>
+                <option value="Carphaniidae">Carphaniidae</option>
+                <option value="Milnesiidae">Milnesiidae</option>
+                <option value="Macrobiotidae">Macrobiotidae</option>
+                <option value="Isohypsibiidae">Isohypsibiidae</option>
+                <option value="Hypsibiidae">Hypsibiidae</option>
+                <option value="Outra">Outra</option>
+              </select>
 
               <!-- Campo: Gênero -->
               <label for="genero">Gênero</label>
-              <input type="text" id="genero" name="genero" required />
+              <input
+                type="text"
+                id="genero"
+                name="genero"
+                required
+                placeholder="Ex: Milnesium, Macrobiotus, Hypsibius"
+              />
 
               <!-- Campo: Espécie -->
               <label for="especie">Espécie</label>
-              <input type="text" id="especie" name="especie" required />
+              <input
+                type="text"
+                id="especie"
+                name="especie"
+                required
+                placeholder="Ex: tardigradum, harmsworthi"
+              />
             </div>
           </fieldset>
 
@@ -329,16 +357,19 @@
               <label for="localidade">Nome da localidade</label>
               <input type="text" id="localidade" name="localidade" required />
 
-              <!-- Campo: Habitat -->
+              <!-- Campo: Habitat específico para Tardigrada -->
               <label for="habitat">Habitat</label>
               <select id="habitat" name="habitat" required>
                 <option value="">Selecione o Habitat</option>
                 <option value="Aquático Marinho">Aquático Marinho</option>
                 <option value="Aquático Dulcícola">Aquático Dulcícola</option>
-                <option value="Terrestre">Terrestre</option>
-                <option value="Aéreo">Aéreo</option>
-                <option value="Parasita">Parasita</option>
-                <option value="Solo">Solo</option>
+                <option value="Terrestre - Musgo">Terrestre - Musgo</option>
+                <option value="Terrestre - Líquen">Terrestre - Líquen</option>
+                <option value="Terrestre - Solo">Terrestre - Solo</option>
+                <option value="Terrestre - Folhiço">Terrestre - Folhiço</option>
+                <option value="Limno-terrestre">Limno-terrestre</option>
+                <option value="Areia de praia">Areia de praia</option>
+                <option value="Outro">Outro</option>
               </select>
             </div>
           </fieldset>
@@ -357,9 +388,17 @@
                 required
               />
 
-              <!-- Campo: Tamanho -->
-              <label for="tamanho">Tamanho aproximado (mm)</label>
-              <input type="number" id="tamanho" name="tamanho" step="0.1" />
+              <!-- Campo: Tamanho em micrometros para Tardigrada -->
+              <label for="tamanho">Tamanho aproximado (μm - micrometros)</label>
+              <input
+                type="number"
+                id="tamanho"
+                name="tamanho"
+                step="1"
+                min="50"
+                max="2000"
+                placeholder="Ex: 500"
+              />
 
               <!-- Campo: Nome do Pesquisador -->
               <label for="pesquisador">Nome do pesquisador/observador</label>
@@ -371,27 +410,27 @@
             </div>
           </fieldset>
 
-          <!-- Grupo de campos: Características e Observações -->
+          <!-- Grupo de campos: Características Morfológicas de Tardigrada -->
           <fieldset>
-            <legend>Características e Observações</legend>
+            <legend>Características Morfológicas de Tardigrada</legend>
             <div class="form-group">
-              <!-- Campo: Características (textarea) -->
+              <!-- Campo: Características morfológicas específicas -->
               <label for="caracteristicas"
-                >Principais características observadas</label
+                >Principais características morfológicas observadas</label
               >
               <textarea
                 id="caracteristicas"
                 name="caracteristicas"
-                placeholder="Descreva as principais características morfológicas observadas..."
+                placeholder="Ex: Cirros laterais A presentes/ausentes, forma das garras, placas dorsais, estruturas bucais, etc."
                 required
               ></textarea>
 
-              <!-- Campo: Observações (textarea) -->
+              <!-- Campo: Observações comportamentais -->
               <label for="observacoes">Observações adicionais</label>
               <textarea
                 id="observacoes"
                 name="observacoes"
-                placeholder="Comportamento, condições ambientais, etc."
+                placeholder="Comportamento, estado (ativo/tun), condições ambientais, etc."
               ></textarea>
             </div>
           </fieldset>
@@ -436,7 +475,7 @@
           <button class="back-btn" onclick="showSection('home')">
             <i class="fas fa-arrow-left"></i> Voltar
           </button>
-          <h2>Chave Dicotômica dos Filos</h2>
+          <h2>Chave Dicotômica — Tardigrada</h2>
         </div>
 
         <!-- Container da chave dicotômica -->
@@ -444,8 +483,9 @@
           <!-- Introdução explicativa -->
           <div class="key-intro">
             <p>
-              Use esta chave dicotômica para identificar o filo do organismo que
-              você observou. Siga as instruções passo a passo:
+              Use esta chave dicotômica para identificar as ordens, famílias e
+              gêneros de Tardigrada. Siga as instruções passo a passo observando
+              as características morfológicas:
             </p>
           </div>
 
@@ -456,21 +496,21 @@
               <!-- Pergunta atual -->
               <div class="key-question">
                 <p>
-                  <strong
-                    >O organismo possui células organizadas em tecidos
-                    verdadeiros?</strong
-                  >
+                  <strong>Cirros laterais A presentes (seta / cA)?</strong>
                 </p>
               </div>
               <!-- Opções de resposta -->
               <div class="key-options">
-                <button class="key-option" onclick="nextStep('tecidos-sim')">
+                <button
+                  class="key-option"
+                  onclick="nextStep('heterotardigrada')"
+                >
                   <i class="fas fa-check"></i>
-                  Sim - Possui tecidos organizados
+                  Sim - Cirros laterais A presentes
                 </button>
-                <button class="key-option" onclick="nextStep('tecidos-nao')">
+                <button class="key-option" onclick="nextStep('eutardigrada')">
                   <i class="fas fa-times"></i>
-                  Não - Células não organizadas em tecidos
+                  Não - Cirros laterais A ausentes
                 </button>
               </div>
             </div>
@@ -481,16 +521,46 @@
             <h3>Resultado da Identificação</h3>
             <div id="result-content"></div>
             <!-- Botão para recomeçar -->
-            <button class="btn btn-primary" onclick="resetKey()">
-              <i class="fas fa-redo"></i>
-              Recomeçar Identificação
+            <div class="key-controls">
+              <button class="btn btn-primary" onclick="resetKey()">
+                <i class="fas fa-redo"></i>
+                Recomeçar Identificação
+              </button>
+            </div>
+          </div>
+
+          <!-- Controles adicionais -->
+          <div class="key-navigation">
+            <button
+              class="btn btn-secondary"
+              onclick="showPath()"
+              id="path-btn"
+            >
+              <i class="fas fa-route"></i>
+              Mostrar Caminho
             </button>
+          </div>
+
+          <!-- Exibição do caminho percorrido -->
+          <div class="path-display" id="path-display">
+            <h4>Caminho Percorrido</h4>
+            <ul class="path-steps" id="path-steps"></ul>
           </div>
 
           <!-- Histórico de escolhas do usuário -->
           <div class="key-history">
             <h4>Histórico de Escolhas:</h4>
             <ul id="choice-history"></ul>
+          </div>
+
+          <!-- Nota sobre a base da chave -->
+          <div class="key-citation">
+            <small
+              ><em
+                >Base: rascunho da chave dicotômica de Tardigrada - versão
+                adaptada para interface interativa.</em
+              ></small
+            >
           </div>
         </div>
       </section>
@@ -501,7 +571,7 @@
           <button class="back-btn" onclick="showSection('home')">
             <i class="fas fa-arrow-left"></i> Voltar
           </button>
-          <h2>Sobre o FiloStudy</h2>
+          <h2>Sobre o TardiStudy</h2>
         </div>
 
         <!-- Conteúdo da página Sobre -->
@@ -530,7 +600,7 @@
                 <h4>Consultoria Científica</h4>
                 <p>
                   <strong>Prof. Dr. [Nome]</strong><br />
-                  Especialista em Taxonomia<br />
+                  Especialista em Tardigrada<br />
                   Instituto [Nome]
                 </p>
               </div>
@@ -542,18 +612,42 @@
             <h3><i class="fas fa-bullseye"></i> Objetivos do Projeto</h3>
             <ul>
               <li>
-                Facilitar o ensino e aprendizado de taxonomia filogenética
+                Facilitar o ensino e aprendizado da taxonomia de Tardigrada
               </li>
               <li>
-                Criar uma plataforma interativa para identificação de filos
+                Criar uma plataforma interativa para identificação de
+                tardígrados
               </li>
               <li>
                 Promover a colaboração científica entre estudantes e
-                pesquisadores
+                pesquisadores da área
               </li>
               <li>
-                Desenvolver um banco de dados educacional sobre biodiversidade
+                Desenvolver um banco de dados educacional sobre a diversidade de
+                Tardigrada
               </li>
+              <li>
+                Contribuir para o conhecimento dos organismos mais resistentes
+                do planeta
+              </li>
+            </ul>
+          </div>
+
+          <!-- Seção: Sobre Tardigrada -->
+          <div class="about-section">
+            <h3><i class="fas fa-microscope"></i> Sobre os Tardígrados</h3>
+            <p>
+              Os tardígrados são microorganismos microscópicos conhecidos como
+              os "ursos d'água" devido à sua aparência fofa e movimentos lentos.
+              Eles são considerados os organismos mais resistentes da Terra,
+              capazes de sobreviver em condições extremas incluindo:
+            </p>
+            <ul>
+              <li>Temperaturas de -272°C a 151°C</li>
+              <li>Pressões até 6 vezes maior que a das fossas oceânicas</li>
+              <li>Radiação 1000 vezes maior que a letal para humanos</li>
+              <li>Vácuo do espaço por até 10 dias</li>
+              <li>Desidratação total por décadas</li>
             </ul>
           </div>
 
@@ -561,36 +655,47 @@
           <div class="about-section">
             <h3><i class="fas fa-book"></i> Bibliografia e Fontes</h3>
             <div class="references">
-              <p><strong>Referências Principais:</strong></p>
+              <p><strong>Referências Principais sobre Tardigrada:</strong></p>
               <ul>
                 <li>
-                  Brusca, R. C., & Brusca, G. J. (2018). <em>Invertebrados</em>.
-                  3ª edição. Guanabara Koogan.
+                  Nelson, D. R., Guidetti, R., & Rebecchi, L. (2015).
+                  <em>Phylum Tardigrada</em>. In Thorp & Rogers (Eds.), Ecology
+                  and General Biology: Thorp and Covich's Freshwater
+                  Invertebrates.
                 </li>
                 <li>
-                  Hickman Jr., C. P., Roberts, L. S., & Larson, A. (2016).
-                  <em>Princípios Integrados de Zoologia</em>. 16ª edição.
-                  Guanabara Koogan.
-                </li>
-                <li>
-                  Ruppert, E. E., Fox, R. S., & Barnes, R. D. (2005).
-                  <em>Zoologia dos Invertebrados</em>. 7ª edição. Roca.
-                </li>
-                <li>
-                  Nielsen, C. (2012).
+                  Guidetti, R., & Bertolani, R. (2005).
                   <em
-                    >Animal Evolution: Interrelationships of the Living
-                    Phyla</em
-                  >. 3ª edição. Oxford University Press.
+                    >Tardigrade taxonomy: an updated check list of the taxa and
+                    a list of characters for their identification</em
+                  >. Zootaxa, 845(1), 1-46.
+                </li>
+                <li>
+                  Ramazzotti, G., & Maucci, W. (1983).
+                  <em
+                    >Il Phylum Tardigrada (III edizione riveduta e
+                    aggiornata)</em
+                  >. Memorie dell'Istituto Italiano di Idrobiologia, 41, 1-1012.
+                </li>
+                <li>
+                  Bertolani, R., Guidetti, R., Marchioro, T., Altiero, T.,
+                  Rebecchi, L., & Cesari, M. (2014).
+                  <em
+                    >Phylogeny of Eutardigrada: new molecular data and their
+                    morphological support lead to the identification of new
+                    evolutionary lineages</em
+                  >. Molecular Phylogenetics and Evolution, 76, 110-126.
                 </li>
               </ul>
 
               <p><strong>Bases de Dados Consultadas:</strong></p>
               <ul>
-                <li>World Register of Marine Species (WoRMS)</li>
-                <li>Catalogue of Life</li>
-                <li>Encyclopedia of Life (EOL)</li>
-                <li>Tree of Life Web Project</li>
+                <li>
+                  Tardigrade Database (Università di Modena e Reggio Emilia)
+                </li>
+                <li>World Register of Marine Species (WoRMS) - Tardigrada</li>
+                <li>Encyclopedia of Life (EOL) - Tardigrada</li>
+                <li>Catalogue of Life - Tardigrada</li>
               </ul>
             </div>
           </div>
@@ -622,10 +727,11 @@
           <div class="about-section">
             <h3><i class="fas fa-envelope"></i> Contato</h3>
             <p>
-              Para mais informações sobre o projeto FiloStudy, entre em contato:
+              Para mais informações sobre o projeto TardiStudy, entre em
+              contato:
             </p>
             <p>
-              <strong>E-mail:</strong> contato@filostudy.edu.br<br />
+              <strong>E-mail:</strong> contato@tardistudy.edu.br<br />
               <strong>Instituição:</strong> [Nome da Universidade]<br />
               <strong>Departamento:</strong> [Departamento/Instituto]
             </p>
@@ -636,7 +742,7 @@
 
     <!-- RODAPÉ -->
     <footer>
-      <p>© 2025 FiloStudy - Portal Educativo de Estudos Filogenéticos</p>
+      <p>© 2025 TardiStudy - Portal Educativo Especializado em Tardigrada</p>
     </footer>
 
     <!-- Container de notificações (toast) -->
