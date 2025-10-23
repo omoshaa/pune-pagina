@@ -1,12 +1,125 @@
 // ===================================
 // FILOSTUDY - Portal de Estudos Filogenéticos
+// Script principal da aplicação
 // ===================================
 
-// Dados dos registros filogenéticos
+// ============================================================
+// MENU MOBILE E NAVEGAÇÃO RESPONSIVA
+// ============================================================
+
+// Variável de controle: menu mobile aberto ou fechado
+let isMobileMenuOpen = false;
+
+/**
+ * Função: Abre/fecha o menu mobile (toggle)
+ * Chamada ao clicar no botão hamburger ou no botão X
+ */
+function toggleMobileMenu() {
+  const mobileNav = document.getElementById("mobile-nav"); // Overlay do menu
+  const mobileMenuBtn = document.querySelector(".mobile-menu-btn"); // Botão hamburger
+
+  if (!mobileNav || !mobileMenuBtn) return; // Proteção contra elementos não encontrados
+
+  // Inverte o estado
+  isMobileMenuOpen = !isMobileMenuOpen;
+
+  if (isMobileMenuOpen) {
+    // ABRIR menu
+    mobileNav.classList.add("active");
+    mobileMenuBtn.classList.add("active"); // Anima hamburger para X
+    document.body.style.overflow = "hidden"; // Desabilita scroll da página
+  } else {
+    // FECHAR menu
+    mobileNav.classList.remove("active");
+    mobileMenuBtn.classList.remove("active"); // Volta hamburger ao normal
+    document.body.style.overflow = "auto"; // Reabilita scroll
+  }
+}
+
+// Event listener: Fechar menu ao clicar fora dele
+document.addEventListener("click", (e) => {
+  const mobileNav = document.getElementById("mobile-nav");
+  const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+
+  // Se menu está aberto E clique foi fora do menu E fora do botão
+  if (
+    isMobileMenuOpen &&
+    mobileNav &&
+    !mobileNav.contains(e.target) &&
+    mobileMenuBtn &&
+    !mobileMenuBtn.contains(e.target)
+  ) {
+    toggleMobileMenu(); // Fecha o menu
+  }
+});
+
+// Event listener: Fechar menu ao redimensionar para desktop
+window.addEventListener("resize", () => {
+  if (window.innerWidth >= 768 && isMobileMenuOpen) {
+    toggleMobileMenu(); // Fecha menu se tela ficar grande
+  }
+});
+
+// ============================================================
+// NAVEGAÇÃO ENTRE SEÇÕES (SPA - Single Page Application)
+// ============================================================
+
+/**
+ * Função: Mostra uma seção e esconde todas as outras
+ * @param {string} sectionId - ID da seção a ser exibida (ex: 'home', 'mapa-filos')
+ */
+function showSection(sectionId) {
+  // Fechar menu mobile se estiver aberto
+  if (isMobileMenuOpen) {
+    toggleMobileMenu();
+  }
+
+  // Esconder TODAS as seções
+  const sections = document.querySelectorAll(".container");
+  sections.forEach((section) => {
+    section.classList.add("hidden"); // Adiciona classe .hidden
+  });
+
+  // Mostrar apenas a seção selecionada
+  const targetSection = document.getElementById(sectionId);
+  if (targetSection) {
+    targetSection.classList.remove("hidden"); // Remove classe .hidden
+
+    // Inicializar componentes específicos da seção após um delay
+    setTimeout(() => {
+      if (sectionId === "mapa-filos" && !map) {
+        // Se for seção do mapa E mapa ainda não foi criado
+        initMap(); // Inicializa o mapa Leaflet
+        renderAll(); // Renderiza marcadores e estatísticas
+      } else if (sectionId === "mapa-filos" && map) {
+        // Se mapa já existe, apenas redimensiona
+        map.invalidateSize(); // Fix para mapa aparecer corretamente
+      }
+
+      if (sectionId === "chave-dicotomica") {
+        resetKey(); // Reinicia chave dicotômica
+      }
+    }, 300); // 300ms de delay para animações suaves
+
+    // Scroll suave para o topo da página
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+}
+
+// ============================================================
+// DADOS DOS REGISTROS FILOGENÉTICOS
+// Armazenados no LocalStorage do navegador
+// ============================================================
+
+// Carrega registros do LocalStorage OU usa dados de exemplo
 let filoRecords = JSON.parse(localStorage.getItem("filoRecords")) || [
+  // Registro de exemplo 1: Tardígrado
   {
-    id: "1a2b3c",
-    latitude: -23.5505,
+    id: "1a2b3c", // ID único de 6 caracteres
+    latitude: -23.5505, // Coordenada GPS
     longitude: -46.6333,
     filo: "Tardigrada",
     classe: "Eutardigrada",
@@ -14,8 +127,8 @@ let filoRecords = JSON.parse(localStorage.getItem("filoRecords")) || [
     familia: "Ramazzottiidae",
     genero: "Ramazzottius",
     especie: "oberhaeuseri",
-    quantidade: 15,
-    tamanho: 0.3,
+    quantidade: 15, // Número de indivíduos observados
+    tamanho: 0.3, // Tamanho em mm
     localidade: "Parque Ibirapuera, SP",
     habitat: "Terrestre",
     pesquisador: "Ana Silva",
@@ -23,9 +136,10 @@ let filoRecords = JSON.parse(localStorage.getItem("filoRecords")) || [
     caracteristicas:
       "Tardígrado com cutícula lisa, garras duplas bem desenvolvidas",
     observacoes: "Encontrado em musgo de árvore. Resistente à dessecação.",
-    fotos: [],
-    data: "2025-09-22T19:00:00Z",
+    fotos: [], // Array de URLs de fotos (não implementado)
+    data: "2025-09-22T19:00:00Z", // Data no formato ISO
   },
+  // Registro de exemplo 2: Borboleta
   {
     id: "4d5e6f",
     latitude: -15.7801,
@@ -37,7 +151,7 @@ let filoRecords = JSON.parse(localStorage.getItem("filoRecords")) || [
     genero: "Morpho",
     especie: "menelaus",
     quantidade: 3,
-    tamanho: 120,
+    tamanho: 120, // 120mm de envergadura
     localidade: "Parque Nacional de Brasília, DF",
     habitat: "Terrestre",
     pesquisador: "João Costa",
@@ -47,823 +161,487 @@ let filoRecords = JSON.parse(localStorage.getItem("filoRecords")) || [
     fotos: [],
     data: "2025-09-23T19:00:00Z",
   },
-  {
-    id: "7g8h9i",
-    latitude: -8.0476,
-    longitude: -34.877,
-    filo: "Cnidaria",
-    classe: "Anthozoa",
-    ordem: "Scleractinia",
-    familia: "Mussidae",
-    genero: "Mussismilia",
-    especie: "braziliensis",
-    quantidade: 25,
-    tamanho: 80,
-    localidade: "Porto de Galinhas, PE",
-    habitat: "Aquático Marinho",
-    pesquisador: "Maria Santos",
-    instituicao: "UFPE",
-    caracteristicas: "Coral pétreo com pólipos grandes, esqueleto calcário",
-    observacoes: "Colônia em formação recifal, boa condição de saúde.",
-    fotos: [],
-    data: "2025-09-24T19:00:00Z",
-  },
 ];
 
-// Estado da aplicação
-let currentSection = "home";
-let currentKeyStep = "start";
-let keyHistory = [];
+// ============================================================
+// VARIÁVEIS GLOBAIS
+// ============================================================
+let map = null; // Instância do mapa Leaflet (null até ser inicializado)
+let markers = []; // Array de marcadores no mapa
+let currentStep = 1; // Passo atual da chave dicotômica
+let choiceHistory = []; // Histórico de escolhas do usuário na chave
 
-// Referências a elementos do DOM
-const mapElement = document.getElementById("map");
-const form = document.getElementById("form");
-const recordsTableBody = document.getElementById("records-body");
-const totalRegistrosSpan = document.getElementById("total-registros");
-const totalFilosSpan = document.getElementById("total-filos");
-const totalEspeciesSpan = document.getElementById("total-especies");
-const filoFilter = document.getElementById("filo-filter");
-const fotoInput = document.getElementById("foto");
-const previewContainer = document.getElementById("image-preview");
-const latitudeInput = document.getElementById("latitude");
-const longitudeInput = document.getElementById("longitude");
-const getLocationBtn = document.getElementById("getLocation");
-const notification = document.getElementById("notification");
+// ============================================================
+// MAPA INTERATIVO LEAFLET
+// ============================================================
 
-// Inicialização do Mapa Leaflet
-const map = L.map(mapElement).setView([-15.7801, -47.9292], 4);
-
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "© OpenStreetMap contributors",
-}).addTo(map);
-
-// ===================================
-// NAVEGAÇÃO ENTRE SEÇÕES
-// ===================================
-
-function showSection(sectionId) {
-  // Fechar menu mobile se estiver aberto
-  if (isMobileMenuOpen) {
-    toggleMobileMenu();
+/**
+ * Função: Inicializa o mapa Leaflet
+ * Só é chamada quando o usuário navega para a seção "Mapa de Filos"
+ */
+function initMap() {
+  // Verificar se a biblioteca Leaflet foi carregada
+  if (typeof L === "undefined") {
+    console.log("Leaflet não está carregado");
+    return;
   }
 
-  // Esconde todas as seções
-  const sections = document.querySelectorAll(".section, .hero-section");
-  sections.forEach((section) => {
-    section.classList.remove("active");
-    section.classList.add("hidden");
-  });
-
-  // Mostra a seção selecionada
-  const targetSection = document.getElementById(sectionId);
-  if (targetSection) {
-    targetSection.classList.remove("hidden");
-    targetSection.classList.add("active");
-    currentSection = sectionId;
-
-    // Se for o mapa, inicializa/atualiza o mapa
-    if (sectionId === "mapa-filos") {
-      setTimeout(() => {
-        map.invalidateSize();
-        renderAll();
-      }, 100);
-    }
-
-    // Scroll suave para o topo
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-
-    // Adicionar animação de entrada
-    targetSection.style.opacity = "0";
-    targetSection.style.transform = "translateY(20px)";
-
-    setTimeout(() => {
-      targetSection.style.transition = "all 0.4s ease-out";
-      targetSection.style.opacity = "1";
-      targetSection.style.transform = "translateY(0)";
-    }, 50);
-  }
-}
-
-// ===================================
-// CHAVE DICOTÔMICA
-// ===================================
-
-const dichotomousKeyData = {
-  start: {
-    question: "O organismo possui células organizadas em tecidos verdadeiros?",
-    options: [
-      { text: "Sim - Possui tecidos organizados", next: "tecidos-sim" },
-      { text: "Não - Células não organizadas em tecidos", next: "tecidos-nao" },
-    ],
-  },
-  "tecidos-nao": {
-    result: "Porifera",
-    description:
-      "Filo Porifera - Esponjas. Organismos aquáticos simples sem tecidos verdadeiros, com sistema de canais e poros para filtração de água.",
-  },
-  "tecidos-sim": {
-    question: "O organismo possui simetria bilateral?",
-    options: [
-      { text: "Sim - Simetria bilateral", next: "bilateral" },
-      { text: "Não - Simetria radial ou irregular", next: "radial" },
-    ],
-  },
-  radial: {
-    result: "Cnidaria",
-    description:
-      "Filo Cnidaria - Águas-vivas, corais, anêmonas. Organismos com simetria radial, cnidócitos (células urticantes) e duas camadas germinativas.",
-  },
-  bilateral: {
-    question: "O organismo possui cavidade corporal (celoma)?",
-    options: [
-      { text: "Sim - Possui celoma", next: "celoma-sim" },
-      { text: "Não - Acelomado ou pseudocelomado", next: "celoma-nao" },
-    ],
-  },
-  "celoma-nao": {
-    question: "O organismo possui forma corporal achatada?",
-    options: [
-      { text: "Sim - Corpo achatado dorsoventralmente", next: "achatado" },
-      { text: "Não - Corpo cilíndrico ou fusiforme", next: "cilindrico" },
-    ],
-  },
-  achatado: {
-    result: "Platyhelminthes",
-    description:
-      "Filo Platyhelminthes - Vermes achatados. Organismos acelomados com corpo achatado, sistema digestório incompleto ou ausente.",
-  },
-  cilindrico: {
-    result: "Nematoda",
-    description:
-      "Filo Nematoda - Vermes cilíndricos. Organismos pseudocelomados com corpo cilíndrico, sistema digestório completo e cutícula protetora.",
-  },
-  "celoma-sim": {
-    question: "O organismo possui patas articuladas?",
-    options: [
-      { text: "Sim - Possui patas articuladas", next: "articuladas" },
-      { text: "Não - Sem patas articuladas", next: "sem-articuladas" },
-    ],
-  },
-  articuladas: {
-    result: "Arthropoda",
-    description:
-      "Filo Arthropoda - Artrópodes. Organismos com exoesqueleto quitinoso, patas articuladas e corpo segmentado. Inclui insetos, crustáceos, aracnídeos.",
-  },
-  "sem-articuladas": {
-    question: "O organismo possui concha externa?",
-    options: [
-      { text: "Sim - Possui concha", next: "concha" },
-      { text: "Não - Sem concha externa", next: "sem-concha" },
-    ],
-  },
-  concha: {
-    result: "Mollusca",
-    description:
-      "Filo Mollusca - Moluscos. Organismos com corpo mole, frequentemente com concha calcária, pé muscular e manto. Inclui caracóis, ostras, lulas.",
-  },
-  "sem-concha": {
-    question: "O organismo possui notocorda ou coluna vertebral?",
-    options: [
-      { text: "Sim - Possui notocorda ou vértebras", next: "cordados" },
-      { text: "Não - Sem estruturas axiais", next: "outros-filos" },
-    ],
-  },
-  cordados: {
-    result: "Chordata",
-    description:
-      "Filo Chordata - Cordados. Organismos com notocorda, tubo neural dorsal e fendas faríngeas. Inclui peixes, anfíbios, répteis, aves e mamíferos.",
-  },
-  "outros-filos": {
-    result: "Outros Filos",
-    description:
-      "Podem ser diversos outros filos como Tardigrada (tardígrados), Annelida (minhocas), Echinodermata (estrelas-do-mar), entre outros. Características específicas são necessárias para identificação precisa.",
-  },
-};
-
-function nextStep(stepId) {
-  const stepData = dichotomousKeyData[stepId];
-  const currentStep = dichotomousKeyData[currentKeyStep];
-
-  // Adiciona ao histórico
-  if (currentStep && currentStep.question) {
-    const selectedOption = currentStep.options.find(
-      (opt) => opt.next === stepId
-    );
-    if (selectedOption) {
-      keyHistory.push({
-        question: currentStep.question,
-        choice: selectedOption.text,
-      });
-      updateKeyHistory();
-    }
+  // Verificar se o elemento HTML do mapa existe
+  const mapElement = document.getElementById("map");
+  if (!mapElement) {
+    console.log("Elemento do mapa não encontrado");
+    return;
   }
 
-  currentKeyStep = stepId;
+  try {
+    // Criar instância do mapa centrado no Brasil
+    map = L.map("map").setView([-15.7942, -47.8822], 4); // Centro: Brasília, Zoom: 4
 
-  if (stepData.result) {
-    // Mostra resultado final
-    showKeyResult(stepData);
-  } else {
-    // Mostra próximo passo
-    showKeyStep(stepData);
-  }
-}
-
-function showKeyStep(stepData) {
-  const stepElement = document.getElementById("key-step");
-  const resultElement = document.getElementById("key-result");
-
-  if (stepElement) stepElement.style.display = "block";
-  if (resultElement) resultElement.style.display = "none";
-
-  const stepTitle = document.getElementById("step-title");
-  if (stepTitle) stepTitle.textContent = `Passo ${keyHistory.length + 1}`;
-
-  const stepContent = document.getElementById("step-content");
-  if (stepContent) {
-    stepContent.innerHTML = `
-            <div class="key-question">
-                <p><strong>${stepData.question}</strong></p>
-            </div>
-            <div class="key-options">
-                ${stepData.options
-                  .map(
-                    (option) => `
-                    <button class="key-option" onclick="nextStep('${option.next}')">
-                        <i class="fas fa-arrow-right"></i>
-                        ${option.text}
-                    </button>
-                `
-                  )
-                  .join("")}
-            </div>
-        `;
-  }
-}
-
-function showKeyResult(resultData) {
-  const stepElement = document.getElementById("key-step");
-  const resultElement = document.getElementById("key-result");
-
-  if (stepElement) stepElement.style.display = "none";
-  if (resultElement) resultElement.style.display = "block";
-
-  const resultContent = document.getElementById("result-content");
-  if (resultContent) {
-    resultContent.innerHTML = `
-            <div class="result-filo">
-                <h2>${resultData.result}</h2>
-                <p>${resultData.description}</p>
-            </div>
-        `;
-  }
-}
-
-function resetKey() {
-  currentKeyStep = "start";
-  keyHistory = [];
-  updateKeyHistory();
-
-  const startStep = dichotomousKeyData["start"];
-  showKeyStep(startStep);
-}
-
-function updateKeyHistory() {
-  const historyList = document.getElementById("choice-history");
-  if (historyList) {
-    historyList.innerHTML = keyHistory
-      .map(
-        (item, index) => `
-            <li>
-                <strong>${index + 1}.</strong> ${item.question}<br>
-                <span style="color: var(--primary); margin-left: 20px;">→ ${
-                  item.choice
-                }</span>
-            </li>
-        `
-      )
-      .join("");
-  }
-}
-
-// ===================================
-// FUNÇÕES DE DADOS E RENDERIZAÇÃO
-// ===================================
-
-function showNotification(message, type = "success") {
-  if (!notification) return;
-
-  notification.textContent = message;
-  notification.className = `notification ${type}`;
-  notification.style.display = "block";
-  notification.style.transform = "translateX(0)";
-
-  setTimeout(() => {
-    notification.style.transform = "translateX(400px)";
-    setTimeout(() => {
-      notification.style.display = "none";
-    }, 300);
-  }, 3000);
-}
-
-function updateStats() {
-  const totalRegistros = filoRecords.length;
-  const filosUnicos = new Set(filoRecords.map((record) => record.filo)).size;
-  const especiesUnicas = new Set(
-    filoRecords.map((record) => record.genero + " " + record.especie)
-  ).size;
-
-  if (totalRegistrosSpan) totalRegistrosSpan.textContent = totalRegistros;
-  if (totalFilosSpan) totalFilosSpan.textContent = filosUnicos;
-  if (totalEspeciesSpan) totalEspeciesSpan.textContent = especiesUnicas;
-}
-
-function renderTable() {
-  if (!recordsTableBody) return;
-
-  let filteredRecords = filoRecords;
-
-  // Aplica filtro se estiver selecionado
-  if (filoFilter && filoFilter.value) {
-    filteredRecords = filoRecords.filter(
-      (record) => record.filo === filoFilter.value
-    );
-  }
-
-  recordsTableBody.innerHTML = filteredRecords
-    .sort((a, b) => new Date(b.data) - new Date(a.data))
-    .slice(0, 10)
-    .map((record) => {
-      const date = new Date(record.data);
-      const timeAgo =
-        typeof moment !== "undefined"
-          ? moment(date).fromNow()
-          : date.toLocaleDateString();
-      return `
-                <tr>
-                    <td>${record.filo}</td>
-                    <td>${record.classe}</td>
-                    <td><em>${record.genero} ${record.especie}</em></td>
-                    <td>${record.localidade}</td>
-                    <td>${record.pesquisador}</td>
-                    <td>${timeAgo}</td>
-                    <td>
-                        <button class="btn-delete" data-id="${record.id}" title="Excluir registro">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            `;
-    })
-    .join("");
-}
-
-function renderMap() {
-  if (!map) return;
-
-  // Limpa marcadores existentes
-  map.eachLayer((layer) => {
-    if (layer instanceof L.Marker || layer instanceof L.CircleMarker) {
-      map.removeLayer(layer);
-    }
-  });
-
-  let filteredRecords = filoRecords;
-
-  // Aplica filtro se estiver selecionado
-  if (filoFilter && filoFilter.value) {
-    filteredRecords = filoRecords.filter(
-      (record) => record.filo === filoFilter.value
-    );
-  }
-
-  // Cores por filo
-  const filoColors = {
-    Porifera: "#FF6B6B",
-    Cnidaria: "#4ECDC4",
-    Platyhelminthes: "#45B7D1",
-    Nematoda: "#96CEB4",
-    Arthropoda: "#FECA57",
-    Mollusca: "#FF9FF3",
-    Chordata: "#54A0FF",
-    Tardigrada: "#5F27CD",
-  };
-
-  filteredRecords.forEach((record) => {
-    const color = filoColors[record.filo] || "#666";
-
-    const marker = L.circleMarker([record.latitude, record.longitude], {
-      color: color,
-      fillColor: color,
-      fillOpacity: 0.7,
-      radius: 8,
+    // Adicionar camada de tiles (mapa base do OpenStreetMap)
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19, // Zoom máximo permitido
+      tileSize: 256, // Tamanho dos tiles
+      zoomOffset: 0,
     }).addTo(map);
 
-    const date = new Date(record.data);
-    const formattedDate =
-      typeof moment !== "undefined"
-        ? moment(date).format("DD/MM/YYYY")
-        : date.toLocaleDateString();
+    // Aguardar um pouco antes de renderizar marcadores (fix para mobile)
+    setTimeout(() => {
+      renderMarkers(); // Adiciona marcadores dos registros
+      map.invalidateSize(); // Força recálculo do tamanho do mapa
+    }, 500);
 
-    marker.bindPopup(`
-            <div class="popup-content">
-                <h3>${record.filo}</h3>
-                <p><strong>Espécie:</strong> <em>${record.genero} ${record.especie}</em></p>
-                <p><strong>Classe:</strong> ${record.classe}</p>
-                <p><strong>Local:</strong> ${record.localidade}</p>
-                <p><strong>Habitat:</strong> ${record.habitat}</p>
-                <p><strong>Pesquisador:</strong> ${record.pesquisador}</p>
-                <p><strong>Quantidade:</strong> ${record.quantidade}</p>
-                <p><strong>Data:</strong> ${formattedDate}</p>
-            </div>
-        `);
+    console.log("Mapa inicializado com sucesso");
+  } catch (error) {
+    console.error("Erro ao inicializar o mapa:", error);
+  }
+}
+
+/**
+ * Função: Renderiza marcadores no mapa
+ * Remove marcadores antigos e adiciona novos baseados nos registros filtrados
+ */
+function renderMarkers() {
+  if (!map) return; // Proteção: só executa se mapa foi inicializado
+
+  // Remover todos os marcadores antigos
+  markers.forEach((marker) => map.removeLayer(marker));
+  markers = []; // Limpa array
+
+  // Obter registros (com filtro se houver)
+  const filteredRecords = getFilteredRecords();
+
+  // Para cada registro, criar um marcador
+  filteredRecords.forEach((record) => {
+    const marker = L.marker([record.latitude, record.longitude]).addTo(map) // Adiciona ao mapa
+      .bindPopup(`
+        <div class="popup-content">
+          <h4>${record.filo} - ${record.genero} ${record.especie}</h4>
+          <p><strong>Local:</strong> ${record.localidade}</p>
+          <p><strong>Pesquisador:</strong> ${record.pesquisador}</p>
+          <p><strong>Data:</strong> ${new Date(record.data).toLocaleDateString(
+            "pt-BR"
+          )}</p>
+        </div>
+      `); // Popup com informações
+
+    markers.push(marker); // Adiciona ao array
   });
 }
 
-function handleFormSubmit(e) {
-  e.preventDefault();
+/**
+ * Função: Retorna registros filtrados pelo dropdown
+ * @returns {Array} Array de registros filtrados ou todos os registros
+ */
+function getFilteredRecords() {
+  const filter = document.getElementById("filo-filter")?.value; // Valor do dropdown
+  return filter
+    ? filoRecords.filter((record) => record.filo === filter) // Filtra por filo
+    : filoRecords; // Ou retorna todos
+}
 
-  const formData = new FormData(form);
+// ============================================================
+// ESTATÍSTICAS (Cards de contadores)
+// ============================================================
+
+/**
+ * Função: Atualiza os 3 cards de estatísticas
+ * Conta: total de registros, filos únicos, espécies únicas
+ */
+function updateStats() {
+  const totalRegistros = filoRecords.length; // Conta registros
+
+  // Conta filos únicos usando Set (remove duplicatas)
+  const totalFilos = [...new Set(filoRecords.map((r) => r.filo))].length;
+
+  // Conta espécies únicas (genero + especie)
+  const totalEspecies = [
+    ...new Set(filoRecords.map((r) => `${r.genero} ${r.especie}`)),
+  ].length;
+
+  // Atualiza o HTML dos contadores
+  document.getElementById("total-registros").textContent = totalRegistros;
+  document.getElementById("total-filos").textContent = totalFilos;
+  document.getElementById("total-especies").textContent = totalEspecies;
+}
+
+// ============================================================
+// FORMULÁRIO DE CADASTRO
+// ============================================================
+
+/**
+ * Função: Processa o envio do formulário
+ * @param {Event} e - Evento de submit do formulário
+ */
+function handleFormSubmit(e) {
+  e.preventDefault(); // Impede reload da página
+
+  // Extrai dados do formulário usando FormData API
+  const formData = new FormData(e.target);
+
+  // Cria novo objeto de registro
   const newRecord = {
-    id: Date.now().toString(36) + Math.random().toString(36).substr(2),
-    latitude: parseFloat(formData.get("latitude")),
+    id: generateId(), // Gera ID único aleatório
+    latitude: parseFloat(formData.get("latitude")), // Converte para número
     longitude: parseFloat(formData.get("longitude")),
     filo: formData.get("filo"),
     classe: formData.get("classe"),
-    ordem: formData.get("ordem") || "",
+    ordem: formData.get("ordem") || "", // Campos opcionais
     familia: formData.get("familia") || "",
     genero: formData.get("genero"),
     especie: formData.get("especie"),
-    quantidade: parseInt(formData.get("quantidade")),
-    tamanho: parseFloat(formData.get("tamanho")) || null,
+    quantidade: parseInt(formData.get("quantidade")), // Converte para inteiro
+    tamanho: parseFloat(formData.get("tamanho")) || null, // Pode ser null
     localidade: formData.get("localidade"),
     habitat: formData.get("habitat"),
     pesquisador: formData.get("pesquisador"),
     instituicao: formData.get("instituicao") || "",
     caracteristicas: formData.get("caracteristicas"),
     observacoes: formData.get("observacoes") || "",
-    fotos: [],
-    data: new Date().toISOString(),
+    fotos: [], // TODO: implementar upload de fotos
+    data: new Date().toISOString(), // Data atual em formato ISO
   };
 
+  // Adiciona registro ao array
   filoRecords.push(newRecord);
+
+  // Salva no LocalStorage (persiste dados)
   localStorage.setItem("filoRecords", JSON.stringify(filoRecords));
 
+  // Mostra mensagem de sucesso
   showNotification("Registro salvo com sucesso!", "success");
-  form.reset();
-  if (previewContainer) previewContainer.innerHTML = "";
+
+  // Limpa o formulário
+  e.target.reset();
+
+  // Atualiza visualizações (tabela, mapa, estatísticas)
   renderAll();
 }
 
+/**
+ * Função: Gera um ID único de 6 caracteres
+ * @returns {string} ID aleatório
+ */
+function generateId() {
+  return Math.random().toString(36).substr(2, 6); // Base 36: letras + números
+}
+
+/**
+ * Função: Obtém localização GPS do usuário
+ * Usa a API de Geolocalização do navegador
+ */
+function getLocation() {
+  // Verifica se navegador suporta geolocalização
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        // Sucesso: preenche campos de lat/long
+        document.getElementById("latitude").value =
+          position.coords.latitude.toFixed(6); // 6 casas decimais
+        document.getElementById("longitude").value =
+          position.coords.longitude.toFixed(6);
+        showNotification("Localização obtida!", "success");
+      },
+      () => showNotification("Erro ao obter localização", "error") // Erro
+    );
+  }
+}
+
+// ============================================================
+// CHAVE DICOTÔMICA (Máquina de Estados)
+// Sistema de identificação interativa de filos
+// ============================================================
+
+// Objeto que define todos os passos da chave dicotômica
+const keySteps = {
+  // Passo inicial
+  1: {
+    title: "Passo 1",
+    question: "O organismo possui células organizadas em tecidos verdadeiros?",
+    options: [
+      { text: "Sim - Possui tecidos organizados", next: "tecidos-sim" },
+      { text: "Não - Células não organizadas em tecidos", next: "tecidos-nao" },
+    ],
+  },
+  // Resultado: sem tecidos = Porifera
+  "tecidos-nao": {
+    title: "Resultado",
+    result: "Porifera",
+    description: "Esponjas - organismos aquáticos sem tecidos verdadeiros",
+  },
+  // Com tecidos: pergunta sobre simetria
+  "tecidos-sim": {
+    title: "Passo 2",
+    question: "O organismo apresenta simetria radial ou bilateral?",
+    options: [
+      { text: "Simetria radial", next: "radial" },
+      { text: "Simetria bilateral", next: "bilateral" },
+    ],
+  },
+  // Resultado: simetria radial = Cnidaria
+  radial: {
+    title: "Resultado",
+    result: "Cnidaria",
+    description:
+      "Águas-vivas, corais, anêmonas - organismos com simetria radial",
+  },
+  // Simetria bilateral: pergunta sobre esqueleto
+  bilateral: {
+    title: "Passo 3",
+    question: "O organismo possui esqueleto interno?",
+    options: [
+      { text: "Sim - Possui esqueleto interno", next: "esqueleto-sim" },
+      { text: "Não - Sem esqueleto interno", next: "esqueleto-nao" },
+    ],
+  },
+  // Resultado: com esqueleto = Chordata
+  "esqueleto-sim": {
+    title: "Resultado",
+    result: "Chordata",
+    description: "Vertebrados - peixes, anfíbios, répteis, aves, mamíferos",
+  },
+  // Resultado: sem esqueleto = Arthropoda
+  "esqueleto-nao": {
+    title: "Resultado",
+    result: "Arthropoda",
+    description: "Artrópodes - insetos, crustáceos, aracnídeos",
+  },
+};
+
+/**
+ * Função: Avança para o próximo passo da chave
+ * @param {string} stepId - ID do próximo passo
+ */
+function nextStep(stepId) {
+  const step = keySteps[stepId]; // Busca dados do passo
+  if (!step) return; // Proteção
+
+  // Adiciona escolha atual ao histórico
+  const currentStepData = keySteps[currentStep];
+  if (currentStepData) {
+    choiceHistory.push(currentStepData.question);
+  }
+
+  // Verifica se é um resultado final ou próximo passo
+  if (step.result) {
+    showResult(step); // Mostra resultado
+  } else {
+    showStep(step, stepId); // Mostra próximo passo
+  }
+}
+
+/**
+ * Função: Mostra um passo da chave (pergunta + opções)
+ * @param {Object} step - Dados do passo
+ * @param {string} stepId - ID do passo
+ */
+function showStep(step, stepId) {
+  currentStep = stepId; // Atualiza passo atual
+
+  // Atualiza título
+  document.getElementById("step-title").textContent = step.title;
+
+  // Atualiza conteúdo (pergunta + botões de opção)
+  const content = document.getElementById("step-content");
+  content.innerHTML = `
+    <div class="key-question">
+      <p><strong>${step.question}</strong></p>
+    </div>
+    <div class="key-options">
+      ${step.options
+        .map(
+          (option) => `
+        <button class="key-option" onclick="nextStep('${option.next}')">
+          ${option.text}
+        </button>
+      `
+        )
+        .join("")}
+    </div>
+  `;
+
+  updateChoiceHistory(); // Atualiza histórico
+}
+
+/**
+ * Função: Mostra o resultado final da identificação
+ * @param {Object} step - Dados do resultado
+ */
+function showResult(step) {
+  // Esconde passo, mostra resultado
+  document.getElementById("key-step").style.display = "none";
+  document.getElementById("key-result").style.display = "block";
+
+  // Exibe filo identificado
+  document.getElementById("result-content").innerHTML = `
+    <div class="result-card">
+      <h4>Filo: ${step.result}</h4>
+      <p>${step.description}</p>
+    </div>
+  `;
+
+  updateChoiceHistory(); // Atualiza histórico
+}
+
+/**
+ * Função: Reinicia a chave dicotômica
+ */
+function resetKey() {
+  currentStep = 1; // Volta ao passo 1
+  choiceHistory = []; // Limpa histórico
+  document.getElementById("key-step").style.display = "block";
+  document.getElementById("key-result").style.display = "none";
+  showStep(keySteps[1], 1); // Mostra primeiro passo
+}
+
+/**
+ * Função: Atualiza o HTML do histórico de escolhas
+ */
+function updateChoiceHistory() {
+  const historyList = document.getElementById("choice-history");
+  historyList.innerHTML = choiceHistory
+    .map((choice) => `<li>${choice}</li>`)
+    .join("");
+}
+
+// ============================================================
+// TABELA DE REGISTROS
+// ============================================================
+
+/**
+ * Função: Renderiza a tabela de registros recentes
+ * Mostra os 10 registros mais recentes (ou filtrados)
+ */
+function renderRecordsTable() {
+  const tbody = document.getElementById("records-body");
+  if (!tbody) return; // Proteção
+
+  // Pega registros filtrados e limita a 10
+  const records = getFilteredRecords().slice(0, 10);
+
+  // Gera HTML das linhas da tabela
+  tbody.innerHTML = records
+    .map(
+      (record) => `
+    <tr>
+      <td>${record.filo}</td>
+      <td>${record.classe}</td>
+      <td><em>${record.genero} ${record.especie}</em></td>
+      <td>${record.localidade}</td>
+      <td>${record.pesquisador}</td>
+      <td>${new Date(record.data).toLocaleDateString("pt-BR")}</td>
+      <td>
+        <button class="btn btn-sm btn-danger btn-delete" data-id="${record.id}">
+          <i class="fas fa-trash"></i>
+        </button>
+      </td>
+    </tr>
+  `
+    )
+    .join("");
+}
+
+/**
+ * Função: Deleta um registro
+ * @param {string} id - ID do registro a ser deletado
+ */
 function handleDeleteRecord(id) {
-  if (confirm("Tem certeza que deseja excluir este registro?")) {
+  // Pede confirmação
+  if (confirm("Deseja realmente excluir este registro?")) {
+    // Remove registro do array
     filoRecords = filoRecords.filter((record) => record.id !== id);
+
+    // Atualiza LocalStorage
     localStorage.setItem("filoRecords", JSON.stringify(filoRecords));
+
+    // Mostra notificação
     showNotification("Registro excluído com sucesso!", "success");
+
+    // Atualiza visualizações
     renderAll();
   }
 }
 
-function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        if (latitudeInput && longitudeInput) {
-          latitudeInput.value = position.coords.latitude.toFixed(6);
-          longitudeInput.value = position.coords.longitude.toFixed(6);
-        }
-        map.setView([position.coords.latitude, position.coords.longitude], 13);
-        showNotification("Localização obtida!", "success");
-      },
-      (error) => {
-        showNotification("Erro ao obter localização. Clique no mapa.", "error");
-        console.error("Geolocation error:", error);
-      }
-    );
-  } else {
-    showNotification(
-      "Geolocalização não é suportada por este navegador.",
-      "error"
-    );
-  }
+// ============================================================
+// NOTIFICAÇÕES (Toast Messages)
+// ============================================================
+
+/**
+ * Função: Mostra notificação temporária na tela
+ * @param {string} message - Mensagem a ser exibida
+ * @param {string} type - Tipo: 'success', 'error', 'info'
+ */
+function showNotification(message, type = "info") {
+  const notification = document.getElementById("notification");
+  if (!notification) return;
+
+  // Define texto e classe CSS
+  notification.textContent = message;
+  notification.className = `notification ${type} show`;
+
+  // Remove após 3 segundos
+  setTimeout(() => {
+    notification.classList.remove("show");
+  }, 3000);
 }
 
+// ============================================================
+// RENDERIZAÇÃO GERAL
+// ============================================================
+
+/**
+ * Função: Atualiza todas as visualizações
+ * Chama: estatísticas, tabela e marcadores do mapa
+ */
 function renderAll() {
-  updateStats();
-  renderTable();
-  renderMap();
+  updateStats(); // Atualiza contadores
+  renderRecordsTable(); // Atualiza tabela
+  renderMarkers(); // Atualiza marcadores do mapa
 }
 
-// ===================================
-// INICIALIZAÇÃO
-// ===================================
+// ============================================================
+// INICIALIZAÇÃO DA APLICAÇÃO
+// Executado quando o DOM estiver pronto
+// ============================================================
 
+/**
+ * Função: Inicializa todos os event listeners e componentes
+ */
 function init() {
-  // Mostra a página inicial
-  showSection("home");
+  // ===== EVENT LISTENERS PARA NAVEGAÇÃO =====
 
-  // Adiciona evento de clique no mapa para preencher coordenadas
-  if (map) {
-    map.on("click", (e) => {
-      if (latitudeInput && longitudeInput) {
-        latitudeInput.value = e.latlng.lat.toFixed(6);
-        longitudeInput.value = e.latlng.lng.toFixed(6);
-      }
-    });
-  }
-
-  // Event listeners
-  if (form) {
-    form.addEventListener("submit", handleFormSubmit);
-  }
-
-  if (getLocationBtn) {
-    getLocationBtn.addEventListener("click", getLocation);
-  }
-
-  if (filoFilter) {
-    filoFilter.addEventListener("change", renderAll);
-  }
-
-  if (fotoInput && previewContainer) {
-    fotoInput.addEventListener("change", () => {
-      previewContainer.innerHTML = "";
-      const files = fotoInput.files;
-      if (files) {
-        Array.from(files).forEach((file) => {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const img = document.createElement("img");
-            img.src = e.target.result;
-            img.style.width = "100px";
-            img.style.height = "100px";
-            img.style.objectFit = "cover";
-            img.style.borderRadius = "8px";
-            img.style.margin = "4px";
-            previewContainer.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        });
-      }
-    });
-  }
-
-  if (recordsTableBody) {
-    recordsTableBody.addEventListener("click", (e) => {
-      const target = e.target.closest(".btn-delete");
-      if (target) {
-        const id = target.dataset.id;
-        handleDeleteRecord(id);
-      }
-    });
-  }
-
-  // Inicializa a chave dicotômica
-  if (document.getElementById("chave-dicotomica")) {
-    setTimeout(() => resetKey(), 100);
-  }
-
-  // Renderiza dados iniciais
-  renderAll();
-}
-
-// Inicializa a aplicação
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", init);
-} else {
-  init();
-}
-
-// ===== MELHORIAS DE PERFORMANCE E UX =====
-
-// Debounce para redimensionamento de janela
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
-
-// Otimizar redimensionamento
-const optimizedResize = debounce(() => {
-  if (window.innerWidth >= 768 && isMobileMenuOpen) {
-    toggleMobileMenu();
-  }
-
-  // Reajustar mapa se existir
-  if (typeof map !== "undefined" && map) {
-    setTimeout(() => {
-      map.invalidateSize();
-    }, 300);
-  }
-}, 250);
-
-window.addEventListener("resize", optimizedResize);
-
-// Melhorar navegação com teclado
-document.addEventListener("keydown", (e) => {
-  // Fechar menu mobile com ESC
-  if (e.key === "Escape" && isMobileMenuOpen) {
-    toggleMobileMenu();
-  }
-
-  // Navegação com TAB no menu mobile
-  if (isMobileMenuOpen && e.key === "Tab") {
-    const focusableElements = document.querySelectorAll(
-      ".mobile-nav-item, .mobile-nav-close"
-    );
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
-
-    if (e.shiftKey) {
-      if (document.activeElement === firstElement) {
-        e.preventDefault();
-        lastElement.focus();
-      }
-    } else {
-      if (document.activeElement === lastElement) {
-        e.preventDefault();
-        firstElement.focus();
-      }
-    }
-  }
-});
-
-// Adicionar feedback tátil em dispositivos móveis
-function addHapticFeedback() {
-  if ("vibrate" in navigator) {
-    navigator.vibrate(10); // Vibração leve
-  }
-}
-
-// Melhorar performance do scroll
-let ticking = false;
-function updateOnScroll() {
-  const navbar = document.querySelector(".navbar");
-  const scrollY = window.scrollY;
-
-  if (scrollY > 100) {
-    navbar.style.backdropFilter = "blur(25px)";
-    navbar.style.background = "rgba(255, 255, 255, 0.95)";
-  } else {
-    navbar.style.backdropFilter = "blur(20px)";
-    navbar.style.background = "rgba(255, 255, 255, 0.25)";
-  }
-
-  ticking = false;
-}
-
-function requestScrollUpdate() {
-  if (!ticking) {
-    requestAnimationFrame(updateOnScroll);
-    ticking = true;
-  }
-}
-
-window.addEventListener("scroll", requestScrollUpdate, { passive: true });
-
-// Lazy loading para imagens
-function lazyLoadImages() {
-  const images = document.querySelectorAll("img[data-src]");
-  const imageObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const img = entry.target;
-        img.src = img.dataset.src;
-        img.classList.remove("lazy");
-        imageObserver.unobserve(img);
-      }
-    });
-  });
-
-  images.forEach((img) => imageObserver.observe(img));
-}
-
-// Detectar tipo de dispositivo
-function detectDevice() {
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
-  );
-  const isTablet =
-    /iPad|Android/i.test(navigator.userAgent) && window.innerWidth >= 768;
-  const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-
-  document.documentElement.classList.toggle("is-mobile", isMobile);
-  document.documentElement.classList.toggle("is-tablet", isTablet);
-  document.documentElement.classList.toggle("is-touch", isTouchDevice);
-
-  // Otimizações específicas para cada dispositivo
-  if (isMobile) {
-    // Otimizar para mobile
-    document.body.style.overscrollBehavior = "none";
-  }
-
-  if (isTouchDevice) {
-    // Adicionar classes para otimizar interações touch
-    document.body.classList.add("touch-device");
-  }
-}
-
-// Melhorar carregamento de fontes
-function preloadFonts() {
-  const fonts = [
-    "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap",
-  ];
-
-  fonts.forEach((font) => {
-    const link = document.createElement("link");
-    link.rel = "preload";
-    link.href = font;
-    link.as = "style";
-    link.onload = () => {
-      link.rel = "stylesheet";
-    };
-    document.head.appendChild(link);
-  });
-}
-
-// Inicializar melhorias
-document.addEventListener("DOMContentLoaded", () => {
-  detectDevice();
-  lazyLoadImages();
-  preloadFonts();
-
-  // Adicionar indicadores de carregamento
-  document.body.classList.add("loaded");
-});
-
-// Service Worker para PWA (opcional)
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("/sw.js")
-      .then((registration) => {
-        console.log("SW registrado com sucesso");
-      })
-      .catch((registrationError) => {
-        console.log("Falha ao registrar SW");
-      });
-  });
-}
-
-// Arquivo finalizado com melhorias de responsividade implementadas
-
-  isMobileMenuOpen = !isMobileMenuOpen;
-
-  if (isMobileMenuOpen) {
-    mobileNav.classList.add("active");
-    mobileMenuBtn.classList.add("active");
-    document.body.style.overflow = "hidden"; // Previne scroll do body
-  } else {
-    mobileNav.classList.remove("active");
-    mobileMenuBtn.classList.remove("active");
-    document.body.style.overflow = "auto";
-  }
-
-// Fechar menu mobile ao clicar fora
-document.addEventListener("click", (e) => {
-  const mobileNav = document.getElementById("mobile-nav");
-  const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
-
-  if (
-    isMobileMenuOpen &&
-    !mobileNav.contains(e.target) &&
-    !mobileMenuBtn.contains(e.target)
-  ) {
-    toggleMobileMenu();
-  }
-});
-
-// Fechar menu mobile ao redimensionar para desktop
-window.addEventListener("resize", () => {
-  if (window.innerWidth >= 768 && isMobileMenuOpen) {
-    toggleMobileMenu();
-  }
-});
-
-// Função duplicada removida - usando a versão melhorada acima
-
-// Adicionar listeners para navegação desktop e mobile
-document.addEventListener("DOMContentLoaded", () => {
-  // Desktop navigation
+  // Links do menu desktop
   const desktopNavLinks = document.querySelectorAll(".desktop-nav a");
   desktopNavLinks.forEach((link) => {
     link.addEventListener("click", (e) => {
-      e.preventDefault();
-      const sectionId = link.getAttribute("href").substring(1);
-      showSection(sectionId);
+      e.preventDefault(); // Impede navegação padrão
+      const sectionId = link.getAttribute("href").substring(1); // Remove '#'
+      showSection(sectionId); // Mostra seção
     });
   });
 
-  // Mobile navigation
+  // Links do menu mobile
   const mobileNavLinks = document.querySelectorAll(".mobile-nav-item");
   mobileNavLinks.forEach((link) => {
     link.addEventListener("click", (e) => {
@@ -873,6 +651,57 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Mostrar seção inicial
+  // ===== EVENT LISTENER PARA FORMULÁRIO =====
+  const form = document.getElementById("form");
+  if (form) {
+    form.addEventListener("submit", handleFormSubmit);
+  }
+
+  // ===== EVENT LISTENER PARA BOTÃO DE LOCALIZAÇÃO =====
+  const getLocationBtn = document.getElementById("getLocation");
+  if (getLocationBtn) {
+    getLocationBtn.addEventListener("click", getLocation);
+  }
+
+  // ===== EVENT LISTENER PARA FILTRO DE FILOS =====
+  const filoFilter = document.getElementById("filo-filter");
+  if (filoFilter) {
+    filoFilter.addEventListener("change", renderAll); // Re-renderiza ao mudar filtro
+  }
+
+  // ===== EVENT LISTENER PARA BOTÕES DE DELETE =====
+  // Usa delegação de eventos (um listener no document)
+  document.addEventListener("click", (e) => {
+    if (e.target.closest(".btn-delete")) {
+      const id = e.target.closest(".btn-delete").dataset.id;
+      handleDeleteRecord(id);
+    }
+  });
+
+  // ===== INICIALIZAÇÃO COM DELAY =====
+  // Aguarda um pouco para garantir que DOM está pronto
+  setTimeout(() => {
+    // Só inicializa mapa se estivermos na seção do mapa
+    if (
+      document.getElementById("mapa-filos") &&
+      !document.getElementById("mapa-filos").classList.contains("hidden")
+    ) {
+      initMap();
+    }
+    resetKey(); // Inicializa chave dicotômica
+    renderAll(); // Renderiza tudo
+  }, 500);
+
+  // Mostra seção inicial (Home)
   showSection("home");
-});
+}
+
+// ===== EXECUTA INICIALIZAÇÃO =====
+// Verifica se DOM já está pronto
+if (document.readyState === "loading") {
+  // Ainda carregando: aguarda evento DOMContentLoaded
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  // Já está pronto: executa imediatamente
+  init();
+}
