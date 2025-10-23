@@ -1,54 +1,68 @@
+/* ============================================================
+   FILOSTUDY - PORTAL DE ESTUDOS FILOGENÉTICOS
+   Design moderno com tema claro e verde natural
+============================================================ */
+
 /* ----------------------------
-    FILOSTUDY - DESIGN MODERNO E LIMPO
+   VARIÁVEIS CSS (CORES E ESTILOS)
 ----------------------------- */
 :root {
-  /* Paleta de Cores Claras e Naturais */
-  --primary: #2e7d32; /* Verde suave */
-  --primary-light: #66bb6a; /* Verde claro */
-  --primary-dark: #1b5e20; /* Verde escuro */
-  --accent: #81c784; /* Verde pastel */
-  --mint: #a5d6a7; /* Verde menta */
+  /* Paleta de Cores Verdes (Tema Principal) */
+  --primary: #2e7d32; /* Verde suave - cor principal */
+  --primary-light: #66bb6a; /* Verde claro - hover states */
+  --primary-dark: #1b5e20; /* Verde escuro - textos importantes */
+  --accent: #81c784; /* Verde pastel - destaques */
+  --mint: #a5d6a7; /* Verde menta - acessórios */
 
-  /* Background e Cards */
-  --bg-primary: rgba(255, 255, 255, 0.95);
-  --bg-secondary: rgba(248, 255, 248, 0.9);
-  --bg-card: rgba(255, 255, 255, 0.85);
+  /* Fundos e Cards */
+  --bg-primary: rgba(255, 255, 255, 0.95); /* Fundo principal branco */
+  --bg-secondary: rgba(
+    248,
+    255,
+    248,
+    0.9
+  ); /* Fundo secundário levemente verde */
+  --bg-card: rgba(255, 255, 255, 0.85); /* Cards com transparência */
   --bg-hero: linear-gradient(
     135deg,
     rgba(129, 199, 132, 0.8) 0%,
     rgba(165, 214, 167, 0.7) 100%
-  );
+  ); /* Gradiente da hero section */
 
-  /* Textos */
-  --text-primary: #2e3440; /* Texto principal */
-  --text-secondary: #5e6c7e; /* Texto secundário */
-  --text-muted: #8faab5; /* Texto discreto */
-  --text-white: #ffffff;
+  /* Cores de Texto */
+  --text-primary: #2e3440; /* Texto principal escuro */
+  --text-secondary: #5e6c7e; /* Texto secundário cinza */
+  --text-muted: #8faab5; /* Texto discreto/desativado */
+  --text-white: #ffffff; /* Texto branco para fundos escuros */
 
-  /* Elementos */
-  --radius: 16px;
-  --radius-small: 8px;
-  --shadow-soft: 0 4px 20px rgba(46, 125, 50, 0.1);
-  --shadow-medium: 0 8px 30px rgba(46, 125, 50, 0.15);
-  --shadow-strong: 0 12px 40px rgba(46, 125, 50, 0.2);
-  --border-light: 1px solid rgba(129, 199, 132, 0.2);
+  /* Bordas e Sombras */
+  --radius: 16px; /* Raio de borda grande */
+  --radius-small: 8px; /* Raio de borda pequeno */
+  --shadow-soft: 0 4px 20px rgba(46, 125, 50, 0.1); /* Sombra suave */
+  --shadow-medium: 0 8px 30px rgba(46, 125, 50, 0.15); /* Sombra média */
+  --shadow-strong: 0 12px 40px rgba(46, 125, 50, 0.2); /* Sombra forte */
+  --border-light: 1px solid rgba(129, 199, 132, 0.2); /* Borda sutil */
 
-  /* Glassmorphism */
-  --glass: rgba(255, 255, 255, 0.25);
-  --glass-border: rgba(255, 255, 255, 0.18);
+  /* Glassmorphism (Efeito de Vidro) */
+  --glass: rgba(255, 255, 255, 0.25); /* Fundo translúcido */
+  --glass-border: rgba(255, 255, 255, 0.18); /* Borda translúcida */
 }
 
-/* Reset e Base */
+/* ----------------------------
+   RESET E ESTILOS BASE
+----------------------------- */
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  box-sizing: border-box; /* Facilita cálculos de layout */
 }
 
+/* Corpo da página */
 body {
-  font-family: "Inter", "Segoe UI", Roboto, sans-serif;
-  line-height: 1.6;
+  font-family: "Inter", "Segoe UI", Roboto, sans-serif; /* Fonte moderna */
+  line-height: 1.6; /* Espaçamento entre linhas */
   color: var(--text-primary);
+  /* Fundo: gradiente verde + imagem de floresta */
   background: linear-gradient(
       135deg,
       rgba(232, 245, 233, 0.9) 0%,
@@ -57,78 +71,88 @@ body {
     url("https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80")
       center/cover fixed;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: hidden; /* Previne scroll horizontal */
 }
 
-/* Scrollbar personalizada */
+/* ----------------------------
+   SCROLLBAR PERSONALIZADA (Chrome/Safari)
+----------------------------- */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 8px; /* Largura da scrollbar */
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1); /* Trilha transparente */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--primary-light);
+  background: var(--primary-light); /* Barra verde clara */
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary);
+  background: var(--primary); /* Verde mais escuro ao hover */
 }
 
-/* Links */
+/* ----------------------------
+   LINKS GLOBAIS
+----------------------------- */
 a {
   color: var(--primary);
-  text-decoration: none;
+  text-decoration: none; /* Remove sublinhado */
   transition: all 0.3s ease;
 }
 
 a:hover {
   color: var(--primary-dark);
-  transform: translateY(-1px);
+  transform: translateY(-1px); /* Sutil movimento ao hover */
 }
 
-/* ----------------------------
-    NAVBAR - RESPONSIVO COM MENU HAMBURGER
------------------------------ */
+/* ============================================================
+   BARRA DE NAVEGAÇÃO (NAVBAR)
+   Responsiva com menu hamburger para mobile
+============================================================ */
 .navbar {
-  background: var(--glass);
-  backdrop-filter: blur(20px);
+  background: var(--glass); /* Fundo translúcido */
+  backdrop-filter: blur(20px); /* Efeito de vidro desfocado */
   border-bottom: var(--glass-border);
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Logo à esquerda, menu à direita */
   align-items: center;
   padding: 16px 32px;
-  position: sticky;
+  position: sticky; /* Fica fixo ao rolar a página */
   top: 0;
-  z-index: 1000;
+  z-index: 1000; /* Fica acima de outros elementos */
   transition: all 0.3s ease;
 }
 
+/* Logotipo (imagem + texto) */
 .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 12px; /* Espaço entre imagem e texto */
   font-weight: 700;
-  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-size: clamp(1.1rem, 3vw, 1.4rem); /* Tamanho responsivo */
   color: var(--primary-dark);
   z-index: 1001;
 }
 
+/* Imagem do logo */
 .logo-img {
-  width: clamp(32px, 5vw, 40px);
+  width: clamp(32px, 5vw, 40px); /* Tamanho responsivo */
   height: clamp(32px, 5vw, 40px);
   border-radius: var(--radius-small);
 }
 
-/* Navegação Desktop */
+/* ----------------------------
+   MENU DESKTOP (Telas grandes)
+----------------------------- */
 .desktop-nav {
   display: flex;
-  gap: 32px;
+  gap: 32px; /* Espaço entre os links */
 }
 
+/* Links do menu desktop */
 .desktop-nav a {
   font-weight: 600;
   padding: 8px 16px;
@@ -137,11 +161,13 @@ a:hover {
   position: relative;
 }
 
+/* Efeito hover nos links */
 .desktop-nav a:hover {
-  background: rgba(129, 199, 132, 0.2);
-  transform: translateY(-2px);
+  background: rgba(129, 199, 132, 0.2); /* Fundo verde claro */
+  transform: translateY(-2px); /* Levanta o link */
 }
 
+/* Linha animada embaixo do link (pseudo-elemento) */
 .desktop-nav a::after {
   content: "";
   position: absolute;
@@ -154,15 +180,18 @@ a:hover {
   transition: width 0.3s ease;
 }
 
+/* Linha aparece ao hover */
 .desktop-nav a:hover::after {
   width: 80%;
 }
 
-/* Menu Hambúrguer */
+/* ----------------------------
+   BOTÃO HAMBURGER (3 linhas - Mobile)
+----------------------------- */
 .mobile-menu-btn {
-  display: none;
+  display: none; /* Escondido em desktop */
   flex-direction: column;
-  gap: 4px;
+  gap: 4px; /* Espaço entre as 3 linhas */
   background: none;
   border: none;
   cursor: pointer;
@@ -171,6 +200,7 @@ a:hover {
   transition: all 0.3s ease;
 }
 
+/* Cada linha do hamburger */
 .hamburger-line {
   width: 24px;
   height: 3px;
@@ -180,39 +210,47 @@ a:hover {
   transform-origin: center;
 }
 
+/* Animação quando menu está aberto: linha 1 vira \ */
 .mobile-menu-btn.active .hamburger-line:nth-child(1) {
   transform: rotate(45deg) translate(6px, 6px);
 }
 
+/* Animação quando menu está aberto: linha 2 desaparece */
 .mobile-menu-btn.active .hamburger-line:nth-child(2) {
   opacity: 0;
 }
 
+/* Animação quando menu está aberto: linha 3 vira / formando X */
 .mobile-menu-btn.active .hamburger-line:nth-child(3) {
   transform: rotate(-45deg) translate(6px, -6px);
 }
 
-/* Menu Mobile */
+/* ----------------------------
+   MENU MOBILE (Painel lateral)
+----------------------------- */
+/* Overlay escuro que cobre a tela */
 .mobile-nav {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.5); /* Fundo escuro semitransparente */
   backdrop-filter: blur(10px);
   z-index: 999;
-  display: none;
+  display: none; /* Escondido por padrão */
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
 }
 
+/* Quando menu está ativo (aberto) */
 .mobile-nav.active {
   opacity: 1;
   visibility: visible;
 }
 
+/* Painel branco que desliza da direita */
 .mobile-nav-content {
   position: absolute;
   top: 0;
@@ -221,15 +259,17 @@ a:hover {
   height: 100vh;
   background: var(--bg-primary);
   backdrop-filter: blur(20px);
-  padding: 80px 32px 32px;
-  transform: translateX(100%);
+  padding: 80px 32px 32px; /* Espaço para o botão X no topo */
+  transform: translateX(100%); /* Começa fora da tela à direita */
   transition: transform 0.3s ease;
 }
 
+/* Painel desliza para dentro quando ativo */
 .mobile-nav.active .mobile-nav-content {
   transform: translateX(0);
 }
 
+/* Botão X para fechar o menu */
 .mobile-nav-close {
   position: absolute;
   top: 20px;
@@ -244,21 +284,24 @@ a:hover {
   transition: all 0.3s ease;
 }
 
+/* Efeito hover no botão X */
 .mobile-nav-close:hover {
   background: rgba(129, 199, 132, 0.2);
-  transform: rotate(90deg);
+  transform: rotate(90deg); /* Gira 90 graus */
 }
 
+/* Container dos links */
 .mobile-nav-links {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Links em coluna */
   gap: 8px;
 }
 
+/* Cada item do menu mobile */
 .mobile-nav-item {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 16px; /* Espaço entre ícone e texto */
   padding: 16px 20px;
   border-radius: var(--radius);
   color: var(--text-primary);
@@ -267,12 +310,14 @@ a:hover {
   text-decoration: none;
 }
 
+/* Efeito hover nos itens */
 .mobile-nav-item:hover {
   background: var(--bg-card);
-  transform: translateX(8px);
+  transform: translateX(8px); /* Desliza para direita */
   color: var(--primary-dark);
 }
 
+/* Ícones dos itens */
 .mobile-nav-item i {
   font-size: 20px;
   color: var(--primary);
@@ -284,14 +329,16 @@ a:hover {
 }
 
 /* ----------------------------
-    LAYOUT E CONTAINERS
+   LAYOUT E CONTAINERS GERAIS
 ----------------------------- */
+/* Container principal das seções */
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 1200px; /* Largura máxima */
+  margin: 0 auto; /* Centraliza horizontalmente */
   padding: 40px 24px;
 }
 
+/* Títulos hierárquicos */
 h1,
 h2,
 h3,
@@ -300,6 +347,7 @@ h4 {
   margin-bottom: 24px;
 }
 
+/* Título de seção (h2) com linha decorativa embaixo */
 h2 {
   font-size: 2.5rem;
   font-weight: 700;
@@ -307,6 +355,7 @@ h2 {
   position: relative;
 }
 
+/* Linha decorativa embaixo do h2 (pseudo-elemento) */
 h2::after {
   content: "";
   position: absolute;
@@ -316,7 +365,7 @@ h2::after {
   height: 4px;
   background: linear-gradient(90deg, var(--primary), var(--accent));
   border-radius: 2px;
-  transform: translateX(-50%);
+  transform: translateX(-50%); /* Centraliza */
 }
 
 /* ----------------------------
@@ -513,21 +562,22 @@ select {
 
 /* ===== CORREÇÕES ESPECÍFICAS PARA FORMULÁRIOS ===== */
 
-/* Garantir que todos os inputs tenham fundo claro */
+/* Garantir que todos os inputs tenham fundo claro e sejam legíveis */
 input[type="text"],
 input[type="number"],
 input[type="email"],
 textarea,
 select {
-  background: rgba(255, 255, 255, 0.95) !important;
-  color: var(--text-primary) !important;
+  background: rgba(255, 255, 255, 0.95) !important; /* Fundo branco */
+  color: var(--text-primary) !important; /* Texto escuro */
   border: 2px solid rgba(129, 199, 132, 0.3);
   border-radius: var(--radius-small);
   padding: 12px 16px;
-  font-size: 16px;
+  font-size: 16px; /* Importante: evita zoom no iOS */
   font-family: inherit;
   transition: all 0.3s ease;
   width: 100%;
+  min-height: 48px; /* Touch target adequado para mobile */
 }
 
 /* Estados de foco melhorados */
@@ -539,7 +589,7 @@ select:focus {
   background: rgba(255, 255, 255, 1) !important;
   border-color: var(--primary) !important;
   box-shadow: 0 0 0 3px rgba(129, 199, 132, 0.2) !important;
-  outline: none !important;
+  outline: none !important; /* Remove outline padrão */
 }
 
 /* Labels dos formulários */
@@ -551,7 +601,7 @@ label {
   font-size: 14px;
 }
 
-/* Fieldsets */
+/* Fieldsets (grupos de campos) */
 fieldset {
   border: 2px solid rgba(129, 199, 132, 0.2);
   border-radius: var(--radius);
@@ -560,6 +610,7 @@ fieldset {
   background: rgba(255, 255, 255, 0.5);
 }
 
+/* Legendas dos fieldsets */
 legend {
   background: var(--primary);
   color: white;
@@ -569,7 +620,9 @@ legend {
   font-size: 14px;
 }
 
-/* Correções para o mapa */
+/* ----------------------------
+   MAPA LEAFLET (Correções)
+----------------------------- */
 #map {
   width: 100% !important;
   height: 400px !important;
@@ -580,14 +633,18 @@ legend {
   overflow: hidden;
   border: 2px solid rgba(129, 199, 132, 0.2);
   position: relative;
+  min-height: 300px; /* Altura mínima garantida */
 }
 
-/* Garantir que o mapa seja visível */
+/* Container do Leaflet */
 .leaflet-container {
-  background: #e8f5e8 !important;
+  background: #e8f5e8 !important; /* Fundo verde claro */
   font-family: inherit !important;
+  height: 100% !important; /* Importante para mobile */
+  width: 100% !important;
 }
 
+/* Controles de zoom do mapa */
 .leaflet-control-zoom {
   border: none !important;
   box-shadow: var(--shadow-soft) !important;
@@ -597,6 +654,9 @@ legend {
   background: var(--bg-card) !important;
   color: var(--primary) !important;
   border: 1px solid rgba(129, 199, 132, 0.3) !important;
+  width: 32px !important; /* Maior para touch */
+  height: 32px !important;
+  line-height: 32px !important;
 }
 
 .leaflet-control-zoom a:hover {
@@ -609,11 +669,14 @@ legend {
   background: var(--bg-card) !important;
   border-radius: var(--radius-small) !important;
   box-shadow: var(--shadow-medium) !important;
+  padding: 8px !important;
 }
 
 .leaflet-popup-content {
   color: var(--text-primary) !important;
   font-family: inherit !important;
+  margin: 12px !important;
+  min-width: 200px !important; /* Largura mínima */
 }
 
 .leaflet-popup-tip {
@@ -778,10 +841,10 @@ legend {
 }
 
 /* ----------------------------
-    RODAPÉ
+   RODAPÉ
 ----------------------------- */
 footer {
-  background: var(--glass);
+  background: var(--glass); /* Fundo translúcido */
   backdrop-filter: blur(20px);
   text-align: center;
   padding: 32px;
@@ -907,31 +970,33 @@ p {
 
 /* ===== MOBILE LARGE (481px - 767px) ===== */
 @media (max-width: 767px) {
-  /* Navegação mobile */
+  /* Navegação mobile ativa */
   .desktop-nav {
-    display: none;
+    display: none; /* Esconde menu desktop */
   }
 
   .mobile-menu-btn {
-    display: flex;
+    display: flex; /* Mostra botão hamburger */
   }
 
   .mobile-nav {
-    display: block;
+    display: block; /* Ativa painel mobile */
   }
 
+  /* Navbar mais compacta */
   .navbar {
     padding: 12px 20px;
   }
 
-  /* Hero section */
+  /* Hero section (página inicial) */
   .hero-content {
-    padding: 40px 0;
+    padding: 40px 20px; /* Mais compacto */
     text-align: center;
   }
 
+  /* Botões do menu principal */
   .menu-buttons {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* 1 coluna em mobile */
     gap: 16px;
     margin-top: 40px;
   }
@@ -939,6 +1004,7 @@ p {
   .menu-btn {
     padding: 24px 20px;
     text-align: left;
+    width: 100%; /* Largura total */
   }
 
   .menu-btn i {
@@ -946,7 +1012,7 @@ p {
     margin-bottom: 12px;
   }
 
-  /* Seções */
+  /* Cabeçalho das seções */
   .section-header {
     flex-direction: column;
     align-items: flex-start;
@@ -955,15 +1021,17 @@ p {
   }
 
   .back-btn {
-    order: -1;
+    order: -1; /* Botão voltar sempre primeiro */
   }
 
-  /* Mapa e estatísticas */
+  /* Mapa interativo */
   #map {
-    height: 300px;
+    height: 300px !important; /* Altura fixa para mobile */
     margin: 16px 0;
+    width: 100% !important; /* Largura total */
   }
 
+  /* Estatísticas em coluna */
   .stats-container {
     flex-direction: column;
     gap: 12px;
@@ -972,9 +1040,10 @@ p {
   .stat-box {
     width: 100%;
     padding: 16px;
+    min-width: auto; /* Remove min-width */
   }
 
-  /* Formulários */
+  /* Formulários mobile-friendly */
   .coordinates-container {
     flex-direction: column;
     align-items: stretch;
@@ -987,6 +1056,7 @@ p {
     margin-bottom: 8px;
   }
 
+  /* Botões de ação em coluna */
   .form-actions {
     flex-direction: column;
     gap: 12px;
@@ -996,16 +1066,17 @@ p {
     width: 100%;
     padding: 14px;
     font-size: 1rem;
+    justify-content: center; /* Centraliza conteúdo */
   }
 
-  /* Tabelas */
+  /* Tabelas com scroll horizontal */
   .table-container {
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    -webkit-overflow-scrolling: touch; /* Scroll suave no iOS */
   }
 
   table {
-    min-width: 600px;
+    min-width: 600px; /* Evita colunas muito estreitas */
   }
 
   /* Chave dicotômica */
@@ -1020,25 +1091,44 @@ p {
     padding: 16px;
   }
 
-  /* Sobre */
+  /* Página Sobre */
   .about-content {
     flex-direction: column;
     text-align: center;
   }
 
   .team-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* 1 coluna */
     gap: 20px;
   }
 
   .tech-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas */
     gap: 16px;
+  }
+
+  /* Inputs e selects mobile-friendly */
+  input,
+  textarea,
+  select {
+    font-size: 16px !important; /* Previne zoom no iOS */
+    min-height: 48px; /* Touch target mínimo */
+  }
+
+  /* Fieldsets mais compactos */
+  fieldset {
+    padding: 20px 16px;
+  }
+
+  legend {
+    font-size: 13px;
+    padding: 6px 12px;
   }
 }
 
 /* ===== MOBILE SMALL (320px - 480px) ===== */
 @media (max-width: 480px) {
+  /* Navbar ainda mais compacta */
   .navbar {
     padding: 10px 16px;
   }
@@ -1047,8 +1137,9 @@ p {
     font-size: 1.1rem;
   }
 
+  /* Hero mais compacto */
   .hero-content {
-    padding: 32px 0;
+    padding: 32px 16px;
   }
 
   .hero-subtitle {
@@ -1059,6 +1150,7 @@ p {
     font-size: 0.9rem;
   }
 
+  /* Botões do menu */
   .menu-btn {
     padding: 20px 16px;
   }
@@ -1072,10 +1164,12 @@ p {
     line-height: 1.4;
   }
 
+  /* Mapa menor */
   #map {
-    height: 250px;
+    height: 250px !important;
   }
 
+  /* Seções e fieldsets */
   form,
   .about-section,
   .key-intro,
@@ -1087,18 +1181,26 @@ p {
     padding: 16px;
   }
 
+  /* Menu mobile ocupa tela inteira */
   .mobile-nav-content {
-    width: 100vw;
+    width: 100vw; /* Largura total */
     padding: 60px 24px 24px;
   }
 
+  /* Tecnologias em 1 coluna */
   .tech-grid {
     grid-template-columns: 1fr;
     gap: 12px;
   }
 
+  /* Estatísticas */
   .stat-box span {
     font-size: 1.8rem;
+  }
+
+  /* Container geral */
+  .container {
+    padding: 20px 16px;
   }
 }
 
@@ -1227,6 +1329,10 @@ html {
   box-shadow: var(--shadow-medium);
 }
 
+/* ----------------------------
+   ANIMAÇÕES
+----------------------------- */
+/* Animação de entrada (fade + movimento para cima) */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -1238,6 +1344,7 @@ html {
   }
 }
 
+/* Animação de deslize lateral */
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -1249,15 +1356,17 @@ html {
   }
 }
 
-/* Aplicar animações aos elementos */
+/* Aplicar animação fadeInUp aos containers */
 .container {
   animation: fadeInUp 0.6s ease-out;
 }
 
+/* Aplicar animação slideIn aos botões do menu */
 .menu-btn {
   animation: slideIn 0.5s ease-out;
 }
 
+/* Delays progressivos para efeito cascata */
 .menu-btn:nth-child(1) {
   animation-delay: 0.1s;
 }
@@ -1277,30 +1386,41 @@ html {
   input,
   textarea,
   select {
-    min-height: 44px; /* Padrão Apple para touch targets */
-    font-size: 16px; /* Previne zoom no iOS */
+    min-height: 48px !important; /* Padrão Apple para touch targets */
+    font-size: 16px !important; /* Previne zoom no iOS */
     border-radius: 12px;
     padding: 12px 16px;
     border: 2px solid rgba(129, 199, 132, 0.3);
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.95) !important;
     transition: all 0.3s ease;
+    -webkit-appearance: none; /* Remove estilo padrão do iOS */
+    -moz-appearance: none;
+    appearance: none;
   }
 
+  /* Melhora ainda mais o foco em mobile */
   input:focus,
   textarea:focus,
   select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(129, 199, 132, 0.2);
-    transform: scale(1.02);
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(129, 199, 132, 0.2) !important;
+    transform: scale(1.01); /* Sutil feedback visual */
   }
 
   /* Botões touch-friendly */
   .btn,
   .menu-btn,
   .key-option,
-  .mobile-nav-item {
+  .mobile-nav-item,
+  .back-btn {
     min-height: 48px; /* Tamanho mínimo para toque confortável */
     touch-action: manipulation; /* Melhora responsividade do toque */
+    -webkit-tap-highlight-color: rgba(
+      129,
+      199,
+      132,
+      0.3
+    ); /* Cor do tap no iOS */
   }
 
   /* Melhor espaçamento entre elementos */
@@ -1313,6 +1433,7 @@ html {
     color: var(--text-primary);
     margin-bottom: 8px;
     display: block;
+    font-size: 15px; /* Ligeiramente maior em mobile */
   }
 
   /* Cards mais espaçados */
@@ -1335,11 +1456,26 @@ html {
     border-radius: 16px;
   }
 
-  /* Mapa com altura fixa mais apropriada */
+  /* Mapa com altura otimizada para mobile */
   #map {
-    height: 280px;
+    height: 280px !important;
     border-radius: 16px;
     margin: 16px 0;
+    min-height: 280px !important; /* Garante altura mínima */
+  }
+
+  /* Leaflet container mobile */
+  .leaflet-container {
+    height: 280px !important;
+    width: 100% !important;
+  }
+
+  /* Controles do mapa maiores em mobile */
+  .leaflet-control-zoom a {
+    width: 36px !important;
+    height: 36px !important;
+    line-height: 36px !important;
+    font-size: 18px !important;
   }
 }
 
@@ -1479,36 +1615,40 @@ html {
 }
 
 /* ----------------------------
-    SEÇÃO HERO E COMPONENTES PRINCIPAIS  
+   PÁGINA INICIAL (HERO SECTION)
 ----------------------------- */
-
+/* Seção hero com gradiente verde */
 .hero-section {
-  min-height: 80vh;
+  min-height: 80vh; /* 80% da altura da tela */
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: var(--bg-hero);
+  background: var(--bg-hero); /* Gradiente verde */
   border-radius: var(--radius);
   margin: 20px 0;
   box-shadow: var(--shadow-soft);
 }
 
+/* Container do conteúdo hero */
 .hero-content {
   max-width: 1000px;
   padding: 60px 40px;
 }
 
+/* Título principal com gradiente */
 .hero-content h1 {
   font-size: 4rem;
   font-weight: 800;
   margin-bottom: 20px;
+  /* Texto com efeito gradiente */
   background: linear-gradient(135deg, var(--primary-dark), var(--primary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
+/* Subtítulo */
 .hero-subtitle {
   font-size: 1.5rem;
   color: var(--text-secondary);
@@ -1516,6 +1656,7 @@ html {
   font-weight: 600;
 }
 
+/* Descrição */
 .hero-description {
   font-size: 1.1rem;
   color: var(--text-secondary);
@@ -1523,34 +1664,41 @@ html {
   line-height: 1.7;
 }
 
+/* Grid de botões do menu principal */
 .menu-buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(300px, 1fr)
+  ); /* Grid responsivo */
   gap: 32px;
   max-width: 1000px;
   margin: 0 auto;
 }
 
+/* Cada botão do menu principal */
 .menu-btn {
   background: var(--bg-card);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px); /* Efeito vidro */
   border: var(--glass-border);
   padding: 40px 32px;
   border-radius: var(--radius);
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Animação suave */
   text-align: center;
   box-shadow: var(--shadow-soft);
   position: relative;
   overflow: hidden;
 }
 
+/* Efeito hover no botão */
 .menu-btn:hover {
-  transform: translateY(-10px) scale(1.02);
-  box-shadow: var(--shadow-strong);
+  transform: translateY(-10px) scale(1.02); /* Levanta e aumenta */
+  box-shadow: var(--shadow-strong); /* Sombra mais forte */
   background: rgba(255, 255, 255, 0.95);
 }
 
+/* Ícone do botão */
 .menu-btn i {
   font-size: 3.5rem;
   margin-bottom: 24px;
@@ -1559,11 +1707,13 @@ html {
   transition: all 0.3s ease;
 }
 
+/* Ícone aumenta ao hover */
 .menu-btn:hover i {
   transform: scale(1.1);
   color: var(--primary-dark);
 }
 
+/* Título do botão */
 .menu-btn h3 {
   font-size: 1.6rem;
   margin-bottom: 16px;
@@ -1571,6 +1721,7 @@ html {
   font-weight: 700;
 }
 
+/* Descrição do botão */
 .menu-btn p {
   color: var(--text-secondary);
   font-size: 1rem;
@@ -1578,21 +1729,59 @@ html {
   margin: 0;
 }
 
-/* Container padrão */
+/* ----------------------------
+   SEÇÕES INTERNAS (Mapa, Cadastro, etc.)
+----------------------------- */
+/* Container padrão de seções */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 32px;
 }
 
-/* Seções ocultas por padrão */
+/* Seções escondidas por padrão */
 .section {
   display: none;
 }
 
+/* Seção ativa (visível) */
 .section.active,
 .section:not(.hidden) {
   display: block;
+}
+
+/* Cabeçalho de cada seção (botão voltar + título) */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+/* Botão "Voltar" */
+.back-btn {
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  color: var(--primary-dark);
+  border: var(--border-light);
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow-soft);
+}
+
+/* Efeito hover no botão voltar */
+.back-btn:hover {
+  background: var(--primary-light);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
 }
 
 /* Estilos para popups do mapa */
