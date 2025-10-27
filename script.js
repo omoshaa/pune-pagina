@@ -36,30 +36,6 @@ function toggleMobileMenu() {
   }
 }
 
-// Event listener: Fechar menu ao clicar fora dele
-document.addEventListener("click", (e) => {
-  const mobileNav = document.getElementById("mobile-nav");
-  const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
-
-  // Se menu está aberto E clique foi fora do menu E fora do botão
-  if (
-    isMobileMenuOpen &&
-    mobileNav &&
-    !mobileNav.contains(e.target) &&
-    mobileMenuBtn &&
-    !mobileMenuBtn.contains(e.target)
-  ) {
-    toggleMobileMenu(); // Fecha o menu
-  }
-});
-
-// Event listener: Fechar menu ao redimensionar para desktop
-window.addEventListener("resize", () => {
-  if (window.innerWidth >= 768 && isMobileMenuOpen) {
-    toggleMobileMenu(); // Fecha menu se tela ficar grande
-  }
-});
-
 // ============================================================
 // NAVEGAÇÃO ENTRE SEÇÕES (SPA - Single Page Application)
 // ============================================================
@@ -75,7 +51,8 @@ function showSection(sectionId) {
   }
 
   // Esconder TODAS as seções
-  const sections = document.querySelectorAll(".container");
+  // CORREÇÃO: Seleciona as seções principais, não todos os .container
+  const sections = document.querySelectorAll("main > .section, main > .hero-section");
   sections.forEach((section) => {
     section.classList.add("hidden"); // Adiciona classe .hidden
   });
@@ -110,12 +87,12 @@ function showSection(sectionId) {
 }
 
 // ============================================================
-// DADOS DOS REGISTROS FILOGENÉTICOS
+// DADOS DOS REGISTROS DE TARDIGRADA
 // Armazenados no LocalStorage do navegador
 // ============================================================
 
-// Carrega registros do LocalStorage OU usa dados de exemplo
-let filoRecords = JSON.parse(localStorage.getItem("filoRecords")) || [
+// CORREÇÃO: Renomeado de filoRecords para tardiRecords
+let tardiRecords = JSON.parse(localStorage.getItem("tardiRecords")) || [
   // Registro de exemplo 1: Tardígrado Eutardigrada
   {
     id: "1a2b3c", // ID único de 6 caracteres
@@ -204,7 +181,7 @@ let choiceHistory = []; // Histórico de escolhas do usuário na chave
 
 /**
  * Função: Inicializa o mapa Leaflet
- * Só é chamada quando o usuário navega para a seção "Mapa de Filos"
+ * Só é chamada quando o usuário navega para a seção "Mapa de Tardigrada"
  */
 function initMap() {
   // Verificar se a biblioteca Leaflet foi carregada
@@ -261,17 +238,24 @@ function renderMarkers() {
 
   // Para cada registro, criar um marcador
   filteredRecords.forEach((record) => {
-    const marker = L.marker([record.latitude, record.longitude]).addTo(map) // Adiciona ao mapa
-      .bindPopup(`
-        <div class="popup-content">
-          <h4>${record.filo} - ${record.genero} ${record.especie}</h4>
-          <p><strong>Local:</strong> ${record.localidade}</p>
-          <p><strong>Pesquisador:</strong> ${record.pesquisador}</p>
-          <p><strong>Data:</strong> ${new Date(record.data).toLocaleDateString(
-            "pt-BR"
-          )}</p>
-        </div>
-      `); // Popup com informações
+    // CORREÇÃO DE BUG: Usando `record.classe` em vez de `record.filo`
+    // MELHORIA DE SEGURANÇA: Usando escapeHtml para dados do usuário
+    const popupHtml = `
+      <div class="popup-content">
+        <h4>${escapeHtml(record.classe)} - ${escapeHtml(
+      record.genero
+    )} ${escapeHtml(record.especie)}</h4>
+        <p><strong>Local:</strong> ${escapeHtml(record.localidade)}</p>
+        <p><strong>Pesquisador:</strong> ${escapeHtml(record.pesquisador)}</p>
+        <p><strong>Data:</strong> ${new Date(record.data).toLocaleDateString(
+          "pt-BR"
+        )}</p>
+      </div>
+    `;
+
+    const marker = L.marker([record.latitude, record.longitude])
+      .addTo(map) // Adiciona ao mapa
+      .bindPopup(popupHtml); // Popup com informações
 
     markers.push(marker); // Adiciona ao array
   });
@@ -284,10 +268,10 @@ function renderMarkers() {
 function getFilteredRecords() {
   const filter = document.getElementById("grupo-filter")?.value; // Valor do dropdown
   return filter
-    ? filoRecords.filter(
+    ? tardiRecords.filter( // CORREÇÃO: Usando tardiRecords
         (record) => record.classe === filter || record.ordem === filter
       ) // Filtra por grupo
-    : filoRecords; // Ou retorna todos
+    : tardiRecords; // Ou retorna todos
 }
 
 // ============================================================
@@ -299,15 +283,15 @@ function getFilteredRecords() {
  * Conta: total de registros, grupos únicos, espécies únicas
  */
 function updateStats() {
-  const totalRegistros = filoRecords.length; // Conta registros
+  const totalRegistros = tardiRecords.length; // Conta registros
 
   // Conta grupos únicos de Tardigrada usando Set (remove duplicatas)
-  const totalGrupos = [...new Set(filoRecords.map((r) => r.classe || r.ordem))]
+  const totalGrupos = [...new Set(tardiRecords.map((r) => r.classe || r.ordem))]
     .length;
 
   // Conta espécies únicas (genero + especie)
   const totalEspecies = [
-    ...new Set(filoRecords.map((r) => `${r.genero} ${r.especie}`)),
+    ...new Set(tardiRecords.map((r) => `${r.genero} ${r.especie}`)),
   ].length;
 
   // Atualiza o HTML dos contadores
@@ -335,9 +319,10 @@ function handleFormSubmit(e) {
     id: generateId(), // Gera ID único aleatório
     latitude: parseFloat(formData.get("latitude")), // Converte para número
     longitude: parseFloat(formData.get("longitude")),
-    filo: formData.get("filo"),
+    // CORREÇÃO DE BUG: Removida a propriedade "filo" que não existe no form
     classe: formData.get("classe"),
     ordem: formData.get("ordem") || "", // Campos opcionais
+    superfamilia: formData.get("superfamilia") || "",
     familia: formData.get("familia") || "",
     genero: formData.get("genero"),
     especie: formData.get("especie"),
@@ -354,10 +339,10 @@ function handleFormSubmit(e) {
   };
 
   // Adiciona registro ao array
-  filoRecords.push(newRecord);
+  tardiRecords.push(newRecord); // CORREÇÃO: Usando tardiRecords
 
   // Salva no LocalStorage (persiste dados)
-  localStorage.setItem("filoRecords", JSON.stringify(filoRecords));
+  localStorage.setItem("tardiRecords", JSON.stringify(tardiRecords)); // CORREÇÃO
 
   // Mostra mensagem de sucesso
   showNotification("Registro salvo com sucesso!", "success");
@@ -395,12 +380,13 @@ function getLocation() {
       },
       () => showNotification("Erro ao obter localização", "error") // Erro
     );
+  } else {
+    showNotification("Geolocalização não suportada.", "error");
   }
 }
 
 // ============================================================
 // CHAVE DICOTÔMICA (Máquina de Estados)
-// Sistema de identificação interativa de filos
 // ============================================================
 
 // Objeto que define todos os passos da chave dicotômica de Tardigrada
@@ -414,7 +400,7 @@ const keySteps = {
       { text: "Não - Cirros laterais A ausentes", next: "eutardigrada" },
     ],
   },
-
+  // ... (todos os outros passos da chave permanecem os mesmos) ...
   // Ramo Heterotardigrada
   heterotardigrada: {
     title: "Heterotardigrada - Passo 2",
@@ -424,7 +410,6 @@ const keySteps = {
       { text: "Não - Cirro mediano ausente", next: "echiniscoidea_inicio" },
     ],
   },
-
   // Resultado: Arthrotardigrada
   arthrotardigrada: {
     title: "Resultado",
@@ -432,7 +417,6 @@ const keySteps = {
     description:
       "Ex.: Styraconyx hallasi - Tardigrados com cirro mediano presente",
   },
-
   // Echiniscoidea - início
   echiniscoidea_inicio: {
     title: "Echiniscoidea - Passo 3",
@@ -446,7 +430,6 @@ const keySteps = {
       { text: "Não - Características diferentes", next: "carphaniidae" },
     ],
   },
-
   // Resultado: Família Echiniscidae
   echiniscidae: {
     title: "Resultado",
@@ -454,7 +437,6 @@ const keySteps = {
     description:
       "Tardigrados com quatro garras por perna e placas dorsais-laterais",
   },
-
   // Resultado: Família Carphaniidae
   carphaniidae: {
     title: "Resultado",
@@ -462,7 +444,6 @@ const keySteps = {
     description:
       "Um gênero: Carphania - características distintas de Echiniscidae",
   },
-
   // Ramo Eutardigrada
   eutardigrada: {
     title: "Eutardigrada - Passo 2",
@@ -476,7 +457,6 @@ const keySteps = {
       { text: "Não - Características diferentes", next: "parachela_inicio" },
     ],
   },
-
   // Resultado: Apochela
   apochela: {
     title: "Resultado",
@@ -484,7 +464,6 @@ const keySteps = {
     description:
       "Ex.: Milnesium - Tardigrados com papilas cefálicas e ganchos específicos",
   },
-
   // Parachela - início
   parachela_inicio: {
     title: "Parachela - Passo 3",
@@ -501,7 +480,6 @@ const keySteps = {
       },
     ],
   },
-
   // Macrobiotoidea
   macrobiotoidea: {
     title: "Macrobiotoidea - Passo 4",
@@ -511,7 +489,6 @@ const keySteps = {
       { text: "Não - Dois macroplacóides", next: "macrobiotus" },
     ],
   },
-
   // Resultado: Macrobiotidae (três macroplacóides)
   macrobiotidae_tres: {
     title: "Resultado",
@@ -519,14 +496,12 @@ const keySteps = {
     description:
       "Verificar Mesobiotus / Paramacrobiotus etc. - com três macroplacóides",
   },
-
   // Resultado: Macrobiotus
   macrobiotus: {
     title: "Resultado",
     result: "Macrobiotus",
     description: "Dois macroplacóides; pode haver microplacóide",
   },
-
   // Parachela - superfamílias
   parachela_superfamilias: {
     title: "Parachela - Passo 4",
@@ -543,7 +518,6 @@ const keySteps = {
       },
     ],
   },
-
   // Isohypsibioidea
   isohypsibioidea: {
     title: "Isohypsibioidea - Passo 5",
@@ -553,14 +527,12 @@ const keySteps = {
       { text: "Não - Lâmina ventral ausente", next: "isohypsibiidae_lamelas" },
     ],
   },
-
   // Resultado: Doryphoribius
   doryphoribius: {
     title: "Resultado",
     result: "Doryphoribius",
     description: "Limnoterrestre - com lâmina ventral no tubo bucal",
   },
-
   // Isohypsibiidae - lamelas
   isohypsibiidae_lamelas: {
     title: "Isohypsibiidae - Passo 6",
@@ -571,21 +543,18 @@ const keySteps = {
       { text: "Não - Lamelas peribuccais ausentes", next: "isohypsibius" },
     ],
   },
-
   // Resultado: Pseudobiotus
   pseudobiotus: {
     title: "Resultado",
     result: "Pseudobiotus",
     description: "Muitas lamelas peribuccais (cerca de 30)",
   },
-
   // Resultado: Isohypsibius
   isohypsibius: {
     title: "Resultado",
     result: "Isohypsibius",
     description: "Lamelas peribuccais ausentes",
   },
-
   // Resultado: Hypsibioidea
   hypsibioidea: {
     title: "Resultado",
@@ -638,18 +607,18 @@ function showStep(step, stepId) {
   // Atualiza título
   document.getElementById("step-title").textContent = step.title;
 
-  // Atualiza conteúdo (pergunta + botões de opção)
+  // CORREÇÃO: Remove "onclick" e usa "data-step" para consistência
   const content = document.getElementById("step-content");
   content.innerHTML = `
     <div class="key-question">
-      <p><strong>${step.question}</strong></p>
+      <p><strong>${escapeHtml(step.question)}</strong></p>
     </div>
     <div class="key-options">
       ${step.options
         .map(
           (option) => `
-        <button class="key-option" onclick="nextStep('${option.next}')">
-          ${option.text}
+        <button class="key-option" data-step="${option.next}">
+          ${escapeHtml(option.text)}
         </button>
       `
         )
@@ -669,11 +638,11 @@ function showResult(step) {
   document.getElementById("key-step").style.display = "none";
   document.getElementById("key-result").style.display = "block";
 
-  // Exibe filo identificado
+  // Exibe resultado identificado
   document.getElementById("result-content").innerHTML = `
     <div class="result-card">
-      <h4>Filo: ${step.result}</h4>
-      <p>${step.description}</p>
+      <h4>Identificação: ${escapeHtml(step.result)}</h4>
+      <p>${escapeHtml(step.description)}</p>
     </div>
   `;
 
@@ -710,11 +679,11 @@ function updateChoiceHistory() {
   historyList.innerHTML = choiceHistory
     .map((entry, index) => {
       if (typeof entry === "object") {
-        return `<li><strong>Passo ${index + 1}:</strong> ${
+        return `<li><strong>Passo ${index + 1}:</strong> ${escapeHtml(
           entry.question
-        }<br><em>Resposta: ${entry.answer}</em></li>`;
+        )}<br><em>Resposta: ${escapeHtml(entry.answer)}</em></li>`;
       } else {
-        return `<li>${entry}</li>`;
+        return `<li>${escapeHtml(entry)}</li>`;
       }
     })
     .join("");
@@ -735,21 +704,23 @@ function renderRecordsTable() {
   // Pega registros filtrados e limita a 10
   const records = getFilteredRecords().slice(0, 10);
 
-  // Gera HTML das linhas da tabela
+  // Gera HTML das linhas da tabela (com escapeHtml)
   tbody.innerHTML = records
     .map(
       (record) => `
     <tr>
-      <td>${record.classe || record.ordem}</td>
-      <td>${record.familia}</td>
-      <td>${record.genero}</td>
-      <td><em>${record.genero} ${record.especie}</em></td>
-      <td>${record.localidade}</td>
-      <td>${record.pesquisador}</td>
+      <td>${escapeHtml(record.classe || record.ordem)}</td>
+      <td>${escapeHtml(record.familia)}</td>
+      <td>${escapeHtml(record.genero)}</td>
+      <td><em>${escapeHtml(record.genero)} ${escapeHtml(record.especie)}</em></td>
+      <td>${escapeHtml(record.localidade)}</td>
+      <td>${escapeHtml(record.pesquisador)}</td>
       <td>${new Date(record.data).toLocaleDateString("pt-BR")}</td>
       <td>
-        <button class="btn btn-sm btn-danger btn-delete" data-id="${record.id}">
-          <i class="fas fa-trash"></i>
+        <button class="btn btn-sm btn-danger btn-delete" data-id="${
+          record.id
+        }" aria-label="Excluir registro">
+          <i class="fas fa-trash" aria-hidden="true"></i>
         </button>
       </td>
     </tr>
@@ -766,10 +737,10 @@ function handleDeleteRecord(id) {
   // Pede confirmação
   if (confirm("Deseja realmente excluir este registro?")) {
     // Remove registro do array
-    filoRecords = filoRecords.filter((record) => record.id !== id);
+    tardiRecords = tardiRecords.filter((record) => record.id !== id); // CORREÇÃO
 
     // Atualiza LocalStorage
-    localStorage.setItem("filoRecords", JSON.stringify(filoRecords));
+    localStorage.setItem("tardiRecords", JSON.stringify(tardiRecords)); // CORREÇÃO
 
     // Mostra notificação
     showNotification("Registro excluído com sucesso!", "success");
@@ -825,25 +796,27 @@ function renderAll() {
  * Função: Inicializa todos os event listeners e componentes
  */
 function init() {
-  // ===== EVENT LISTENERS PARA NAVEGAÇÃO =====
+  // ===== EVENT LISTENERS PARA NAVEGAÇÃO (CORRIGIDO) =====
 
-  // Links do menu desktop
-  const desktopNavLinks = document.querySelectorAll(".desktop-nav a");
-  desktopNavLinks.forEach((link) => {
-    link.addEventListener("click", (e) => {
-      e.preventDefault(); // Impede navegação padrão
-      const sectionId = link.getAttribute("href").substring(1); // Remove '#'
-      showSection(sectionId); // Mostra seção
-    });
+  // 1. Botões de abrir/fechar menu mobile
+  const menuToggleTriggers = document.querySelectorAll(
+    ".mobile-menu-btn, .mobile-nav-close"
+  );
+  menuToggleTriggers.forEach((trigger) => {
+    trigger.addEventListener("click", toggleMobileMenu);
   });
 
-  // Links do menu mobile
-  const mobileNavLinks = document.querySelectorAll(".mobile-nav-item");
-  mobileNavLinks.forEach((link) => {
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      const sectionId = link.getAttribute("href").substring(1);
-      showSection(sectionId);
+  // 2. Links de navegação (Desktop, Mobile, Botões da Home, Botões "Voltar")
+  const sectionNavTriggers = document.querySelectorAll(
+    '.desktop-nav a[href^="#"], .mobile-nav-item[href^="#"], .menu-btn[data-section], .back-btn[data-section]'
+  );
+  sectionNavTriggers.forEach((trigger) => {
+    trigger.addEventListener("click", (e) => {
+      e.preventDefault(); // Impede navegação padrão
+      // Pega o ID da seção do data-attribute OU do href
+      const sectionId =
+        trigger.dataset.section || trigger.getAttribute("href").substring(1);
+      showSection(sectionId); // Mostra seção
     });
   });
 
@@ -865,31 +838,45 @@ function init() {
     grupoFilter.addEventListener("change", renderAll); // Re-renderiza ao mudar filtro
   }
 
-  // ===== EVENT LISTENER PARA BOTÕES DE DELETE =====
-  // Usa delegação de eventos (um listener no document)
+  // ===== EVENT LISTENERS PARA DELEGAÇÃO (Botões dinâmicos) =====
+
+  // 1. Botões de Delete na tabela
   document.addEventListener("click", (e) => {
-    if (e.target.closest(".btn-delete")) {
-      const id = e.target.closest(".btn-delete").dataset.id;
+    const deleteButton = e.target.closest(".btn-delete");
+    if (deleteButton) {
+      const id = deleteButton.dataset.id;
       handleDeleteRecord(id);
     }
   });
 
-  // ===== INICIALIZAÇÃO COM DELAY =====
-  // Aguarda um pouco para garantir que DOM está pronto
-  setTimeout(() => {
-    // Só inicializa mapa se estivermos na seção do mapa
-    if (
-      document.getElementById("mapa-tardigrada") &&
-      !document.getElementById("mapa-tardigrada").classList.contains("hidden")
-    ) {
-      initMap();
-    }
-    resetKey(); // Inicializa chave dicotômica
-    renderAll(); // Renderiza tudo
-  }, 500);
+  // 2. Botões da Chave Dicotômica (usa data-step)
+  const keyStepContainer = document.getElementById("key-step");
+  if (keyStepContainer) {
+    keyStepContainer.addEventListener("click", (event) => {
+      const optionButton = event.target.closest(".key-option");
+      if (optionButton && optionButton.dataset.step) {
+        nextStep(optionButton.dataset.step);
+      }
+    });
+  }
+
+  // ===== EVENT LISTENERS PARA BOTÕES DA CHAVE (Reset/Path) =====
+  const resetKeyBtn = document.getElementById("reset-key-btn");
+  if (resetKeyBtn) {
+    resetKeyBtn.addEventListener("click", resetKey);
+  }
+
+  const pathBtn = document.getElementById("path-btn");
+  if (pathBtn) {
+    pathBtn.addEventListener("click", showPath);
+  }
+
+  // ===== INICIALIZAÇÃO DA PÁGINA =====
 
   // Mostra seção inicial (Home)
   showSection("home");
+  // Renderiza dados iniciais
+  renderAll();
 }
 
 // ===== EXECUTA INICIALIZAÇÃO =====
@@ -910,6 +897,8 @@ function showPath() {
   const pathSteps = document.getElementById("path-steps");
   const pathBtn = document.getElementById("path-btn");
 
+  if (!pathDisplay || !pathSteps || !pathBtn) return;
+
   if (pathDisplay.style.display === "none" || !pathDisplay.style.display) {
     // Mostrar caminho
     if (choiceHistory.length === 0) {
@@ -919,9 +908,12 @@ function showPath() {
       pathSteps.innerHTML = choiceHistory
         .map((entry, index) => {
           if (typeof entry === "object") {
-            return `<li><strong>${entry.question}</strong><br><em>→ ${entry.answer}</em></li>`;
+            return `<li><strong>${escapeHtml(
+              entry.question
+            )}</strong><br><em>→ ${escapeHtml(entry.answer)}</em></li>`;
           } else {
-            return `<li><strong>Pergunta ${index + 1}:</strong> ${entry}</li>`;
+            return `<li><strong>Pergunta ${index +
+              1}:</strong> ${escapeHtml(entry)}</li>`;
           }
         })
         .join("");
@@ -942,6 +934,9 @@ function showPath() {
  * @returns {string} - Texto escapado
  */
 function escapeHtml(text) {
+  if (typeof text !== 'string') {
+    return text; // Retorna o valor original se não for string
+  }
   const div = document.createElement("div");
   div.textContent = text;
   return div.innerHTML;

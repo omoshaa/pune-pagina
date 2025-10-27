@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
-    <!-- Configurações básicas da página -->
     <meta charset="UTF-8" />
     <meta
       name="viewport"
@@ -13,7 +12,6 @@
       content="TardiStudy - Portal educativo especializado no estudo de Tardigrada com mapa interativo, cadastro e chaves dicotômicas."
     />
 
-    <!-- Arquivos de estilo -->
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link
@@ -24,11 +22,8 @@
   </head>
 
   <body>
-    <!-- CABEÇALHO E NAVEGAÇÃO -->
     <header>
-      <!-- Barra de navegação principal -->
       <nav class="navbar">
-        <!-- Logotipo da aplicação -->
         <div class="logo">
           <img
             src="assets/tardigrade-icon.png"
@@ -38,7 +33,6 @@
           <span>TardiStudy</span>
         </div>
 
-        <!-- Menu de navegação para desktop (telas grandes) -->
         <div class="nav-links desktop-nav">
           <a href="#home" class="nav-item">Início</a>
           <a href="#mapa-tardigrada" class="nav-item">Mapa de Tardigrada</a>
@@ -47,68 +41,36 @@
           <a href="#sobre" class="nav-item">Sobre</a>
         </div>
 
-        <!-- Botão hambúrguer para abrir menu mobile (3 linhas) -->
-        <button
-          class="mobile-menu-btn"
-          onclick="toggleMobileMenu()"
-          aria-label="Menu"
-        >
+        <button class="mobile-menu-btn" aria-label="Menu">
           <span class="hamburger-line"></span>
           <span class="hamburger-line"></span>
           <span class="hamburger-line"></span>
         </button>
 
-        <!-- Menu lateral para dispositivos móveis -->
         <div class="mobile-nav" id="mobile-nav">
           <div class="mobile-nav-content">
-            <!-- Botão X para fechar o menu mobile -->
-            <button
-              class="mobile-nav-close"
-              onclick="toggleMobileMenu()"
-              aria-label="Fechar menu"
-            >
-              <i class="fas fa-times"></i>
+            <button class="mobile-nav-close" aria-label="Fechar menu">
+              <i class="fas fa-times" aria-hidden="true"></i>
             </button>
-            <!-- Links de navegação do menu mobile -->
             <nav class="mobile-nav-links">
-              <a
-                href="#home"
-                class="mobile-nav-item"
-                onclick="toggleMobileMenu()"
-              >
-                <i class="fas fa-home"></i>
+              <a href="#home" class="mobile-nav-item">
+                <i class="fas fa-home" aria-hidden="true"></i>
                 <span>Início</span>
               </a>
-              <a
-                href="#mapa-tardigrada"
-                class="mobile-nav-item"
-                onclick="toggleMobileMenu()"
-              >
-                <i class="fas fa-map"></i>
+              <a href="#mapa-tardigrada" class="mobile-nav-item">
+                <i class="fas fa-map" aria-hidden="true"></i>
                 <span>Mapa de Tardigrada</span>
               </a>
-              <a
-                href="#cadastrar"
-                class="mobile-nav-item"
-                onclick="toggleMobileMenu()"
-              >
-                <i class="fas fa-plus-circle"></i>
+              <a href="#cadastrar" class="mobile-nav-item">
+                <i class="fas fa-plus-circle" aria-hidden="true"></i>
                 <span>Cadastrar</span>
               </a>
-              <a
-                href="#chave-dicotomica"
-                class="mobile-nav-item"
-                onclick="toggleMobileMenu()"
-              >
-                <i class="fas fa-code-branch"></i>
+              <a href="#chave-dicotomica" class="mobile-nav-item">
+                <i class="fas fa-code-branch" aria-hidden="true"></i>
                 <span>Chave Dicotômica</span>
               </a>
-              <a
-                href="#sobre"
-                class="mobile-nav-item"
-                onclick="toggleMobileMenu()"
-              >
-                <i class="fas fa-info-circle"></i>
+              <a href="#sobre" class="mobile-nav-item">
+                <i class="fas fa-info-circle" aria-hidden="true"></i>
                 <span>Sobre</span>
               </a>
             </nav>
@@ -117,12 +79,9 @@
       </nav>
     </header>
 
-    <!-- CONTEÚDO PRINCIPAL -->
     <main>
-      <!-- SEÇÃO: Página Inicial (Home) -->
       <section id="home" class="container hero-section">
         <div class="hero-content">
-          <!-- Título principal -->
           <h1>TardiStudy</h1>
           <p class="hero-subtitle">
             Portal Educativo Especializado em Tardigrada
@@ -132,25 +91,21 @@
             fascinantes tardígrados - os organismos mais resistentes do planeta
           </p>
 
-          <!-- Grid de botões do menu principal -->
           <div class="menu-buttons">
-            <!-- Botão: Mapa de Tardigrada -->
-            <button class="menu-btn" onclick="showSection('mapa-tardigrada')">
-              <i class="fas fa-map"></i>
+            <button class="menu-btn" data-section="mapa-tardigrada">
+              <i class="fas fa-map" aria-hidden="true"></i>
               <h3>Mapa de Tardigrada</h3>
               <p>Visualize a distribuição geográfica dos tardígrados</p>
             </button>
 
-            <!-- Botão: Cadastrar Tardígrados -->
-            <button class="menu-btn" onclick="showSection('cadastrar')">
-              <i class="fas fa-plus-circle"></i>
+            <button class="menu-btn" data-section="cadastrar">
+              <i class="fas fa-plus-circle" aria-hidden="true"></i>
               <h3>Cadastrar Tardígrados</h3>
               <p>Adicione novos registros de espécimes encontrados</p>
             </button>
 
-            <!-- Botão: Chave Dicotômica -->
-            <button class="menu-btn" onclick="showSection('chave-dicotomica')">
-              <i class="fas fa-code-branch"></i>
+            <button class="menu-btn" data-section="chave-dicotomica">
+              <i class="fas fa-code-branch" aria-hidden="true"></i>
               <h3>Chave Dicotômica</h3>
               <p>
                 Identifique espécimes de Tardigrada usando características
@@ -158,9 +113,8 @@
               </p>
             </button>
 
-            <!-- Botão: Sobre -->
-            <button class="menu-btn" onclick="showSection('sobre')">
-              <i class="fas fa-info-circle"></i>
+            <button class="menu-btn" data-section="sobre">
+              <i class="fas fa-info-circle" aria-hidden="true"></i>
               <h3>Sobre o Projeto</h3>
               <p>Conheça a equipe, fontes e bibliografia sobre Tardigrada</p>
             </button>
@@ -168,36 +122,29 @@
         </div>
       </section>
 
-      <!-- SEÇÃO: Mapa de Tardigrada (escondida por padrão) -->
       <section id="mapa-tardigrada" class="container section hidden">
-        <!-- Cabeçalho da seção com botão voltar -->
         <div class="section-header">
-          <button class="back-btn" onclick="showSection('home')">
-            <i class="fas fa-arrow-left"></i> Voltar
+          <button class="back-btn" data-section="home">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
           </button>
           <h2>Mapa de Tardigrada</h2>
         </div>
 
-        <!-- Container de estatísticas (3 cards) -->
         <div class="stats-container">
-          <!-- Card de estatística: Total de registros -->
           <div class="stat-box">
             <span id="total-registros">0</span>
             <p>Registros</p>
           </div>
-          <!-- Card de estatística: Total de grupos -->
           <div class="stat-box">
             <span id="total-grupos">0</span>
             <p>Grupos</p>
           </div>
-          <!-- Card de estatística: Total de espécies -->
           <div class="stat-box">
             <span id="total-especies">0</span>
             <p>Espécies</p>
           </div>
         </div>
 
-        <!-- Filtro dropdown para selecionar grupo específico -->
         <div class="filter-container">
           <select id="grupo-filter">
             <option value="">Todos os Grupos</option>
@@ -213,14 +160,11 @@
           </select>
         </div>
 
-        <!-- Mapa interativo Leaflet -->
         <div id="map"></div>
 
-        <!-- Seção de tabela de registros -->
         <div class="records-section">
           <h3>Registros Recentes</h3>
           <div class="table-container">
-            <!-- Tabela de registros de Tardigrada -->
             <table id="records-table">
               <thead>
                 <tr>
@@ -240,22 +184,18 @@
         </div>
       </section>
 
-      <!-- SEÇÃO: Cadastrar Filos (formulário de registro) -->
       <section id="cadastrar" class="container section hidden">
         <div class="section-header">
-          <button class="back-btn" onclick="showSection('home')">
-            <i class="fas fa-arrow-left"></i> Voltar
+          <button class="back-btn" data-section="home">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
           </button>
           <h2>Cadastrar Novo Tardígrado</h2>
         </div>
 
-        <!-- Formulário de cadastro -->
         <form id="form">
-          <!-- Grupo de campos: Classificação Taxonômica de Tardigrada -->
           <fieldset>
             <legend>Classificação Taxonômica de Tardigrada</legend>
             <div class="form-group">
-              <!-- Campo: Seletor de Classe -->
               <label for="classe">Classe</label>
               <select id="classe" name="classe" required>
                 <option value="">Selecione a Classe</option>
@@ -263,7 +203,6 @@
                 <option value="Eutardigrada">Eutardigrada</option>
               </select>
 
-              <!-- Campo: Ordem -->
               <label for="ordem">Ordem</label>
               <select id="ordem" name="ordem" required>
                 <option value="">Selecione a Ordem</option>
@@ -273,7 +212,6 @@
                 <option value="Parachela">Parachela</option>
               </select>
 
-              <!-- Campo: Superfamília (opcional) -->
               <label for="superfamilia">Superfamília (opcional)</label>
               <select id="superfamilia" name="superfamilia">
                 <option value="">Selecione a Superfamília</option>
@@ -282,7 +220,6 @@
                 <option value="Hypsibioidea">Hypsibioidea</option>
               </select>
 
-              <!-- Campo: Família -->
               <label for="familia">Família</label>
               <select id="familia" name="familia" required>
                 <option value="">Selecione a Família</option>
@@ -295,7 +232,6 @@
                 <option value="Outra">Outra</option>
               </select>
 
-              <!-- Campo: Gênero -->
               <label for="genero">Gênero</label>
               <input
                 type="text"
@@ -305,7 +241,6 @@
                 placeholder="Ex: Milnesium, Macrobiotus, Hypsibius"
               />
 
-              <!-- Campo: Espécie -->
               <label for="especie">Espécie</label>
               <input
                 type="text"
@@ -317,10 +252,8 @@
             </div>
           </fieldset>
 
-          <!-- Grupo de campos: Localização -->
           <fieldset>
             <legend>Informações de Localização</legend>
-            <!-- Container de coordenadas (latitude, longitude e botão GPS) -->
             <div class="form-group coordinates-container">
               <label for="latitude" class="sr-only">Latitude</label>
               <input
@@ -340,7 +273,6 @@
                 step="any"
                 required
               />
-              <!-- Botão para obter localização GPS atual -->
               <button
                 type="button"
                 id="getLocation"
@@ -348,16 +280,17 @@
                 title="Usar localização atual"
                 aria-label="Usar localização atual"
               >
-                <i class="fas fa-location-crosshairs"></i>
+                <i
+                  class="fas fa-location-crosshairs"
+                  aria-hidden="true"
+                ></i>
               </button>
             </div>
 
             <div class="form-group">
-              <!-- Campo: Nome da Localidade -->
               <label for="localidade">Nome da localidade</label>
               <input type="text" id="localidade" name="localidade" required />
 
-              <!-- Campo: Habitat específico para Tardigrada -->
               <label for="habitat">Habitat</label>
               <select id="habitat" name="habitat" required>
                 <option value="">Selecione o Habitat</option>
@@ -374,11 +307,9 @@
             </div>
           </fieldset>
 
-          <!-- Grupo de campos: Observação -->
           <fieldset>
             <legend>Dados da Observação</legend>
             <div class="form-group">
-              <!-- Campo: Quantidade -->
               <label for="quantidade">Quantidade observada</label>
               <input
                 type="number"
@@ -388,7 +319,6 @@
                 required
               />
 
-              <!-- Campo: Tamanho em micrometros para Tardigrada -->
               <label for="tamanho">Tamanho aproximado (μm - micrometros)</label>
               <input
                 type="number"
@@ -400,21 +330,17 @@
                 placeholder="Ex: 500"
               />
 
-              <!-- Campo: Nome do Pesquisador -->
               <label for="pesquisador">Nome do pesquisador/observador</label>
               <input type="text" id="pesquisador" name="pesquisador" required />
 
-              <!-- Campo: Instituição -->
               <label for="instituicao">Instituição (opcional)</label>
               <input type="text" id="instituicao" name="instituicao" />
             </div>
           </fieldset>
 
-          <!-- Grupo de campos: Características Morfológicas de Tardigrada -->
           <fieldset>
             <legend>Características Morfológicas de Tardigrada</legend>
             <div class="form-group">
-              <!-- Campo: Características morfológicas específicas -->
               <label for="caracteristicas"
                 >Principais características morfológicas observadas</label
               >
@@ -425,7 +351,6 @@
                 required
               ></textarea>
 
-              <!-- Campo: Observações comportamentais -->
               <label for="observacoes">Observações adicionais</label>
               <textarea
                 id="observacoes"
@@ -435,10 +360,9 @@
             </div>
           </fieldset>
 
-          <!-- Upload de fotos -->
           <div class="form-group file-upload-container">
             <label for="foto" class="file-label">
-              <i class="fas fa-camera"></i>
+              <i class="fas fa-camera" aria-hidden="true"></i>
               <span>Adicionar Fotos</span>
             </label>
             <input
@@ -449,38 +373,31 @@
               multiple
               hidden
             />
-            <!-- Container para preview de imagens -->
             <div class="image-preview-container" id="image-preview"></div>
           </div>
 
-          <!-- Botões de ação do formulário -->
           <div class="form-actions">
-            <!-- Botão: Salvar -->
             <button type="submit" class="btn btn-primary">
-              <i class="fas fa-save"></i>
+              <i class="fas fa-save" aria-hidden="true"></i>
               Salvar Registro
             </button>
-            <!-- Botão: Limpar -->
             <button type="reset" class="btn btn-secondary">
-              <i class="fas fa-eraser"></i>
+              <i class="fas fa-eraser" aria-hidden="true"></i>
               Limpar Formulário
             </button>
           </div>
         </form>
       </section>
 
-      <!-- SEÇÃO: Chave Dicotômica (identificação interativa) -->
       <section id="chave-dicotomica" class="container section hidden">
         <div class="section-header">
-          <button class="back-btn" onclick="showSection('home')">
-            <i class="fas fa-arrow-left"></i> Voltar
+          <button class="back-btn" data-section="home">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
           </button>
           <h2>Chave Dicotômica — Tardigrada</h2>
         </div>
 
-        <!-- Container da chave dicotômica -->
         <div class="dichotomous-key">
-          <!-- Introdução explicativa -->
           <div class="key-intro">
             <p>
               Use esta chave dicotômica para identificar as ordens, famílias e
@@ -489,71 +406,58 @@
             </p>
           </div>
 
-          <!-- Passo atual da chave -->
           <div id="key-step" class="key-step">
             <h3 id="step-title">Passo 1</h3>
             <div id="step-content">
-              <!-- Pergunta atual -->
               <div class="key-question">
                 <p>
                   <strong>Cirros laterais A presentes (seta / cA)?</strong>
                 </p>
               </div>
-              <!-- Opções de resposta -->
               <div class="key-options">
                 <button
                   class="key-option"
-                  onclick="nextStep('heterotardigrada')"
+                  data-step="heterotardigrada"
                 >
-                  <i class="fas fa-check"></i>
+                  <i class="fas fa-check" aria-hidden="true"></i>
                   Sim - Cirros laterais A presentes
                 </button>
-                <button class="key-option" onclick="nextStep('eutardigrada')">
-                  <i class="fas fa-times"></i>
+                <button class="key-option" data-step="eutardigrada">
+                  <i class="fas fa-times" aria-hidden="true"></i>
                   Não - Cirros laterais A ausentes
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- Resultado final (escondido até identificação completa) -->
           <div class="key-result" id="key-result" style="display: none">
             <h3>Resultado da Identificação</h3>
             <div id="result-content"></div>
-            <!-- Botão para recomeçar -->
             <div class="key-controls">
-              <button class="btn btn-primary" onclick="resetKey()">
-                <i class="fas fa-redo"></i>
+              <button class="btn btn-primary" id="reset-key-btn">
+                <i class="fas fa-redo" aria-hidden="true"></i>
                 Recomeçar Identificação
               </button>
             </div>
           </div>
 
-          <!-- Controles adicionais -->
           <div class="key-navigation">
-            <button
-              class="btn btn-secondary"
-              onclick="showPath()"
-              id="path-btn"
-            >
-              <i class="fas fa-route"></i>
+            <button class="btn btn-secondary" id="path-btn">
+              <i class="fas fa-route" aria-hidden="true"></i>
               Mostrar Caminho
             </button>
           </div>
 
-          <!-- Exibição do caminho percorrido -->
           <div class="path-display" id="path-display">
             <h4>Caminho Percorrido</h4>
             <ul class="path-steps" id="path-steps"></ul>
           </div>
 
-          <!-- Histórico de escolhas do usuário -->
           <div class="key-history">
             <h4>Histórico de Escolhas:</h4>
             <ul id="choice-history"></ul>
           </div>
 
-          <!-- Nota sobre a base da chave -->
           <div class="key-citation">
             <small
               ><em
@@ -565,20 +469,17 @@
         </div>
       </section>
 
-      <!-- SEÇÃO: Sobre o Projeto -->
       <section id="sobre" class="container section hidden">
         <div class="section-header">
-          <button class="back-btn" onclick="showSection('home')">
-            <i class="fas fa-arrow-left"></i> Voltar
+          <button class="back-btn" data-section="home">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
           </button>
           <h2>Sobre o TardiStudy</h2>
         </div>
 
-        <!-- Conteúdo da página Sobre -->
         <div class="about-content">
-          <!-- Seção: Equipe -->
           <div class="about-section">
-            <h3><i class="fas fa-users"></i> Equipe do Projeto</h3>
+            <h3><i class="fas fa-users" aria-hidden="true"></i> Equipe do Projeto</h3>
             <div class="team-grid">
               <div class="team-member">
                 <h4>Coordenação Geral</h4>
@@ -607,9 +508,8 @@
             </div>
           </div>
 
-          <!-- Seção: Objetivos -->
           <div class="about-section">
-            <h3><i class="fas fa-bullseye"></i> Objetivos do Projeto</h3>
+            <h3><i class="fas fa-bullseye" aria-hidden="true"></i> Objetivos do Projeto</h3>
             <ul>
               <li>
                 Facilitar o ensino e aprendizado da taxonomia de Tardigrada
@@ -633,9 +533,8 @@
             </ul>
           </div>
 
-          <!-- Seção: Sobre Tardigrada -->
           <div class="about-section">
-            <h3><i class="fas fa-microscope"></i> Sobre os Tardígrados</h3>
+            <h3><i class="fas fa-microscope" aria-hidden="true"></i> Sobre os Tardígrados</h3>
             <p>
               Os tardígrados são microorganismos microscópicos conhecidos como
               os "ursos d'água" devido à sua aparência fofa e movimentos lentos.
@@ -651,9 +550,8 @@
             </ul>
           </div>
 
-          <!-- Seção: Bibliografia -->
           <div class="about-section">
-            <h3><i class="fas fa-book"></i> Bibliografia e Fontes</h3>
+            <h3><i class="fas fa-book" aria-hidden="true"></i> Bibliografia e Fontes</h3>
             <div class="references">
               <p><strong>Referências Principais sobre Tardigrada:</strong></p>
               <ul>
@@ -700,32 +598,30 @@
             </div>
           </div>
 
-          <!-- Seção: Tecnologias -->
           <div class="about-section">
-            <h3><i class="fas fa-code"></i> Tecnologias Utilizadas</h3>
+            <h3><i class="fas fa-code" aria-hidden="true"></i> Tecnologias Utilizadas</h3>
             <div class="tech-grid">
               <div class="tech-item">
-                <i class="fab fa-html5"></i>
+                <i class="fab fa-html5" aria-hidden="true"></i>
                 <span>HTML5</span>
               </div>
               <div class="tech-item">
-                <i class="fab fa-css3-alt"></i>
+                <i class="fab fa-css3-alt" aria-hidden="true"></i>
                 <span>CSS3</span>
               </div>
               <div class="tech-item">
-                <i class="fab fa-js"></i>
+                <i class="fab fa-js" aria-hidden="true"></i>
                 <span>JavaScript</span>
               </div>
               <div class="tech-item">
-                <i class="fas fa-map"></i>
+                <i class="fas fa-map" aria-hidden="true"></i>
                 <span>Leaflet.js</span>
               </div>
             </div>
           </div>
 
-          <!-- Seção: Contato -->
           <div class="about-section">
-            <h3><i class="fas fa-envelope"></i> Contato</h3>
+            <h3><i class="fas fa-envelope" aria-hidden="true"></i> Contato</h3>
             <p>
               Para mais informações sobre o projeto TardiStudy, entre em
               contato:
@@ -740,19 +636,15 @@
       </section>
     </main>
 
-    <!-- RODAPÉ -->
     <footer>
       <p>© 2025 TardiStudy - Portal Educativo Especializado em Tardigrada</p>
     </footer>
 
-    <!-- Container de notificações (toast) -->
     <div id="notification"></div>
 
-    <!-- SCRIPTS EXTERNOS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/pt-br.min.js"></script>
-    <!-- Script principal da aplicação -->
     <script src="script.js" defer></script>
   </body>
 </html>
