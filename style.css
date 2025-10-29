@@ -2209,3 +2209,61 @@ html {
   box-shadow: 0 0 0 3px rgba(129, 199, 132, 0.2);
   outline: none;
 }
+
+/* ============================================================
+    NOVOS ESTILOS (FORMULÁRIO E FILTROS)
+============================================================ */
+
+/* Estilo para o label de upload de fotos */
+.file-label {
+  display: inline-block;
+  padding: 12px 20px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 2px solid rgba(129, 199, 132, 0.3);
+  border-radius: var(--radius-small);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-label:hover {
+  background: var(--accent);
+  color: white;
+}
+
+/* Container do preview das imagens */
+.image-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* Estilo de cada imagem de preview */
+.preview-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: var(--radius-small);
+  border: 2px solid var(--border-light);
+  box-shadow: var(--shadow-soft);
+  animation: fadeInUp 0.3s ease; /* Animação de entrada */
+}
+
+/* Container dos filtros do mapa */
+.filter-container {
+    display: flex;
+    flex-wrap: wrap; /* Permite quebra de linha em telas pequenas */
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.filter-container select {
+    flex: 1; /* Ocupa espaço disponível */
+    min-width: 200px; /* Largura mínima para evitar aperto */
+}

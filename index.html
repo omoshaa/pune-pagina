@@ -101,9 +101,7 @@
             <button class="menu-btn" data-section="identificacao">
               <i class="fas fa-search" aria-hidden="true"></i>
               <h3>Identificação</h3>
-              <p>
-                Use a chave dicotômica, cadastre achados e guias visuais
-              </p>
+              <p>Use a chave dicotômica, cadastre achados e guias visuais</p>
             </button>
 
             <button class="menu-btn" data-section="sobre-tardigrados">
@@ -140,22 +138,21 @@
           </div>
           <div class="stat-box">
             <span id="total-especies">0</span>
-            <p>Espécies</p>
+            <p>Gêneros</p>
           </div>
         </div>
 
-        <div class="filter-container">
-          <select id="grupo-filter">
+        <div
+          class="filter-container"
+          style="display: flex; gap: 10px; margin-bottom: 20px"
+        >
+          <select id="grupo-filter" style="flex: 1">
             <option value="">Todos os Grupos</option>
             <option value="Heterotardigrada">Heterotardigrada</option>
             <option value="Eutardigrada">Eutardigrada</option>
-            <option value="Arthrotardigrada">Arthrotardigrada</option>
-            <option value="Echiniscoidea">Echiniscoidea</option>
-            <option value="Apochela">Apochela</option>
-            <option value="Parachela">Parachela</option>
-            <option value="Macrobiotoidea">Macrobiotoidea</option>
-            <option value="Isohypsibioidea">Isohypsibioidea</option>
-            <option value="Hypsibioidea">Hypsibioidea</option>
+          </select>
+          <select id="genero-filter" style="flex: 1">
+            <option value="">Todos os Gêneros</option>
           </select>
         </div>
 
@@ -167,10 +164,10 @@
             <table id="records-table">
               <thead>
                 <tr>
-                  <th>Grupo</th>
-                  <th>Família</th>
+                  <th>Ordem</th>
                   <th>Gênero</th>
-                  <th>Local</th>
+                  <th>Espécie</th>
+                  <th>Coordenadas</th>
                   <th>Pesquisador</th>
                   <th>Data</th>
                   <th>Ações</th>
@@ -187,57 +184,32 @@
           <button class="back-btn" data-section="identificacao">
             <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
           </button>
-          <h2>Cadastrar Novo Tardígrado</h2>
+          <h2>Cadastrar Novo Achado</h2>
         </div>
 
         <form id="form">
           <fieldset>
-            <legend>Classificação Taxonômica de Tardigrada</legend>
+            <legend>Identificação do Espécime</legend>
             <div class="form-group">
-              <label for="classe">Classe</label>
-              <select id="classe" name="classe" required>
-                <option value="">Selecione a Classe</option>
-                <option value="Heterotardigrada">Heterotardigrada</option>
-                <option value="Eutardigrada">Eutardigrada</option>
-              </select>
-
-              <label for="ordem">Ordem</label>
-              <select id="ordem" name="ordem" required>
-                <option value="">Selecione a Ordem</option>
-                <option value="Arthrotardigrada">Arthrotardigrada</option>
-                <option value="Echiniscoidea">Echiniscoidea</option>
-                <option value="Apochela">Apochela</option>
-                <option value="Parachela">Parachela</option>
-              </select>
-
-              <label for="superfamilia">Superfamília (opcional)</label>
-              <select id="superfamilia" name="superfamilia">
-                <option value="">Selecione a Superfamília</option>
-                <option value="Macrobiotoidea">Macrobiotoidea</option>
-                <option value="Isohypsibioidea">Isohypsibioidea</option>
-                <option value="Hypsibioidea">Hypsibioidea</option>
-              </select>
-
-              <label for="familia">Família</label>
-              <select id="familia" name="familia" required>
-                <option value="">Selecione a Família</option>
-                <option value="Echiniscidae">Echiniscidae</option>
-                <option value="Carphaniidae">Carphaniidae</option>
-                <option value="Milnesiidae">Milnesiidae</option>
-                <option value="Macrobiotidae">Macrobiotidae</option>
-                <option value="Murrayidae">Murrayidae</option>
-                <option value="Isohypsibiidae">Isohypsibiidae</option>
-                <option value="Hypsibiidae">Hypsibiidae</option>
-                <option value="Outra">Outra</option>
-              </select>
-
               <label for="genero">Gênero</label>
+              <select id="genero" name="genero" required>
+                <option value="">Selecione o Gênero</option>
+                <option value="Macrobiotus">Macrobiotus</option>
+                <option value="Echiniscus">Echiniscus</option>
+                <option value="Milnesium">Milnesium</option>
+                <option value="Mesobiotus">Mesobiotus</option>
+                <option value="Pseudoechiniscus">Pseudoechiniscus</option>
+                <option value="Paramacrobiotus">Paramacrobiotus</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="especie">Espécie (opcional)</label>
               <input
                 type="text"
-                id="genero"
-                name="genero"
-                required
-                placeholder="Ex: Milnesium, Macrobiotus, Hypsibius"
+                id="especie"
+                name="especie"
+                placeholder="Ex: harmsworthi, tardigradum"
               />
             </div>
           </fieldset>
@@ -270,16 +242,19 @@
                 title="Usar localização atual"
                 aria-label="Usar localização atual"
               >
-                <i
-                  class="fas fa-location-crosshairs"
-                  aria-hidden="true"
-                ></i>
+                <i class="fas fa-location-crosshairs" aria-hidden="true"></i>
               </button>
             </div>
 
             <div class="form-group">
               <label for="localidade">Nome da localidade</label>
-              <input type="text" id="localidade" name="localidade" required />
+              <input
+                type="text"
+                id="localidade"
+                name="localidade"
+                required
+                placeholder="Ex: Escola Estadual..., Parque..."
+              />
 
               <label for="habitat">Habitat</label>
               <select id="habitat" name="habitat" required>
@@ -296,7 +271,7 @@
               </select>
             </div>
           </fieldset>
-          
+
           <fieldset>
             <legend>Dados do Observador</legend>
             <div class="form-group">
@@ -356,14 +331,12 @@
 
           <div id="key-step" class="key-step">
             <h3 id="step-title">Passo 1</h3>
-            <div id="step-content">
-              </div>
+            <div id="step-content"></div>
           </div>
 
           <div class="key-result" id="key-result" style="display: none">
             <h3>Resultado da Identificação</h3>
-            <div id="result-content">
-              </div>
+            <div id="result-content"></div>
             <div class="key-controls">
               <button class="btn btn-primary" id="reset-key-btn">
                 <i class="fas fa-redo" aria-hidden="true"></i>
@@ -379,7 +352,7 @@
             </button>
           </div>
 
-          <div class="path-display" id="path-display" style="display:none;">
+          <div class="path-display" id="path-display" style="display: none">
             <h4>Caminho Percorrido</h4>
             <ul class="path-steps" id="path-steps"></ul>
           </div>
@@ -387,8 +360,8 @@
           <div class="key-citation">
             <small
               ><em
-                >Base: Chave de Damborenea, Rogers & Thorp (2020) e outras referências.
-                Adaptado por Danilo de Castro Santos.</em
+                >Base: Chave de Damborenea, Rogers & Thorp (2020) e outras
+                referências. Adaptado por Danilo de Castro Santos.</em
               ></small
             >
           </div>
@@ -402,100 +375,114 @@
           </button>
           <h2>Identificação de Tardígrados</h2>
         </div>
-        
+
         <div class="key-intro">
-            <p>
-              Ferramentas para auxiliar na coleta, identificação e cadastro de espécimes de Tardigrada.
-            </p>
+          <p>
+            Ferramentas para auxiliar na coleta, identificação e cadastro de
+            espécimes de Tardigrada.
+          </p>
         </div>
 
-         <div class="menu-buttons" style="margin-top: 24px;">
-            <button class="menu-btn" data-section="chave-dicotomica">
-              <i class="fas fa-code-branch" aria-hidden="true"></i>
-              <h3>Chave Dicotômica</h3>
-              <p>Identifique seu espécime passo a passo</p>
-            </button>
-            
-            <button class="menu-btn" data-section="cadastrar">
-              <i class="fas fa-plus-circle" aria-hidden="true"></i>
-              <h3>Cadastrar Achados</h3>
-              <p>Contribua para o banco de dados</p>
-            </button>
+        <div class="menu-buttons" style="margin-top: 24px">
+          <button class="menu-btn" data-section="chave-dicotomica">
+            <i class="fas fa-code-branch" aria-hidden="true"></i>
+            <h3>Chave Dicotômica</h3>
+            <p>Identifique seu espécime passo a passo</p>
+          </button>
 
-            <button class="menu-btn" data-section="guia-estruturas">
-              <i class="fas fa-book-open" aria-hidden="true"></i>
-              <h3>Guia de Estruturas</h3>
-              <p>Glossário visual da anatomia</p>
-            </button>
-            
-            <button class="menu-btn" data-section="como-coletar" disabled>
-              <i class="fas fa-vial" aria-hidden="true"></i>
-              <h3>Como Coletar (Em breve)</h3>
-              <p>Manuais e dicas para coleta</p>
-            </button>
-            
-            <button class="menu-btn" data-section="como-fotografar" disabled>
-              <i class="fas fa-camera" aria-hidden="true"></i>
-              <h3>Como Fotografar (Em breve)</h3>
-              <p>Dicas para fotos em microscópio</p>
-            </button>
-            
-            <button class="menu-btn" data-section="anatomia" disabled>
-              <i class="fas fa-draw-polygon" aria-hidden="true"></i>
-              <h3>Anatomia (Em breve)</h3>
-              <p>Manuais de anatomia detalhada</p>
-            </button>
-          </div>
+          <button class="menu-btn" data-section="cadastrar">
+            <i class="fas fa-plus-circle" aria-hidden="true"></i>
+            <h3>Cadastrar Achados</h3>
+            <p>Contribua para o banco de dados</p>
+          </button>
+
+          <button class="menu-btn" data-section="guia-estruturas">
+            <i class="fas fa-book-open" aria-hidden="true"></i>
+            <h3>Guia de Estruturas</h3>
+            <p>Glossário visual da anatomia</p>
+          </button>
+
+          <button class="menu-btn" data-section="como-coletar" disabled>
+            <i class="fas fa-vial" aria-hidden="true"></i>
+            <h3>Como Coletar (Em breve)</h3>
+            <p>Manuais e dicas para coleta</p>
+          </button>
+
+          <button class="menu-btn" data-section="como-fotografar" disabled>
+            <i class="fas fa-camera" aria-hidden="true"></i>
+            <h3>Como Fotografar (Em breve)</h3>
+            <p>Dicas para fotos em microscópio</p>
+          </button>
+
+          <button class="menu-btn" data-section="anatomia" disabled>
+            <i class="fas fa-draw-polygon" aria-hidden="true"></i>
+            <h3>Anatomia (Em breve)</h3>
+            <p>Manuais de anatomia detalhada</p>
+          </button>
+        </div>
       </section>
-      
+
       <section id="guia-estruturas" class="container section hidden">
         <div class="section-header">
-            <button class="back-btn" data-section="identificacao">
-              <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
-            </button>
-            <h2>Guia de Estruturas</h2>
+          <button class="back-btn" data-section="identificacao">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
+          </button>
+          <h2>Guia de Estruturas</h2>
         </div>
-        
+
         <div class="key-intro">
-            <p>
-              Explore um glossário visual das principais características morfológicas usadas para identificar Tardígrados.
-            </p>
+          <p>
+            Explore um glossário visual das principais características
+            morfológicas usadas para identificar Tardígrados.
+          </p>
         </div>
 
-        <div class="filter-container" style="margin-bottom: 24px;">
-            <input type="text" id="estrutura-search" placeholder="Buscar estrutura (ex: cirro, garras...)" style="width: 100%; max-width: 600px; margin: 0 auto; display: block;">
+        <div class="filter-container" style="margin-bottom: 24px">
+          <input
+            type="text"
+            id="estrutura-search"
+            placeholder="Buscar estrutura (ex: cirro, garras...)"
+            style="
+              width: 100%;
+              max-width: 600px;
+              margin: 0 auto;
+              display: block;
+            "
+          />
         </div>
 
-        <div id="estrutura-cards-container" class="estrutura-grid">
-            </div>
+        <div id="estrutura-cards-container" class="estrutura-grid"></div>
       </section>
 
       <section id="sobre-tardigrados" class="container section hidden">
-         <div class="section-header">
+        <div class="section-header">
           <button class="back-btn" data-section="home">
             <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
           </button>
           <h2>Sobre os Tardígrados</h2>
         </div>
-        
+
         <div class="about-content">
-            <div class="about-section">
-              <h3><i class="fas fa-microscope" aria-hidden="true"></i> Os "Ursos d'Água"</h3>
-              <p>
-                Os tardígrados são microorganismos microscópicos conhecidos como
-                os "ursos d'água" devido à sua aparência fofa e movimentos lentos.
-                Eles são considerados os organismos mais resistentes da Terra,
-                capazes de sobreviver em condições extremas incluindo:
-              </p>
-              <ul>
-                <li>Temperaturas de -272°C a 151°C</li>
-                <li>Pressões até 6 vezes maior que a das fossas oceânicas</li>
-                <li>Radiação 1000 vezes maior que a letal para humanos</li>
-                <li>Vácuo do espaço por até 10 dias</li>
-                <li>Desidratação total por décadas</li>
-              </ul>
-            </div>
-            </div>
+          <div class="about-section">
+            <h3>
+              <i class="fas fa-microscope" aria-hidden="true"></i> Os "Ursos
+              d'Água"
+            </h3>
+            <p>
+              Os tardígrados são microorganismos microscópicos conhecidos como
+              os "ursos d'água" devido à sua aparência fofa e movimentos lentos.
+              Eles são considerados os organismos mais resistentes da Terra,
+              capazes de sobreviver em condições extremas incluindo:
+            </p>
+            <ul>
+              <li>Temperaturas de -272°C a 151°C</li>
+              <li>Pressões até 6 vezes maior que a das fossas oceânicas</li>
+              <li>Radiação 1000 vezes maior que a letal para humanos</li>
+              <li>Vácuo do espaço por até 10 dias</li>
+              <li>Desidratação total por décadas</li>
+            </ul>
+          </div>
+        </div>
       </section>
 
       <section id="sobre" class="container section hidden">
@@ -508,10 +495,26 @@
 
         <div class="about-content">
           <div class="about-section">
-            <h3><i class="fas fa-users" aria-hidden="true"></i> Equipe do Projeto</h3>
+            <h3>
+              <i class="fas fa-history" aria-hidden="true"></i> História do
+              Projeto (PUNE)
+            </h3>
+            <p>
+              O TardiStudy nasceu do "Projeto Urso Na Escola" (PUNE), focado em
+              <strong
+                >integrar o ensino de biologia com a tecnologia, utilizando os
+                tardígrados como modelo de estudo.</strong
+              >
+            </p>
+          </div>
+
+          <div class="about-section">
+            <h3>
+              <i class="fas fa-users" aria-hidden="true"></i> Equipe do Projeto
+            </h3>
             <div class="team-grid">
               <div class="team-member">
-                <h4>Coordenação Geral</h4>
+                <h4>CEO da Página</h4>
                 <p>
                   <strong>Prof. Danilo de Castro Santos</strong><br />
                   Mestrando na Universidade Estadual de Campinas<br />
@@ -519,23 +522,37 @@
                 </p>
               </div>
               <div class="team-member">
+                <h4>Programador</h4>
+                <p>
+                  <strong>Moisés Filipe</strong><br />
+                  Desenvolvedor Full Stack
+                  <a href="https://github.com/moisesfilipe">GitHub</a>
+                </p>
+              </div>
+              <div class="team-member">
                 <h4>Integrantes do projeto</h4>
                 <p>
-                  <strong>(Nome dos alunos participantes)</strong><br />
+                  <strong
+                    >(Nome dos alunos participantes dos anos de 2025)</strong
+                  ><br />
                   Universidade [Nome]
                 </p>
               </div>
               <div class="team-member">
                 <h4>Consultoria Científica</h4>
                 <p>
-                  <strong>Prof. Dr. André Reinaldo Senna Garraffoni</strong><br />
+                  <strong>Prof. Dr. André Reinaldo Senna Garraffoni</strong
+                  ><br />
                   Professor da Universidade Estadual de Campinas
                 </p>
               </div>
               <div class="team-member">
                 <h4>Parceria</h4>
                 <p>
-                  <strong>Laboratório de Evolução de Organismo Meiofaunais (LEOM)</strong><br />
+                  <strong
+                    >Laboratório de Evolução de Organismo Meiofaunais
+                    (LEOM)</strong
+                  ><br />
                   Universidade Estadual de Campinas (UNICAMP)
                 </p>
               </div>
@@ -543,7 +560,10 @@
           </div>
 
           <div class="about-section">
-            <h3><i class="fas fa-bullseye" aria-hidden="true"></i> Objetivos do Projeto</h3>
+            <h3>
+              <i class="fas fa-bullseye" aria-hidden="true"></i> Objetivos do
+              Projeto
+            </h3>
             <ul>
               <li>
                 Facilitar o ensino e aprendizado da taxonomia de Tardigrada
@@ -568,7 +588,10 @@
           </div>
 
           <div class="about-section">
-            <h3><i class="fas fa-code" aria-hidden="true"></i> Tecnologias Utilizadas</h3>
+            <h3>
+              <i class="fas fa-code" aria-hidden="true"></i> Tecnologias
+              Utilizadas
+            </h3>
             <div class="tech-grid">
               <div class="tech-item">
                 <i class="fab fa-html5" aria-hidden="true"></i>
@@ -596,8 +619,9 @@
               contato:
             </p>
             <p>
-              <strong>E-mail:</strong> danilocastros@prof.educacao.sp.gov.br<br />
-              <strong>Instagram:</strong> @ursona escola
+              <strong>E-mail:</strong>
+              danilocastros@prof.educacao.sp.gov.br<br />
+              <strong>Instagram:</strong> @ursonaescola
             </p>
           </div>
         </div>

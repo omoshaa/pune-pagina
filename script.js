@@ -54,6 +54,7 @@ function showSection(sectionId) {
       renderAll();
     } else if (sectionId === "mapa-tardigrada" && map) {
       map.invalidateSize();
+      renderAll(); // Garante que filtros e tabela sejam atualizados
     }
     if (sectionId === "chave-dicotomica") {
       resetKey();
@@ -82,15 +83,11 @@ let tardiRecords = JSON.parse(localStorage.getItem("tardiRecords")) || [
     superfamilia: "Macrobiotoidea",
     familia: "Macrobiotidae",
     genero: "Macrobiotus",
-    // especie: "harmsworthi", // Removido
-    quantidade: 12,
-    // tamanho: 350, // Removido
+    especie: "harmsworthi", // Adicionado
     localidade: "Parque Ibirapuera, SP",
     habitat: "Terrestre - Musgo",
     pesquisador: "Ana Silva",
     instituicao: "USP",
-    // caracteristicas: "Dois macroplacóides, garras duplas assimétricas, cutícula lisa", // Removido
-    // observacoes: "Encontrado em musgo de árvore. Estado ativo e tun observados.", // Removido
     fotos: [],
     data: "2025-09-22T19:00:00Z",
   },
@@ -103,15 +100,11 @@ let tardiRecords = JSON.parse(localStorage.getItem("tardiRecords")) || [
     superfamilia: "",
     familia: "Echiniscidae",
     genero: "Echiniscus",
-    // especie: "testudo", // Removido
-    quantidade: 8,
-    // tamanho: 180, // Removido
+    especie: "testudo", // Adicionado
     localidade: "Parque Nacional de Brasília, DF",
     habitat: "Terrestre - Líquen",
     pesquisador: "João Costa",
     instituicao: "UnB",
-    // caracteristicas: "Cirros laterais A presentes, placas dorsais bem desenvolvidas, quatro garras por perna", // Removido
-    // observacoes: "Encontrado em líquen sobre rocha. Resistência extrema observada.", // Removido
     fotos: [],
     data: "2025-09-23T19:00:00Z",
   },
@@ -124,19 +117,146 @@ let tardiRecords = JSON.parse(localStorage.getItem("tardiRecords")) || [
     superfamilia: "",
     familia: "Milnesiidae",
     genero: "Milnesium",
-    // especie: "tardigradum", // Removido
-    quantidade: 5,
-    // tamanho: 1200, // Removido
+    especie: "tardigradum", // Adicionado
     localidade: "Tijuca, Rio de Janeiro, RJ",
     habitat: "Terrestre - Folhiço",
     pesquisador: "Maria Santos",
     instituicao: "UFRJ",
-    // caracteristicas: "Papilas cefálicas presentes, ganchos com ramo secundário não conectado, ovos lisos", // Removido
-    // observacoes: "Maior tardígrado observado. Comportamento predatório em outros tardígrados.", // Removido
     fotos: [],
     data: "2025-09-24T19:00:00Z",
   },
+  // === NOVOS DADOS ADICIONADOS ===
+  // Escola Gonzaga (SP) - Coordenadas aproximadas da Penha, SP
+  {
+    id: "gonzaga1",
+    latitude: -23.5284,
+    longitude: -46.5432,
+    classe: "Eutardigrada",
+    ordem: "Parachela",
+    familia: "Macrobiotidae",
+    genero: "Mesobiotus",
+    especie: "",
+    localidade: "Escola Estadual Prof. Aprígio Gonzaga (SP)",
+    habitat: "Terrestre - Musgo",
+    pesquisador: "Aluno PUNE",
+    instituicao: "EE Gonzaga",
+    fotos: [],
+    data: "2025-10-29T10:00:00Z",
+  },
+  {
+    id: "gonzaga2",
+    latitude: -23.5285,
+    longitude: -46.5433,
+    classe: "Heterotardigrada",
+    ordem: "Echiniscoidea",
+    familia: "Echiniscidae",
+    genero: "Pseudoechiniscus",
+    especie: "",
+    localidade: "Escola Estadual Prof. Aprígio Gonzaga (SP)",
+    habitat: "Terrestre - Líquen",
+    pesquisador: "Aluno PUNE",
+    instituicao: "EE Gonzaga",
+    fotos: [],
+    data: "2025-10-29T10:01:00Z",
+  },
+  {
+    id: "gonzaga3",
+    latitude: -23.5286,
+    longitude: -46.5434,
+    classe: "Eutardigrada",
+    ordem: "Parachela",
+    familia: "Macrobiotidae",
+    genero: "Paramacrobiotus",
+    especie: "",
+    localidade: "Escola Estadual Prof. Aprígio Gonzaga (SP)",
+    habitat: "Terrestre - Musgo",
+    pesquisador: "Aluno PUNE",
+    instituicao: "EE Gonzaga",
+    fotos: [],
+    data: "2025-10-29T10:02:00Z",
+  },
+  {
+    id: "gonzaga4",
+    latitude: -23.5287,
+    longitude: -46.5435,
+    classe: "Eutardigrada",
+    ordem: "Apochela",
+    familia: "Milnesiidae",
+    genero: "Milnesium",
+    especie: "",
+    localidade: "Escola Estadual Prof. Aprígio Gonzaga (SP)",
+    habitat: "Terrestre - Folhiço",
+    pesquisador: "Aluno PUNE",
+    instituicao: "EE Gonzaga",
+    fotos: [],
+    data: "2025-10-29T10:03:00Z",
+  },
+  // Julio Mesquita (Campinas) - Coordenadas aproximadas de Campinas
+  {
+    id: "julio1",
+    latitude: -22.9345,
+    longitude: -47.0461,
+    classe: "Eutardigrada",
+    ordem: "Parachela",
+    familia: "Macrobiotidae",
+    genero: "Paramacrobiotus",
+    especie: "",
+    localidade: "Escola Estadual Julio de Mesquita (Campinas)",
+    habitat: "Terrestre - Musgo",
+    pesquisador: "Danilo de Castro Santos",
+    instituicao: "EE Julio de Mesquita",
+    fotos: [],
+    data: "2025-10-29T11:00:00Z",
+  },
+  // Maria de Lourdes (Campinas) - Coordenadas aproximadas de Campinas
+  {
+    id: "maria1",
+    latitude: -22.9715,
+    longitude: -47.1082,
+    classe: "Eutardigrada",
+    ordem: "Apochela",
+    familia: "Milnesiidae",
+    genero: "Milnesium",
+    especie: "",
+    localidade: "EE Maria de Lourdes (Campinas)",
+    habitat: "Terrestre - Musgo",
+    pesquisador: "Aluno PUNE",
+    instituicao: "EE Maria de Lourdes",
+    fotos: [],
+    data: "2025-10-29T12:00:00Z",
+  },
+  {
+    id: "maria2",
+    latitude: -22.9716,
+    longitude: -47.1083,
+    classe: "Eutardigrada",
+    ordem: "Parachela",
+    familia: "Macrobiotidae",
+    genero: "Paramacrobiotus",
+    especie: "",
+    localidade: "EE Maria de Lourdes (Campinas)",
+    habitat: "Terrestre - Líquen",
+    pesquisador: "Aluno PUNE",
+    instituicao: "EE Maria de Lourdes",
+    fotos: [],
+    data: "2025-10-29T12:01:00Z",
+  },
 ];
+
+// ============================================================
+// MAPA DE TAXONOMIA (Para formulário simplificado)
+// ============================================================
+const GENUS_TAXONOMY_MAP = {
+    "Macrobiotus": { classe: "Eutardigrada", ordem: "Parachela", familia: "Macrobiotidae" },
+    "Echiniscus": { classe: "Heterotardigrada", ordem: "Echiniscoidea", familia: "Echiniscidae" },
+    "Milnesium": { classe: "Eutardigrada", ordem: "Apochela", familia: "Milnesiidae" },
+    "Mesobiotus": { classe: "Eutardigrada", ordem: "Parachela", familia: "Macrobiotidae" },
+    "Pseudoechiniscus": { classe: "Heterotardigrada", ordem: "Echiniscoidea", familia: "Echiniscidae" },
+    "Paramacrobiotus": { classe: "Eutardigrada", ordem: "Parachela", familia: "Macrobiotidae" },
+    "Outro": { classe: "Indeterminado", ordem: "Indeterminado", familia: "Indeterminado" }
+    // Adicionar outros gêneros da chave aqui...
+};
+
 
 // ============================================================
 // VARIÁVEIS GLOBAIS
@@ -189,6 +309,7 @@ function renderMarkers() {
         <h4>${escapeHtml(record.classe)} - <i>${escapeHtml(
       record.genero
     )}</i></h4>
+        <p><strong>Gênero:</strong> <i>${escapeHtml(record.genero)} ${escapeHtml(record.especie)}</i></p>
         <p><strong>Local:</strong> ${escapeHtml(record.localidade)}</p>
         <p><strong>Pesquisador:</strong> ${escapeHtml(record.pesquisador)}</p>
         <p><strong>Data:</strong> ${new Date(record.data).toLocaleDateString(
@@ -204,12 +325,32 @@ function renderMarkers() {
 }
 
 function getFilteredRecords() {
-  const filter = document.getElementById("grupo-filter")?.value;
-  return filter
-    ? tardiRecords.filter(
-        (record) => record.classe === filter || record.ordem === filter
-      )
-    : tardiRecords;
+  const grupoFilter = document.getElementById("grupo-filter")?.value;
+  const generoFilter = document.getElementById("genero-filter")?.value;
+
+  return tardiRecords.filter(record => {
+      const grupoMatch = !grupoFilter || record.classe === grupoFilter || record.ordem === grupoFilter;
+      const generoMatch = !generoFilter || record.genero === generoFilter;
+      return grupoMatch && generoMatch;
+  });
+}
+
+// NOVO: Popula o filtro de Gênero
+function populateGeneroFilter() {
+    const generoFilter = document.getElementById("genero-filter");
+    if (!generoFilter) return;
+
+    const generos = [...new Set(tardiRecords.map(r => r.genero))].sort();
+    
+    // Limpa opções antigas (exceto a primeira "Todos")
+    generoFilter.innerHTML = '<option value="">Todos os Gêneros</option>';
+    
+    generos.forEach(genero => {
+        const option = document.createElement('option');
+        option.value = genero;
+        option.textContent = genero;
+        generoFilter.appendChild(option);
+    });
 }
 
 // ============================================================
@@ -217,15 +358,14 @@ function getFilteredRecords() {
 // ============================================================
 function updateStats() {
   const totalRegistros = tardiRecords.length;
-  const totalGrupos = [...new Set(tardiRecords.map((r) => r.classe || r.ordem))]
-    .length;
-  // Atualizado para contar Gêneros
+  const totalGrupos = [...new Set(tardiRecords.map((r) => r.classe))].filter(g => g !== 'Indeterminado').length;
   const totalGeneros = [
     ...new Set(tardiRecords.map((r) => r.genero)),
-  ].length;
+  ].filter(g => g !== 'Outro').length;
+  
   document.getElementById("total-registros").textContent = totalRegistros;
   document.getElementById("total-grupos").textContent = totalGrupos;
-  document.getElementById("total-especies").textContent = totalGeneros; // ID no HTML ainda é "total-especies"
+  document.getElementById("total-especies").textContent = totalGeneros; // ID no HTML ainda é "total-especies", mas agora conta Gêneros
 }
 
 // ============================================================
@@ -234,32 +374,45 @@ function updateStats() {
 function handleFormSubmit(e) {
   e.preventDefault();
   const formData = new FormData(e.target);
+  const genero = formData.get("genero");
+  const taxonomia = GENUS_TAXONOMY_MAP[genero] || GENUS_TAXONOMY_MAP["Outro"];
+
   const newRecord = {
     id: generateId(),
     latitude: parseFloat(formData.get("latitude")),
     longitude: parseFloat(formData.get("longitude")),
-    classe: formData.get("classe"),
-    ordem: formData.get("ordem") || "",
-    superfamilia: formData.get("superfamilia") || "",
-    familia: formData.get("familia") || "",
-    genero: formData.get("genero"),
-    // especie: removido
-    quantidade: parseInt(formData.get("quantidade")) || 1, // Campo removido do form, mas mantido nos dados
-    // tamanho: removido
+    
+    // Preenchido automaticamente pelo GENUS_TAXONOMY_MAP
+    classe: taxonomia.classe,
+    ordem: taxonomia.ordem,
+    familia: taxonomia.familia,
+    
+    // Preenchido pelo formulário
+    genero: genero,
+    especie: formData.get("especie") || "",
+    
     localidade: formData.get("localidade"),
     habitat: formData.get("habitat"),
     pesquisador: formData.get("pesquisador"),
     instituicao: formData.get("instituicao") || "",
-    // caracteristicas: removido
-    // observacoes: removido
-    fotos: [],
+    
+    fotos: [], // O preview de fotos não é salvo no localStorage
     data: new Date().toISOString(),
   };
+
   tardiRecords.push(newRecord);
   localStorage.setItem("tardiRecords", JSON.stringify(tardiRecords));
+  
   showNotification("Registro salvo com sucesso!", "success");
   e.target.reset();
-  renderAll();
+  
+  // Limpa o preview de imagens
+  const previewContainer = document.getElementById("image-preview");
+  if (previewContainer) {
+    previewContainer.innerHTML = "";
+  }
+  
+  renderAll(); // Atualiza mapa, tabela e filtros
   showSection("mapa-tardigrada"); // Leva o usuário ao mapa
 }
 
@@ -283,6 +436,38 @@ function getLocation() {
     showNotification("Geolocalização não suportada.", "error");
   }
 }
+
+// NOVO: Função para preview de imagens
+function handleImagePreview(event) {
+    const previewContainer = document.getElementById("image-preview");
+    if (!previewContainer) return;
+    
+    previewContainer.innerHTML = ""; // Limpa previews anteriores
+    
+    const files = event.target.files;
+    if (files.length > 5) {
+        showNotification("Você só pode enviar até 5 fotos.", "error");
+        event.target.value = ""; // Limpa a seleção
+        return;
+    }
+
+    for (const file of files) {
+        if (!file.type.startsWith("image/")) continue;
+        
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            img.alt = "Preview da imagem";
+            img.classList.add("preview-image"); // (Estilo será adicionado no CSS)
+            previewContainer.appendChild(img);
+        }
+        
+        reader.readAsDataURL(file);
+    }
+}
+
 
 // ============================================================
 // CHAVE DICOTÔMICA (Máquina de Estados ATUALIZADA)
@@ -920,7 +1105,9 @@ function resetKey() {
 function renderRecordsTable() {
   const tbody = document.getElementById("records-body");
   if (!tbody) return;
-  const records = getFilteredRecords().slice(0, 10); // Mostra os 10 últimos
+  
+  // Ordena por data mais recente
+  const records = getFilteredRecords().sort((a, b) => new Date(b.data) - new Date(a.data)); 
   
   if (records.length === 0) {
       tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Nenhum registro encontrado.</td></tr>';
@@ -931,10 +1118,10 @@ function renderRecordsTable() {
     .map(
       (record) => `
     <tr>
-      <td>${escapeHtml(record.classe || record.ordem)}</td>
-      <td>${escapeHtml(record.familia)}</td>
+      <td>${escapeHtml(record.ordem)}</td>
       <td><i>${escapeHtml(record.genero)}</i></td>
-      <td>${escapeHtml(record.localidade)}</td>
+      <td><i>${escapeHtml(record.especie || "N/A")}</i></td>
+      <td style="font-size: 0.85rem;">${record.latitude.toFixed(4)}, ${record.longitude.toFixed(4)}</td>
       <td>${escapeHtml(record.pesquisador)}</td>
       <td>${new Date(record.data).toLocaleDateString("pt-BR")}</td>
       <td>
@@ -976,6 +1163,7 @@ function showNotification(message, type = "info") {
 // RENDERIZAÇÃO GERAL
 // ============================================================
 function renderAll() {
+  populateGeneroFilter(); // Atualiza o filtro de gênero
   updateStats();
   renderRecordsTable();
   renderMarkers();
@@ -1130,11 +1318,23 @@ function init() {
   if (getLocationBtn) {
     getLocationBtn.addEventListener("click", getLocation);
   }
+  
+  // NOVO: Event Listener para Preview de Imagem
+  const fotoInput = document.getElementById("foto");
+  if (fotoInput) {
+      fotoInput.addEventListener("change", handleImagePreview);
+  }
 
   // Event Listener para Filtro de Grupos (Mapa)
   const grupoFilter = document.getElementById("grupo-filter");
   if (grupoFilter) {
     grupoFilter.addEventListener("change", renderAll);
+  }
+  
+  // NOVO: Event Listener para Filtro de Gênero (Mapa)
+  const generoFilter = document.getElementById("genero-filter");
+  if (generoFilter) {
+    generoFilter.addEventListener("change", renderAll);
   }
   
   // Event Listener para Filtro da Galeria de Estruturas
@@ -1177,11 +1377,8 @@ function init() {
 
   // Inicialização da Página
   showSection("home");
-  // O renderAll() será chamado dentro do initMap() se necessário,
-  // ou pode ser chamado aqui se o mapa não for a primeira tela.
-  // Vamos garantir que os dados iniciais (tabela, stats) sejam carregados.
-  updateStats();
-  renderRecordsTable();
+  // Renderiza os dados iniciais
+  renderAll();
   renderStructures(); // Renderiza a galeria (para o filtro)
 }
 
