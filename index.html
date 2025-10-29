@@ -35,10 +35,10 @@
 
         <div class="nav-links desktop-nav">
           <a href="#home" class="nav-item">Início</a>
-          <a href="#mapa-tardigrada" class="nav-item">Mapa de Tardigrada</a>
-          <a href="#cadastrar" class="nav-item">Cadastrar</a>
-          <a href="#chave-dicotomica" class="nav-item">Chave Dicotômica</a>
-          <a href="#sobre" class="nav-item">Sobre</a>
+          <a href="#mapa-tardigrada" class="nav-item">Mapa</a>
+          <a href="#identificacao" class="nav-item">Identificação</a>
+          <a href="#sobre-tardigrados" class="nav-item">Sobre Tardígrados</a>
+          <a href="#sobre" class="nav-item">Sobre o Projeto</a>
         </div>
 
         <button class="mobile-menu-btn" aria-label="Menu">
@@ -61,17 +61,17 @@
                 <i class="fas fa-map" aria-hidden="true"></i>
                 <span>Mapa de Tardigrada</span>
               </a>
-              <a href="#cadastrar" class="mobile-nav-item">
-                <i class="fas fa-plus-circle" aria-hidden="true"></i>
-                <span>Cadastrar</span>
+              <a href="#identificacao" class="mobile-nav-item">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <span>Identificação</span>
               </a>
-              <a href="#chave-dicotomica" class="mobile-nav-item">
-                <i class="fas fa-code-branch" aria-hidden="true"></i>
-                <span>Chave Dicotômica</span>
+              <a href="#sobre-tardigrados" class="mobile-nav-item">
+                <i class="fas fa-microscope" aria-hidden="true"></i>
+                <span>Sobre Tardígrados</span>
               </a>
               <a href="#sobre" class="mobile-nav-item">
                 <i class="fas fa-info-circle" aria-hidden="true"></i>
-                <span>Sobre</span>
+                <span>Sobre o Projeto</span>
               </a>
             </nav>
           </div>
@@ -98,25 +98,24 @@
               <p>Visualize a distribuição geográfica dos tardígrados</p>
             </button>
 
-            <button class="menu-btn" data-section="cadastrar">
-              <i class="fas fa-plus-circle" aria-hidden="true"></i>
-              <h3>Cadastrar Tardígrados</h3>
-              <p>Adicione novos registros de espécimes encontrados</p>
+            <button class="menu-btn" data-section="identificacao">
+              <i class="fas fa-search" aria-hidden="true"></i>
+              <h3>Identificação</h3>
+              <p>
+                Use a chave dicotômica, cadastre achados e guias visuais
+              </p>
             </button>
 
-            <button class="menu-btn" data-section="chave-dicotomica">
-              <i class="fas fa-code-branch" aria-hidden="true"></i>
-              <h3>Chave Dicotômica</h3>
-              <p>
-                Identifique espécimes de Tardigrada usando características
-                morfológicas
-              </p>
+            <button class="menu-btn" data-section="sobre-tardigrados">
+              <i class="fas fa-microscope" aria-hidden="true"></i>
+              <h3>Sobre Tardígrados</h3>
+              <p>Aprenda o que são os "ursos d'água"</p>
             </button>
 
             <button class="menu-btn" data-section="sobre">
               <i class="fas fa-info-circle" aria-hidden="true"></i>
               <h3>Sobre o Projeto</h3>
-              <p>Conheça a equipe, fontes e bibliografia sobre Tardigrada</p>
+              <p>Conheça a equipe, objetivos e parceiros</p>
             </button>
           </div>
         </div>
@@ -171,7 +170,6 @@
                   <th>Grupo</th>
                   <th>Família</th>
                   <th>Gênero</th>
-                  <th>Espécie</th>
                   <th>Local</th>
                   <th>Pesquisador</th>
                   <th>Data</th>
@@ -186,7 +184,7 @@
 
       <section id="cadastrar" class="container section hidden">
         <div class="section-header">
-          <button class="back-btn" data-section="home">
+          <button class="back-btn" data-section="identificacao">
             <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
           </button>
           <h2>Cadastrar Novo Tardígrado</h2>
@@ -227,6 +225,7 @@
                 <option value="Carphaniidae">Carphaniidae</option>
                 <option value="Milnesiidae">Milnesiidae</option>
                 <option value="Macrobiotidae">Macrobiotidae</option>
+                <option value="Murrayidae">Murrayidae</option>
                 <option value="Isohypsibiidae">Isohypsibiidae</option>
                 <option value="Hypsibiidae">Hypsibiidae</option>
                 <option value="Outra">Outra</option>
@@ -239,15 +238,6 @@
                 name="genero"
                 required
                 placeholder="Ex: Milnesium, Macrobiotus, Hypsibius"
-              />
-
-              <label for="especie">Espécie</label>
-              <input
-                type="text"
-                id="especie"
-                name="especie"
-                required
-                placeholder="Ex: tardigradum, harmsworthi"
               />
             </div>
           </fieldset>
@@ -306,57 +296,15 @@
               </select>
             </div>
           </fieldset>
-
+          
           <fieldset>
-            <legend>Dados da Observação</legend>
+            <legend>Dados do Observador</legend>
             <div class="form-group">
-              <label for="quantidade">Quantidade observada</label>
-              <input
-                type="number"
-                id="quantidade"
-                name="quantidade"
-                min="1"
-                required
-              />
-
-              <label for="tamanho">Tamanho aproximado (μm - micrometros)</label>
-              <input
-                type="number"
-                id="tamanho"
-                name="tamanho"
-                step="1"
-                min="50"
-                max="2000"
-                placeholder="Ex: 500"
-              />
-
               <label for="pesquisador">Nome do pesquisador/observador</label>
               <input type="text" id="pesquisador" name="pesquisador" required />
 
               <label for="instituicao">Instituição (opcional)</label>
               <input type="text" id="instituicao" name="instituicao" />
-            </div>
-          </fieldset>
-
-          <fieldset>
-            <legend>Características Morfológicas de Tardigrada</legend>
-            <div class="form-group">
-              <label for="caracteristicas"
-                >Principais características morfológicas observadas</label
-              >
-              <textarea
-                id="caracteristicas"
-                name="caracteristicas"
-                placeholder="Ex: Cirros laterais A presentes/ausentes, forma das garras, placas dorsais, estruturas bucais, etc."
-                required
-              ></textarea>
-
-              <label for="observacoes">Observações adicionais</label>
-              <textarea
-                id="observacoes"
-                name="observacoes"
-                placeholder="Comportamento, estado (ativo/tun), condições ambientais, etc."
-              ></textarea>
             </div>
           </fieldset>
 
@@ -391,7 +339,7 @@
 
       <section id="chave-dicotomica" class="container section hidden">
         <div class="section-header">
-          <button class="back-btn" data-section="home">
+          <button class="back-btn" data-section="identificacao">
             <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
           </button>
           <h2>Chave Dicotômica — Tardigrada</h2>
@@ -409,30 +357,13 @@
           <div id="key-step" class="key-step">
             <h3 id="step-title">Passo 1</h3>
             <div id="step-content">
-              <div class="key-question">
-                <p>
-                  <strong>Cirros laterais A presentes (seta / cA)?</strong>
-                </p>
               </div>
-              <div class="key-options">
-                <button
-                  class="key-option"
-                  data-step="heterotardigrada"
-                >
-                  <i class="fas fa-check" aria-hidden="true"></i>
-                  Sim - Cirros laterais A presentes
-                </button>
-                <button class="key-option" data-step="eutardigrada">
-                  <i class="fas fa-times" aria-hidden="true"></i>
-                  Não - Cirros laterais A ausentes
-                </button>
-              </div>
-            </div>
           </div>
 
           <div class="key-result" id="key-result" style="display: none">
             <h3>Resultado da Identificação</h3>
-            <div id="result-content"></div>
+            <div id="result-content">
+              </div>
             <div class="key-controls">
               <button class="btn btn-primary" id="reset-key-btn">
                 <i class="fas fa-redo" aria-hidden="true"></i>
@@ -448,25 +379,123 @@
             </button>
           </div>
 
-          <div class="path-display" id="path-display">
+          <div class="path-display" id="path-display" style="display:none;">
             <h4>Caminho Percorrido</h4>
             <ul class="path-steps" id="path-steps"></ul>
-          </div>
-
-          <div class="key-history">
-            <h4>Histórico de Escolhas:</h4>
-            <ul id="choice-history"></ul>
           </div>
 
           <div class="key-citation">
             <small
               ><em
-                >Base: rascunho da chave dicotômica de Tardigrada - versão
-                adaptada para interface interativa.</em
+                >Base: Chave de Damborenea, Rogers & Thorp (2020) e outras referências.
+                Adaptado por Danilo de Castro Santos.</em
               ></small
             >
           </div>
         </div>
+      </section>
+
+      <section id="identificacao" class="container section hidden">
+        <div class="section-header">
+          <button class="back-btn" data-section="home">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
+          </button>
+          <h2>Identificação de Tardígrados</h2>
+        </div>
+        
+        <div class="key-intro">
+            <p>
+              Ferramentas para auxiliar na coleta, identificação e cadastro de espécimes de Tardigrada.
+            </p>
+        </div>
+
+         <div class="menu-buttons" style="margin-top: 24px;">
+            <button class="menu-btn" data-section="chave-dicotomica">
+              <i class="fas fa-code-branch" aria-hidden="true"></i>
+              <h3>Chave Dicotômica</h3>
+              <p>Identifique seu espécime passo a passo</p>
+            </button>
+            
+            <button class="menu-btn" data-section="cadastrar">
+              <i class="fas fa-plus-circle" aria-hidden="true"></i>
+              <h3>Cadastrar Achados</h3>
+              <p>Contribua para o banco de dados</p>
+            </button>
+
+            <button class="menu-btn" data-section="guia-estruturas">
+              <i class="fas fa-book-open" aria-hidden="true"></i>
+              <h3>Guia de Estruturas</h3>
+              <p>Glossário visual da anatomia</p>
+            </button>
+            
+            <button class="menu-btn" data-section="como-coletar" disabled>
+              <i class="fas fa-vial" aria-hidden="true"></i>
+              <h3>Como Coletar (Em breve)</h3>
+              <p>Manuais e dicas para coleta</p>
+            </button>
+            
+            <button class="menu-btn" data-section="como-fotografar" disabled>
+              <i class="fas fa-camera" aria-hidden="true"></i>
+              <h3>Como Fotografar (Em breve)</h3>
+              <p>Dicas para fotos em microscópio</p>
+            </button>
+            
+            <button class="menu-btn" data-section="anatomia" disabled>
+              <i class="fas fa-draw-polygon" aria-hidden="true"></i>
+              <h3>Anatomia (Em breve)</h3>
+              <p>Manuais de anatomia detalhada</p>
+            </button>
+          </div>
+      </section>
+      
+      <section id="guia-estruturas" class="container section hidden">
+        <div class="section-header">
+            <button class="back-btn" data-section="identificacao">
+              <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
+            </button>
+            <h2>Guia de Estruturas</h2>
+        </div>
+        
+        <div class="key-intro">
+            <p>
+              Explore um glossário visual das principais características morfológicas usadas para identificar Tardígrados.
+            </p>
+        </div>
+
+        <div class="filter-container" style="margin-bottom: 24px;">
+            <input type="text" id="estrutura-search" placeholder="Buscar estrutura (ex: cirro, garras...)" style="width: 100%; max-width: 600px; margin: 0 auto; display: block;">
+        </div>
+
+        <div id="estrutura-cards-container" class="estrutura-grid">
+            </div>
+      </section>
+
+      <section id="sobre-tardigrados" class="container section hidden">
+         <div class="section-header">
+          <button class="back-btn" data-section="home">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
+          </button>
+          <h2>Sobre os Tardígrados</h2>
+        </div>
+        
+        <div class="about-content">
+            <div class="about-section">
+              <h3><i class="fas fa-microscope" aria-hidden="true"></i> Os "Ursos d'Água"</h3>
+              <p>
+                Os tardígrados são microorganismos microscópicos conhecidos como
+                os "ursos d'água" devido à sua aparência fofa e movimentos lentos.
+                Eles são considerados os organismos mais resistentes da Terra,
+                capazes de sobreviver em condições extremas incluindo:
+              </p>
+              <ul>
+                <li>Temperaturas de -272°C a 151°C</li>
+                <li>Pressões até 6 vezes maior que a das fossas oceânicas</li>
+                <li>Radiação 1000 vezes maior que a letal para humanos</li>
+                <li>Vácuo do espaço por até 10 dias</li>
+                <li>Desidratação total por décadas</li>
+              </ul>
+            </div>
+            </div>
       </section>
 
       <section id="sobre" class="container section hidden">
@@ -484,25 +513,30 @@
               <div class="team-member">
                 <h4>Coordenação Geral</h4>
                 <p>
-                  <strong>Prof. Dr. [Nome]</strong><br />
-                  Universidade [Nome]<br />
-                  Departamento de Biologia
+                  <strong>Prof. Danilo de Castro Santos</strong><br />
+                  Mestrando na Universidade Estadual de Campinas<br />
+                  Departamento de Biologia Animal
                 </p>
               </div>
               <div class="team-member">
-                <h4>Desenvolvimento</h4>
+                <h4>Integrantes do projeto</h4>
                 <p>
-                  <strong>[Seus nomes aqui]</strong><br />
-                  Estudantes de [Curso]<br />
+                  <strong>(Nome dos alunos participantes)</strong><br />
                   Universidade [Nome]
                 </p>
               </div>
               <div class="team-member">
                 <h4>Consultoria Científica</h4>
                 <p>
-                  <strong>Prof. Dr. [Nome]</strong><br />
-                  Especialista em Tardigrada<br />
-                  Instituto [Nome]
+                  <strong>Prof. Dr. André Reinaldo Senna Garraffoni</strong><br />
+                  Professor da Universidade Estadual de Campinas
+                </p>
+              </div>
+              <div class="team-member">
+                <h4>Parceria</h4>
+                <p>
+                  <strong>Laboratório de Evolução de Organismo Meiofaunais (LEOM)</strong><br />
+                  Universidade Estadual de Campinas (UNICAMP)
                 </p>
               </div>
             </div>
@@ -534,71 +568,6 @@
           </div>
 
           <div class="about-section">
-            <h3><i class="fas fa-microscope" aria-hidden="true"></i> Sobre os Tardígrados</h3>
-            <p>
-              Os tardígrados são microorganismos microscópicos conhecidos como
-              os "ursos d'água" devido à sua aparência fofa e movimentos lentos.
-              Eles são considerados os organismos mais resistentes da Terra,
-              capazes de sobreviver em condições extremas incluindo:
-            </p>
-            <ul>
-              <li>Temperaturas de -272°C a 151°C</li>
-              <li>Pressões até 6 vezes maior que a das fossas oceânicas</li>
-              <li>Radiação 1000 vezes maior que a letal para humanos</li>
-              <li>Vácuo do espaço por até 10 dias</li>
-              <li>Desidratação total por décadas</li>
-            </ul>
-          </div>
-
-          <div class="about-section">
-            <h3><i class="fas fa-book" aria-hidden="true"></i> Bibliografia e Fontes</h3>
-            <div class="references">
-              <p><strong>Referências Principais sobre Tardigrada:</strong></p>
-              <ul>
-                <li>
-                  Nelson, D. R., Guidetti, R., & Rebecchi, L. (2015).
-                  <em>Phylum Tardigrada</em>. In Thorp & Rogers (Eds.), Ecology
-                  and General Biology: Thorp and Covich's Freshwater
-                  Invertebrates.
-                </li>
-                <li>
-                  Guidetti, R., & Bertolani, R. (2005).
-                  <em
-                    >Tardigrade taxonomy: an updated check list of the taxa and
-                    a list of characters for their identification</em
-                  >. Zootaxa, 845(1), 1-46.
-                </li>
-                <li>
-                  Ramazzotti, G., & Maucci, W. (1983).
-                  <em
-                    >Il Phylum Tardigrada (III edizione riveduta e
-                    aggiornata)</em
-                  >. Memorie dell'Istituto Italiano di Idrobiologia, 41, 1-1012.
-                </li>
-                <li>
-                  Bertolani, R., Guidetti, R., Marchioro, T., Altiero, T.,
-                  Rebecchi, L., & Cesari, M. (2014).
-                  <em
-                    >Phylogeny of Eutardigrada: new molecular data and their
-                    morphological support lead to the identification of new
-                    evolutionary lineages</em
-                  >. Molecular Phylogenetics and Evolution, 76, 110-126.
-                </li>
-              </ul>
-
-              <p><strong>Bases de Dados Consultadas:</strong></p>
-              <ul>
-                <li>
-                  Tardigrade Database (Università di Modena e Reggio Emilia)
-                </li>
-                <li>World Register of Marine Species (WoRMS) - Tardigrada</li>
-                <li>Encyclopedia of Life (EOL) - Tardigrada</li>
-                <li>Catalogue of Life - Tardigrada</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="about-section">
             <h3><i class="fas fa-code" aria-hidden="true"></i> Tecnologias Utilizadas</h3>
             <div class="tech-grid">
               <div class="tech-item">
@@ -627,9 +596,8 @@
               contato:
             </p>
             <p>
-              <strong>E-mail:</strong> contato@tardistudy.edu.br<br />
-              <strong>Instituição:</strong> [Nome da Universidade]<br />
-              <strong>Departamento:</strong> [Departamento/Instituto]
+              <strong>E-mail:</strong> danilocastros@prof.educacao.sp.gov.br<br />
+              <strong>Instagram:</strong> @ursona escola
             </p>
           </div>
         </div>

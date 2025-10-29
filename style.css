@@ -1,10 +1,10 @@
 /* ============================================================
-   FILOSTUDY - PORTAL DE ESTUDOS FILOGENÉTICOS
-   Design moderno com tema claro e verde natural
+    TARDISTUDY - PORTAL DE ESTUDOS DE TARDIGRADA
+    Design moderno com tema claro e verde natural
 ============================================================ */
 
 /* ----------------------------
-   VARIÁVEIS CSS (CORES E ESTILOS)
+    VARIÁVEIS CSS (CORES E ESTILOS)
 ----------------------------- */
 :root {
   /* Paleta de Cores Verdes (Tema Principal) */
@@ -49,7 +49,7 @@
 }
 
 /* ----------------------------
-   RESET E ESTILOS BASE
+    RESET E ESTILOS BASE
 ----------------------------- */
 * {
   margin: 0;
@@ -75,7 +75,7 @@ body {
 }
 
 /* ----------------------------
-   SCROLLBAR PERSONALIZADA (Chrome/Safari)
+    SCROLLBAR PERSONALIZADA (Chrome/Safari)
 ----------------------------- */
 ::-webkit-scrollbar {
   width: 8px; /* Largura da scrollbar */
@@ -95,7 +95,7 @@ body {
 }
 
 /* ----------------------------
-   LINKS GLOBAIS
+    LINKS GLOBAIS
 ----------------------------- */
 a {
   color: var(--primary);
@@ -109,8 +109,8 @@ a:hover {
 }
 
 /* ============================================================
-   BARRA DE NAVEGAÇÃO (NAVBAR)
-   Responsiva com menu hamburger para mobile
+    BARRA DE NAVEGAÇÃO (NAVBAR)
+    Responsiva com menu hamburger para mobile
 ============================================================ */
 .navbar {
   background: var(--glass); /* Fundo translúcido */
@@ -145,20 +145,22 @@ a:hover {
 }
 
 /* ----------------------------
-   MENU DESKTOP (Telas grandes)
+    MENU DESKTOP (Telas grandes)
 ----------------------------- */
 .desktop-nav {
   display: flex;
-  gap: 32px; /* Espaço entre os links */
+  gap: 24px; /* Espaço entre os links */
+  flex-wrap: wrap; /* Permite que os links quebrem a linha se necessário */
 }
 
 /* Links do menu desktop */
 .desktop-nav a {
   font-weight: 600;
-  padding: 8px 16px;
+  padding: 8px 12px; /* Padding ajustado */
   border-radius: var(--radius-small);
   transition: all 0.3s ease;
   position: relative;
+  font-size: 0.95rem; /* Tamanho de fonte ligeiramente menor para caber */
 }
 
 /* Efeito hover nos links */
@@ -186,7 +188,7 @@ a:hover {
 }
 
 /* ----------------------------
-   BOTÃO HAMBURGER (3 linhas - Mobile)
+    BOTÃO HAMBURGER (3 linhas - Mobile)
 ----------------------------- */
 .mobile-menu-btn {
   display: none; /* Escondido em desktop */
@@ -226,7 +228,7 @@ a:hover {
 }
 
 /* ----------------------------
-   MENU MOBILE (Painel lateral)
+    MENU MOBILE (Painel lateral)
 ----------------------------- */
 /* Overlay escuro que cobre a tela */
 .mobile-nav {
@@ -329,7 +331,7 @@ a:hover {
 }
 
 /* ----------------------------
-   LAYOUT E CONTAINERS GERAIS
+    LAYOUT E CONTAINERS GERAIS
 ----------------------------- */
 /* Container principal das seções */
 .container {
@@ -420,10 +422,10 @@ h2::after {
 }
 
 .stat-box {
-  background: var(--secondary);
+  background: var(--bg-card); /* CORRIGIDO: --secondary não existia, usando --bg-card */
   padding: 16px 24px;
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-soft); /* CORRIGIDO: --shadow não existia */
   text-align: center;
   min-width: 120px;
   flex-grow: 1;
@@ -448,9 +450,9 @@ h2::after {
 table {
   width: 100%;
   border-collapse: collapse;
-  background: var(--secondary);
+  background: var(--bg-card); /* CORRIGIDO: --secondary não existia */
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-soft); /* CORRIGIDO: --shadow não existia */
   overflow: hidden;
   transition: background 0.3s ease;
 }
@@ -476,11 +478,11 @@ th {
 }
 
 tr:nth-child(even) {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(232, 245, 233, 0.5); /* Fundo verde-claro alternado */
 }
 
 tr:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(165, 214, 167, 0.3); /* Fundo verde mais forte no hover */
 }
 
 td .btn-action {
@@ -495,10 +497,10 @@ td .btn-action:hover {
   color: var(--accent);
 }
 td .btn-action.btn-delete {
-  color: var(--danger);
+  color: #f44336; /* Cor de perigo */
 }
 td .btn-action.btn-delete:hover {
-  color: var(--danger-hover);
+  color: #d32f2f; /* Perigo hover */
 }
 
 /* ----------------------------
@@ -508,10 +510,10 @@ form {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background: var(--secondary);
+  background: var(--bg-card); /* CORRIGIDO: --secondary não existia */
   padding: 24px;
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-soft); /* CORRIGIDO: --shadow não existia */
   transition: background 0.3s ease;
 }
 
@@ -545,6 +547,7 @@ legend {
   margin-bottom: 5px;
 }
 
+/* ===== CORREÇÕES ESPECÍFICAS PARA FORMULÁRIOS (Inputs) ===== */
 input,
 textarea,
 select {
@@ -553,14 +556,14 @@ select {
   border-radius: var(--radius-small);
   border: 2px solid rgba(129, 199, 132, 0.3);
   outline: none;
-  background: var(--bg-card);
+  background: var(--bg-primary); /* Fundo branco sólido */
   color: var(--text-primary);
   min-width: 150px;
   transition: all 0.3s ease;
-  font-size: 16px;
+  font-size: 16px; /* Evita zoom no iOS */
+  font-family: inherit;
+  min-height: 48px; /* Touch target */
 }
-
-/* ===== CORREÇÕES ESPECÍFICAS PARA FORMULÁRIOS ===== */
 
 /* Garantir que todos os inputs tenham fundo claro e sejam legíveis */
 input[type="text"],
@@ -621,7 +624,7 @@ legend {
 }
 
 /* ----------------------------
-   MAPA LEAFLET (Correções)
+    MAPA LEAFLET (Correções)
 ----------------------------- */
 #map {
   width: 100% !important;
@@ -732,7 +735,7 @@ legend {
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 44px;
-  height: 44px;
+  height: 44px; /* Ajustado para bater com 48px min-height do input */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -756,6 +759,7 @@ legend {
   .coordinates-container {
     flex-direction: column;
     gap: 8px;
+    align-items: stretch; /* Garante que inputs ocupem 100% */
   }
 
   .form-actions {
@@ -793,7 +797,7 @@ legend {
   color: #fff;
   padding: 15px 25px;
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-medium); /* CORRIGIDO: --shadow */
   z-index: 1000;
   text-align: center;
   font-weight: bold;
@@ -804,10 +808,10 @@ legend {
 }
 
 #notification.error {
-  background-color: var(--danger);
+  background-color: #f44336; /* Cor de perigo */
 }
 
-/* Estilos para notificações */
+/* Estilos para notificações (classe .notification) */
 .notification {
   position: fixed;
   bottom: 20px;
@@ -841,7 +845,7 @@ legend {
 }
 
 /* ----------------------------
-   RODAPÉ
+    RODAPÉ
 ----------------------------- */
 footer {
   background: var(--glass); /* Fundo translúcido */
@@ -921,12 +925,12 @@ p {
   }
 
   .desktop-nav {
-    gap: 20px;
+    gap: 12px; /* Reduzido para caber */
   }
 
   .desktop-nav a {
-    padding: 6px 12px;
-    font-size: 0.9rem;
+    padding: 6px 10px; /* Reduzido para caber */
+    font-size: 0.85rem; /* Reduzido para caber */
   }
 
   .hero-content {
@@ -1085,11 +1089,7 @@ p {
     gap: 12px;
   }
 
-  .key-option {
-    width: 100%;
-    text-align: left;
-    padding: 16px;
-  }
+  /* (Regra .key-option foi substituída) */
 
   /* Página Sobre */
   .about-content {
@@ -1281,7 +1281,7 @@ html {
 }
 
 /* ----------------------------
-    FILOSTUDY - COMPONENTES PRINCIPAIS
+    TARDISTUDY - COMPONENTES PRINCIPAIS
 ----------------------------- */
 
 /* Navegação entre seções */
@@ -1330,7 +1330,7 @@ html {
 }
 
 /* ----------------------------
-   ANIMAÇÕES
+    ANIMAÇÕES
 ----------------------------- */
 /* Animação de entrada (fade + movimento para cima) */
 @keyframes fadeInUp {
@@ -1615,7 +1615,7 @@ html {
 }
 
 /* ----------------------------
-   PÁGINA INICIAL (HERO SECTION)
+    PÁGINA INICIAL (HERO SECTION)
 ----------------------------- */
 /* Seção hero com gradiente verde */
 .hero-section {
@@ -1730,7 +1730,7 @@ html {
 }
 
 /* ----------------------------
-   SEÇÕES INTERNAS (Mapa, Cadastro, etc.)
+    SEÇÕES INTERNAS (Mapa, Cadastro, etc.)
 ----------------------------- */
 /* Container padrão de seções */
 .container {
@@ -1795,6 +1795,12 @@ html {
   font-size: 0.9rem;
 }
 
+
+/* -------------------------------------------------------------
+ * ATUALIZAÇÃO DA CHAVE DICOTÔMICA (CSS que eu te enviei antes)
+ * -------------------------------------------------------------
+ */
+
 /* Estilos para chave dicotômica */
 .key-question {
   background: var(--bg-secondary);
@@ -1809,21 +1815,55 @@ html {
   gap: 12px;
 }
 
+/* 1. Transforma o botão .key-option em um card (imagem + texto) */
+/* (ESTA REGRA SUBSTITUI A SUA ANTERIOR) */
 .key-option {
-  background: var(--bg-card);
-  border: var(--border-light);
-  padding: 16px 20px;
-  border-radius: var(--radius-small);
+  display: flex; /* Alinha imagem e texto */
+  align-items: center; /* Centraliza verticalmente */
+  gap: 16px; /* Espaço entre a imagem e o texto */
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+  border: 2px solid transparent;
+  padding: 16px;
+  border-radius: var(--radius); /* Borda mais arredondada */
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: left;
   font-size: 1rem;
+  position: relative;
+  overflow: hidden;
 }
 
+/* (ESTA REGRA SUBSTITUI A SUA ANTERIOR) */
 .key-option:hover {
-  background: var(--primary-light);
+  background: var(--primary);
   color: white;
-  transform: translateX(5px);
+  transform: translateX(8px);
+  border-color: var(--primary-dark);
+  box-shadow: var(--shadow-medium);
+}
+
+/* 2. NOVA classe para a IMAGEM DA OPÇÃO */
+.key-option-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--radius-small);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.key-option:hover .key-option-image {
+  transform: scale(1.05); /* Efeito de zoom na imagem */
+}
+
+/* 3. NOVA classe para o container do TEXTO da opção */
+.key-option-text {
+  flex-grow: 1;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 500;
 }
 
 .key-result {
@@ -1831,6 +1871,19 @@ html {
   padding: 24px;
   border-radius: var(--radius);
   text-align: center;
+}
+
+/* 4. NOVA classe para a IMAGEM FINAL do resultado */
+#key-result .result-image {
+  max-width: 100%;
+  width: 100%;
+  max-height: 450px;
+  object-fit: contain;
+  border-radius: var(--radius);
+  margin-top: 20px;
+  border: 2px solid var(--accent);
+  box-shadow: var(--shadow-soft);
+  background: #fff;
 }
 
 .result-card {
@@ -1883,27 +1936,7 @@ html {
   font-size: 1.1rem;
 }
 
-/* Melhorias para botões da chave */
-.key-option {
-  background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
-  border: 2px solid transparent;
-  padding: 18px 24px;
-  border-radius: var(--radius-small);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: left;
-  font-size: 1rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.key-option:hover {
-  background: var(--primary);
-  color: white;
-  transform: translateX(8px);
-  border-color: var(--primary-dark);
-  box-shadow: var(--shadow-medium);
-}
+/* (Regras .key-option e :hover já foram substituídas acima) */
 
 .key-option:active {
   transform: translateX(4px);
@@ -2083,4 +2116,96 @@ html {
   justify-content: center;
   font-size: 0.8rem;
   font-weight: bold;
+}
+
+
+/* ============================================================
+    NOVOS ESTILOS PARA "GUIA DE ESTRUTURAS"
+============================================================ 
+*/
+
+/* Grid para os cards da galeria */
+.estrutura-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+/* Card individual da estrutura */
+.estrutura-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid transparent;
+}
+
+.estrutura-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-medium);
+  border-color: var(--primary);
+}
+
+/* Container da imagem do card */
+.estrutura-card-image-container {
+  width: 100%;
+  height: 200px; /* Altura fixa para a imagem */
+  overflow: hidden;
+  background-color: var(--bg-secondary);
+}
+
+.estrutura-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Garante que a imagem preencha o espaço */
+  transition: transform 0.3s ease;
+}
+
+.estrutura-card:hover .estrutura-card-image {
+  transform: scale(1.1); /* Efeito de zoom */
+}
+
+/* Conteúdo de texto do card */
+.estrutura-card-content {
+  padding: 20px;
+  flex-grow: 1; /* Faz o conteúdo ocupar o espaço */
+  display: flex;
+  flex-direction: column;
+}
+
+.estrutura-card-title {
+  font-size: 1.3rem;
+  color: var(--primary-dark);
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.estrutura-card-description {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  flex-grow: 1; /* Ocupa espaço */
+}
+
+/* Ajuste no filtro para a nova seção (usado no input #estrutura-search) */
+/* (Já definido no bloco de formulário, mas podemos garantir aqui) */
+#estrutura-search {
+  padding: 12px 16px;
+  border-radius: var(--radius-small);
+  border: 2px solid rgba(129, 199, 132, 0.3);
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--text-primary);
+  width: 100%;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+#estrutura-search:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(129, 199, 132, 0.2);
+  outline: none;
 }

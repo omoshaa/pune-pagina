@@ -6,118 +6,94 @@
 // ============================================================
 // MENU MOBILE E NAVEGAÇÃO RESPONSIVA
 // ============================================================
-
-// Variável de controle: menu mobile aberto ou fechado
 let isMobileMenuOpen = false;
-
-/**
- * Função: Abre/fecha o menu mobile (toggle)
- * Chamada ao clicar no botão hamburger ou no botão X
- */
 function toggleMobileMenu() {
-  const mobileNav = document.getElementById("mobile-nav"); // Overlay do menu
-  const mobileMenuBtn = document.querySelector(".mobile-menu-btn"); // Botão hamburger
-
-  if (!mobileNav || !mobileMenuBtn) return; // Proteção contra elementos não encontrados
-
-  // Inverte o estado
+  const mobileNav = document.getElementById("mobile-nav");
+  const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+  if (!mobileNav || !mobileMenuBtn) return;
   isMobileMenuOpen = !isMobileMenuOpen;
-
   if (isMobileMenuOpen) {
-    // ABRIR menu
     mobileNav.classList.add("active");
-    mobileMenuBtn.classList.add("active"); // Anima hamburger para X
-    document.body.style.overflow = "hidden"; // Desabilita scroll da página
+    mobileMenuBtn.classList.add("active");
+    document.body.style.overflow = "hidden";
   } else {
-    // FECHAR menu
     mobileNav.classList.remove("active");
-    mobileMenuBtn.classList.remove("active"); // Volta hamburger ao normal
-    document.body.style.overflow = "auto"; // Reabilita scroll
+    mobileMenuBtn.classList.remove("active");
+    document.body.style.overflow = "auto";
   }
 }
 
 // ============================================================
 // NAVEGAÇÃO ENTRE SEÇÕES (SPA - Single Page Application)
 // ============================================================
-
-/**
- * Função: Mostra uma seção e esconde todas as outras
- * @param {string} sectionId - ID da seção a ser exibida (ex: 'home', 'mapa-tardigrada')
- */
 function showSection(sectionId) {
-  // Fechar menu mobile se estiver aberto
   if (isMobileMenuOpen) {
     toggleMobileMenu();
   }
-
-  // Esconder TODAS as seções
-  // CORREÇÃO: Seleciona as seções principais, não todos os .container
-  const sections = document.querySelectorAll("main > .section, main > .hero-section");
+  const sections = document.querySelectorAll(
+    "main > .section, main > .hero-section"
+  );
   sections.forEach((section) => {
-    section.classList.add("hidden"); // Adiciona classe .hidden
+    section.classList.add("hidden");
   });
-
-  // Mostrar apenas a seção selecionada
-  const targetSection = document.getElementById(sectionId);
-  if (targetSection) {
-    targetSection.classList.remove("hidden"); // Remove classe .hidden
-
-    // Inicializar componentes específicos da seção após um delay
-    setTimeout(() => {
-      if (sectionId === "mapa-tardigrada" && !map) {
-        // Se for seção do mapa E mapa ainda não foi criado
-        initMap(); // Inicializa o mapa Leaflet
-        renderAll(); // Renderiza marcadores e estatísticas
-      } else if (sectionId === "mapa-tardigrada" && map) {
-        // Se mapa já existe, apenas redimensiona
-        map.invalidateSize(); // Fix para mapa aparecer corretamente
+  
+  // Seção "home" é a hero-section
+  if (sectionId === "home") {
+      document.getElementById("home").classList.remove("hidden");
+  } else {
+      const targetSection = document.getElementById(sectionId);
+      if (targetSection) {
+        targetSection.classList.remove("hidden");
       }
-
-      if (sectionId === "chave-dicotomica") {
-        resetKey(); // Reinicia chave dicotômica
-      }
-    }, 300); // 300ms de delay para animações suaves
-
-    // Scroll suave para o topo da página
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
   }
+
+  // Lógica pós-exibição
+  setTimeout(() => {
+    if (sectionId === "mapa-tardigrada" && !map) {
+      initMap();
+      renderAll();
+    } else if (sectionId === "mapa-tardigrada" && map) {
+      map.invalidateSize();
+    }
+    if (sectionId === "chave-dicotomica") {
+      resetKey();
+    }
+    if (sectionId === "guia-estruturas") {
+      renderStructures();
+    }
+  }, 300);
+  
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
 }
 
 // ============================================================
 // DADOS DOS REGISTROS DE TARDIGRADA
-// Armazenados no LocalStorage do navegador
 // ============================================================
-
-// CORREÇÃO: Renomeado de filoRecords para tardiRecords
 let tardiRecords = JSON.parse(localStorage.getItem("tardiRecords")) || [
-  // Registro de exemplo 1: Tardígrado Eutardigrada
   {
-    id: "1a2b3c", // ID único de 6 caracteres
-    latitude: -23.5505, // Coordenada GPS
+    id: "1a2b3c",
+    latitude: -23.5505,
     longitude: -46.6333,
     classe: "Eutardigrada",
     ordem: "Parachela",
     superfamilia: "Macrobiotoidea",
     familia: "Macrobiotidae",
     genero: "Macrobiotus",
-    especie: "harmsworthi",
-    quantidade: 12, // Número de indivíduos observados
-    tamanho: 350, // Tamanho em micrometros
+    // especie: "harmsworthi", // Removido
+    quantidade: 12,
+    // tamanho: 350, // Removido
     localidade: "Parque Ibirapuera, SP",
     habitat: "Terrestre - Musgo",
     pesquisador: "Ana Silva",
     instituicao: "USP",
-    caracteristicas:
-      "Dois macroplacóides, garras duplas assimétricas, cutícula lisa",
-    observacoes:
-      "Encontrado em musgo de árvore. Estado ativo e tun observados.",
+    // caracteristicas: "Dois macroplacóides, garras duplas assimétricas, cutícula lisa", // Removido
+    // observacoes: "Encontrado em musgo de árvore. Estado ativo e tun observados.", // Removido
     fotos: [],
     data: "2025-09-22T19:00:00Z",
   },
-  // Registro de exemplo 2: Tardígrado Heterotardigrada
   {
     id: "4d5e6f",
     latitude: -15.7801,
@@ -127,21 +103,18 @@ let tardiRecords = JSON.parse(localStorage.getItem("tardiRecords")) || [
     superfamilia: "",
     familia: "Echiniscidae",
     genero: "Echiniscus",
-    especie: "testudo",
+    // especie: "testudo", // Removido
     quantidade: 8,
-    tamanho: 180, // Tamanho em micrometros
+    // tamanho: 180, // Removido
     localidade: "Parque Nacional de Brasília, DF",
     habitat: "Terrestre - Líquen",
     pesquisador: "João Costa",
     instituicao: "UnB",
-    caracteristicas:
-      "Cirros laterais A presentes, placas dorsais bem desenvolvidas, quatro garras por perna",
-    observacoes:
-      "Encontrado em líquen sobre rocha. Resistência extrema observada.",
+    // caracteristicas: "Cirros laterais A presentes, placas dorsais bem desenvolvidas, quatro garras por perna", // Removido
+    // observacoes: "Encontrado em líquen sobre rocha. Resistência extrema observada.", // Removido
     fotos: [],
     data: "2025-09-23T19:00:00Z",
   },
-  // Registro de exemplo 3: Milnesium (Apochela)
   {
     id: "7g8h9i",
     latitude: -22.9068,
@@ -151,17 +124,15 @@ let tardiRecords = JSON.parse(localStorage.getItem("tardiRecords")) || [
     superfamilia: "",
     familia: "Milnesiidae",
     genero: "Milnesium",
-    especie: "tardigradum",
+    // especie: "tardigradum", // Removido
     quantidade: 5,
-    tamanho: 1200, // Tamanho em micrometros (maior espécie)
+    // tamanho: 1200, // Removido
     localidade: "Tijuca, Rio de Janeiro, RJ",
     habitat: "Terrestre - Folhiço",
     pesquisador: "Maria Santos",
     instituicao: "UFRJ",
-    caracteristicas:
-      "Papilas cefálicas presentes, ganchos com ramo secundário não conectado, ovos lisos",
-    observacoes:
-      "Maior tardígrado observado. Comportamento predatório em outros tardígrados.",
+    // caracteristicas: "Papilas cefálicas presentes, ganchos com ramo secundário não conectado, ovos lisos", // Removido
+    // observacoes: "Maior tardígrado observado. Comportamento predatório em outros tardígrados.", // Removido
     fotos: [],
     data: "2025-09-24T19:00:00Z",
   },
@@ -170,81 +141,54 @@ let tardiRecords = JSON.parse(localStorage.getItem("tardiRecords")) || [
 // ============================================================
 // VARIÁVEIS GLOBAIS
 // ============================================================
-let map = null; // Instância do mapa Leaflet (null até ser inicializado)
-let markers = []; // Array de marcadores no mapa
-let currentStep = 1; // Passo atual da chave dicotômica
-let choiceHistory = []; // Histórico de escolhas do usuário na chave
+let map = null;
+let markers = [];
+let currentStep = "1"; // Usar string para IDs
+let choiceHistory = [];
 
 // ============================================================
 // MAPA INTERATIVO LEAFLET
 // ============================================================
-
-/**
- * Função: Inicializa o mapa Leaflet
- * Só é chamada quando o usuário navega para a seção "Mapa de Tardigrada"
- */
 function initMap() {
-  // Verificar se a biblioteca Leaflet foi carregada
   if (typeof L === "undefined") {
     console.log("Leaflet não está carregado");
     return;
   }
-
-  // Verificar se o elemento HTML do mapa existe
   const mapElement = document.getElementById("map");
   if (!mapElement) {
     console.log("Elemento do mapa não encontrado");
     return;
   }
-
   try {
-    // Criar instância do mapa centrado no Brasil
-    map = L.map("map").setView([-15.7942, -47.8822], 4); // Centro: Brasília, Zoom: 4
-
-    // Adicionar camada de tiles (mapa base do OpenStreetMap)
+    map = L.map("map").setView([-15.7942, -47.8822], 4);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
         '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 19, // Zoom máximo permitido
-      tileSize: 256, // Tamanho dos tiles
+      maxZoom: 19,
+      tileSize: 256,
       zoomOffset: 0,
     }).addTo(map);
-
-    // Aguardar um pouco antes de renderizar marcadores (fix para mobile)
     setTimeout(() => {
-      renderMarkers(); // Adiciona marcadores dos registros
-      map.invalidateSize(); // Força recálculo do tamanho do mapa
+      renderMarkers();
+      map.invalidateSize();
     }, 500);
-
     console.log("Mapa inicializado com sucesso");
   } catch (error) {
     console.error("Erro ao inicializar o mapa:", error);
   }
 }
 
-/**
- * Função: Renderiza marcadores no mapa
- * Remove marcadores antigos e adiciona novos baseados nos registros filtrados
- */
 function renderMarkers() {
-  if (!map) return; // Proteção: só executa se mapa foi inicializado
-
-  // Remover todos os marcadores antigos
+  if (!map) return;
   markers.forEach((marker) => map.removeLayer(marker));
-  markers = []; // Limpa array
-
-  // Obter registros (com filtro se houver)
+  markers = [];
   const filteredRecords = getFilteredRecords();
-
-  // Para cada registro, criar um marcador
   filteredRecords.forEach((record) => {
-    // CORREÇÃO DE BUG: Usando `record.classe` em vez de `record.filo`
-    // MELHORIA DE SEGURANÇA: Usando escapeHtml para dados do usuário
     const popupHtml = `
       <div class="popup-content">
-        <h4>${escapeHtml(record.classe)} - ${escapeHtml(
+        <h4>${escapeHtml(record.classe)} - <i>${escapeHtml(
       record.genero
-    )} ${escapeHtml(record.especie)}</h4>
+    )}</i></h4>
         <p><strong>Local:</strong> ${escapeHtml(record.localidade)}</p>
         <p><strong>Pesquisador:</strong> ${escapeHtml(record.pesquisador)}</p>
         <p><strong>Data:</strong> ${new Date(record.data).toLocaleDateString(
@@ -252,133 +196,88 @@ function renderMarkers() {
         )}</p>
       </div>
     `;
-
     const marker = L.marker([record.latitude, record.longitude])
-      .addTo(map) // Adiciona ao mapa
-      .bindPopup(popupHtml); // Popup com informações
-
-    markers.push(marker); // Adiciona ao array
+      .addTo(map)
+      .bindPopup(popupHtml);
+    markers.push(marker);
   });
 }
 
-/**
- * Função: Retorna registros filtrados pelo dropdown
- * @returns {Array} Array de registros filtrados ou todos os registros
- */
 function getFilteredRecords() {
-  const filter = document.getElementById("grupo-filter")?.value; // Valor do dropdown
+  const filter = document.getElementById("grupo-filter")?.value;
   return filter
-    ? tardiRecords.filter( // CORREÇÃO: Usando tardiRecords
+    ? tardiRecords.filter(
         (record) => record.classe === filter || record.ordem === filter
-      ) // Filtra por grupo
-    : tardiRecords; // Ou retorna todos
+      )
+    : tardiRecords;
 }
 
 // ============================================================
 // ESTATÍSTICAS (Cards de contadores)
 // ============================================================
-
-/**
- * Função: Atualiza os 3 cards de estatísticas
- * Conta: total de registros, grupos únicos, espécies únicas
- */
 function updateStats() {
-  const totalRegistros = tardiRecords.length; // Conta registros
-
-  // Conta grupos únicos de Tardigrada usando Set (remove duplicatas)
+  const totalRegistros = tardiRecords.length;
   const totalGrupos = [...new Set(tardiRecords.map((r) => r.classe || r.ordem))]
     .length;
-
-  // Conta espécies únicas (genero + especie)
-  const totalEspecies = [
-    ...new Set(tardiRecords.map((r) => `${r.genero} ${r.especie}`)),
+  // Atualizado para contar Gêneros
+  const totalGeneros = [
+    ...new Set(tardiRecords.map((r) => r.genero)),
   ].length;
-
-  // Atualiza o HTML dos contadores
   document.getElementById("total-registros").textContent = totalRegistros;
   document.getElementById("total-grupos").textContent = totalGrupos;
-  document.getElementById("total-especies").textContent = totalEspecies;
+  document.getElementById("total-especies").textContent = totalGeneros; // ID no HTML ainda é "total-especies"
 }
 
 // ============================================================
-// FORMULÁRIO DE CADASTRO
+// FORMULÁRIO DE CADASTRO (Atualizado)
 // ============================================================
-
-/**
- * Função: Processa o envio do formulário
- * @param {Event} e - Evento de submit do formulário
- */
 function handleFormSubmit(e) {
-  e.preventDefault(); // Impede reload da página
-
-  // Extrai dados do formulário usando FormData API
+  e.preventDefault();
   const formData = new FormData(e.target);
-
-  // Cria novo objeto de registro
   const newRecord = {
-    id: generateId(), // Gera ID único aleatório
-    latitude: parseFloat(formData.get("latitude")), // Converte para número
+    id: generateId(),
+    latitude: parseFloat(formData.get("latitude")),
     longitude: parseFloat(formData.get("longitude")),
-    // CORREÇÃO DE BUG: Removida a propriedade "filo" que não existe no form
     classe: formData.get("classe"),
-    ordem: formData.get("ordem") || "", // Campos opcionais
+    ordem: formData.get("ordem") || "",
     superfamilia: formData.get("superfamilia") || "",
     familia: formData.get("familia") || "",
     genero: formData.get("genero"),
-    especie: formData.get("especie"),
-    quantidade: parseInt(formData.get("quantidade")), // Converte para inteiro
-    tamanho: parseFloat(formData.get("tamanho")) || null, // Pode ser null
+    // especie: removido
+    quantidade: parseInt(formData.get("quantidade")) || 1, // Campo removido do form, mas mantido nos dados
+    // tamanho: removido
     localidade: formData.get("localidade"),
     habitat: formData.get("habitat"),
     pesquisador: formData.get("pesquisador"),
     instituicao: formData.get("instituicao") || "",
-    caracteristicas: formData.get("caracteristicas"),
-    observacoes: formData.get("observacoes") || "",
-    fotos: [], // TODO: implementar upload de fotos
-    data: new Date().toISOString(), // Data atual em formato ISO
+    // caracteristicas: removido
+    // observacoes: removido
+    fotos: [],
+    data: new Date().toISOString(),
   };
-
-  // Adiciona registro ao array
-  tardiRecords.push(newRecord); // CORREÇÃO: Usando tardiRecords
-
-  // Salva no LocalStorage (persiste dados)
-  localStorage.setItem("tardiRecords", JSON.stringify(tardiRecords)); // CORREÇÃO
-
-  // Mostra mensagem de sucesso
+  tardiRecords.push(newRecord);
+  localStorage.setItem("tardiRecords", JSON.stringify(tardiRecords));
   showNotification("Registro salvo com sucesso!", "success");
-
-  // Limpa o formulário
   e.target.reset();
-
-  // Atualiza visualizações (tabela, mapa, estatísticas)
   renderAll();
+  showSection("mapa-tardigrada"); // Leva o usuário ao mapa
 }
 
-/**
- * Função: Gera um ID único de 6 caracteres
- * @returns {string} ID aleatório
- */
 function generateId() {
-  return Math.random().toString(36).substr(2, 6); // Base 36: letras + números
+  return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
 }
 
-/**
- * Função: Obtém localização GPS do usuário
- * Usa a API de Geolocalização do navegador
- */
 function getLocation() {
-  // Verifica se navegador suporta geolocalização
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        // Sucesso: preenche campos de lat/long
         document.getElementById("latitude").value =
-          position.coords.latitude.toFixed(6); // 6 casas decimais
+          position.coords.latitude.toFixed(6);
         document.getElementById("longitude").value =
           position.coords.longitude.toFixed(6);
         showNotification("Localização obtida!", "success");
       },
-      () => showNotification("Erro ao obter localização", "error") // Erro
+      () => showNotification("Erro ao obter localização", "error")
     );
   } else {
     showNotification("Geolocalização não suportada.", "error");
@@ -386,228 +285,570 @@ function getLocation() {
 }
 
 // ============================================================
-// CHAVE DICOTÔMICA (Máquina de Estados)
+// CHAVE DICOTÔMICA (Máquina de Estados ATUALIZADA)
 // ============================================================
 
-// Objeto que define todos os passos da chave dicotômica de Tardigrada
+// (Esta é a nova chave baseada no seu documento)
 const keySteps = {
-  // Passo inicial - Cirros laterais A
-  1: {
-    title: "Passo 1",
-    question: "Cirros laterais A presentes (seta / cA)?",
-    options: [
-      { text: "Sim - Cirros laterais A presentes", next: "heterotardigrada" },
-      { text: "Não - Cirros laterais A ausentes", next: "eutardigrada" },
-    ],
-  },
-  // ... (todos os outros passos da chave permanecem os mesmos) ...
-  // Ramo Heterotardigrada
-  heterotardigrada: {
-    title: "Heterotardigrada - Passo 2",
-    question: "Cirro mediano geralmente presente (cirro no centro da cabeça)?",
-    options: [
-      { text: "Sim - Cirro mediano presente", next: "arthrotardigrada" },
-      { text: "Não - Cirro mediano ausente", next: "echiniscoidea_inicio" },
-    ],
-  },
-  // Resultado: Arthrotardigrada
-  arthrotardigrada: {
-    title: "Resultado",
-    result: "Arthrotardigrada (Ordem)",
-    description:
-      "Ex.: Styraconyx hallasi - Tardigrados com cirro mediano presente",
-  },
-  // Echiniscoidea - início
-  echiniscoidea_inicio: {
-    title: "Echiniscoidea - Passo 3",
-    question:
-      "Quatro garras por perna em adultos; com placas dorsais-laterais?",
+  "1": {
+    title: "Filo Tardigrada: Classe",
+    question: "1. Observe a cabeça do espécime:",
     options: [
       {
-        text: "Sim - Quatro garras e placas dorsais-laterais",
-        next: "echiniscidae",
-      },
-      { text: "Não - Características diferentes", next: "carphaniidae" },
-    ],
-  },
-  // Resultado: Família Echiniscidae
-  echiniscidae: {
-    title: "Resultado",
-    result: "Família Echiniscidae",
-    description:
-      "Tardigrados com quatro garras por perna e placas dorsais-laterais",
-  },
-  // Resultado: Família Carphaniidae
-  carphaniidae: {
-    title: "Resultado",
-    result: "Família Carphaniidae",
-    description:
-      "Um gênero: Carphania - características distintas de Echiniscidae",
-  },
-  // Ramo Eutardigrada
-  eutardigrada: {
-    title: "Eutardigrada - Passo 2",
-    question:
-      "Cabeça com papilas cefálicas (incluindo duas papilas laterais) e ganchos com ramo secundário não conectado ao primário (ovos lisos dentro do exúvio)?",
-    options: [
-      {
-        text: "Sim - Papilas cefálicas e ganchos com ramo secundário desconectado",
-        next: "apochela",
-      },
-      { text: "Não - Características diferentes", next: "parachela_inicio" },
-    ],
-  },
-  // Resultado: Apochela
-  apochela: {
-    title: "Resultado",
-    result: "Apochela",
-    description:
-      "Ex.: Milnesium - Tardigrados com papilas cefálicas e ganchos específicos",
-  },
-  // Parachela - início
-  parachela_inicio: {
-    title: "Parachela - Passo 3",
-    question:
-      "Duas garras duplas em cada perna assimétricas (sequência 2-1-2-1) e ovos postos dentro do exúvio OU dois ganchos duplos por perna?",
-    options: [
-      {
-        text: "Sim - Garras duplas assimétricas ou ganchos duplos",
-        next: "parachela_superfamilias",
+        text: "1. Cirros laterais A presentes (Seta ou cA).",
+        next: "heterotardigrada_ordens",
+        image: "assets/key-images/cirro-A-presente.jpg", // Imagem mantida do script original
       },
       {
-        text: "Não - Garras simétricas e tubo bucal com lâmina ventral",
-        next: "macrobiotoidea",
+        text: "1’. Cirros laterais A ausentes.",
+        next: "eutardigrada_ordens",
+        image: "assets/key-images/cirro-A-ausente.jpg", // Imagem mantida do script original
       },
     ],
   },
-  // Macrobiotoidea
-  macrobiotoidea: {
-    title: "Macrobiotoidea - Passo 4",
-    question: "Macroplacóides: três macroplacóides presentes?",
+  // --- HETEROTARDIGRADA ---
+  heterotardigrada_ordens: {
+    title: "Classe Heterotardigrada: Ordens",
+    question: "1. Observe o cirro mediano (centro da cabeça):",
     options: [
-      { text: "Sim - Três macroplacóides", next: "macrobiotidae_tres" },
-      { text: "Não - Dois macroplacóides", next: "macrobiotus" },
+      {
+        text: "1. Cirro mediano geralmente presente; dígitos ou garras inseridos diretamente na perna.",
+        next: "arthrotardigrada_result",
+        image: "assets/key-images/cirro-mediano-presente.jpg", // Imagem mantida
+      },
+      {
+        text: "1’. Cirro mediano ausente; cada garra e uma papila inserida na perna.",
+        next: "echiniscoidea_familias",
+        image: "assets/key-images/cirro-mediano-ausente.jpg", // Imagem mantida
+      },
     ],
   },
-  // Resultado: Macrobiotidae (três macroplacóides)
-  macrobiotidae_tres: {
-    title: "Resultado",
-    result: "Macrobiotidae - Três macroplacóides",
+  arthrotardigrada_result: {
+    title: "Resultado: Ordem Arthrotardigrada",
+    result: "Ordem Arthrotardigrada",
     description:
-      "Verificar Mesobiotus / Paramacrobiotus etc. - com três macroplacóides",
+      "Uma espécie: Styraconyx hallasi [acidental, marinho, mas também encontrado em fontes da Gronelândia].",
+    image: "assets/key-results/Arthrotardigrada.jpg", // Imagem mantida
   },
-  // Resultado: Macrobiotus
-  macrobiotus: {
-    title: "Resultado",
-    result: "Macrobiotus",
-    description: "Dois macroplacóides; pode haver microplacóide",
+  echiniscoidea_familias: {
+    title: "Ordem Echiniscoidea: Famílias",
+    question: "1. Observe as garras e placas:",
+    options: [
+      {
+        text: "1. Quatro garras por perna em adultos; com placas dorsais-laterais.",
+        next: "echiniscus_generos_1", // Inicia a chave de gêneros de Echiniscidae
+        image: "assets/key-images/4-garras-placas.jpg", // Imagem mantida
+      },
+      {
+        text: "1'. Duas garras nas pernas I-III, uma garra na perna IV em adultos; cutícula sem placas dorsais.",
+        next: "carphaniidae_result",
+        image: "assets/key-images/2-garras-sem-placas.jpg", // Imagem mantida
+      },
+    ],
   },
-  // Parachela - superfamílias
+  carphaniidae_result: {
+    title: "Resultado: Família Carphaniidae",
+    result: "Gênero Carphania (Família Carphaniidae)",
+    description:
+      "Um gênero: Carphania. Duas garras nas pernas I-III, uma garra na perna IV em adultos; cutícula sem placas dorsais; cirrus A muito curto.",
+    image: "assets/tardigrade-icon.png", // Usuário informou "SEM IMAGEM"
+  },
+  echiniscus_generos_1: {
+    title: "Família Echiniscidae: Gêneros (Passo 1/2)",
+    question: "1. Observe a placa pseudosegmentar:",
+    options: [
+      {
+        text: "1. Placa pseudosegmentar ausente.",
+        next: "echiniscus_generos_2",
+        image: "assets/tardigrade-icon.png", // Placeholder
+      },
+      {
+        text: "1’. Placa pseudosegmentar presente (entre a segunda placa em pares e a placa terminal).",
+        next: "pseudechiniscus_result",
+        image: "assets/key-results/Pseudechiniscus.jpg", // Placeholder
+      },
+    ],
+  },
+  pseudechiniscus_result: {
+    title: "Resultado: Gênero Pseudechiniscus",
+    result: "Gênero Pseudechiniscus",
+    description:
+      "Placa pseudosegmentar presente entre a segunda placa em pares e a placa terminal.",
+    image: "assets/key-results/Pseudechiniscus.jpg", // Placeholder
+  },
+  echiniscus_generos_2: {
+    title: "Família Echiniscidae: Gêneros (Passo 2/2)",
+    question: "2. Observe a placa terminal:",
+    options: [
+      {
+        text: "2. Placa terminal entalhada.",
+        next: "echiniscus_result",
+        image: "assets/key-results/Echiniscus.jpg", // Placeholder
+      },
+      {
+        text: "2’. Placa terminal dividida por suturas; olhos em manchas pretas.",
+        next: "hypechiniscus_result",
+        image: "assets/key-results/Hypechiniscus.jpg", // Placeholder
+      },
+    ],
+  },
+  echiniscus_result: {
+    title: "Resultado: Gênero Echiniscus",
+    result: "Gênero Echiniscus",
+    description: "Placa terminal entalhada.",
+    image: "assets/key-results/Echiniscus.jpg", // Placeholder
+  },
+  hypechiniscus_result: {
+    title: "Resultado: Gênero Hypechiniscus",
+    result: "Gênero Hypechiniscus",
+    description: "Placa terminal dividida por suturas; olhos em manchas pretas.",
+    image: "assets/key-results/Hypechiniscus.jpg", // Placeholder
+  },
+
+  // --- EUTARDIGRADA ---
+  eutardigrada_ordens: {
+    title: "Classe Eutardigrada: Ordens",
+    question: "1. Observe a cabeça e os ganchos:",
+    options: [
+      {
+        text: "1. Cabeça sem papilas cefálicas; geralmente 2 ganchos duplos por perna.",
+        next: "parachela_superfamilias", // Continua para Parachela
+        image: "assets/key-images/parachela-cabeca.jpg", // Imagem mantida
+      },
+      {
+        text: "1’. Cabeça com papilas cefálicas (incluindo duas papilas laterais); ganchos com ramo secundário não conectado ao primário.",
+        next: "apochela_result",
+        image: "assets/key-images/apochela-cabeca.jpg", // Imagem mantida
+      },
+    ],
+  },
+  apochela_result: {
+    title: "Resultado: Ordem Apochela",
+    result: "Gênero Milnesium (Ordem Apochela)",
+    description:
+      "Cabeça com papilas cefálicas; ganchos com ramo secundário não conectado ao primário; ovos lisos colocados dentro do exúvio; limnoterrestre.",
+    image: "assets/key-results/Milnesium.jpg", // Imagem mantida
+  },
+
+  // --- PARACHELA (CHAVE DETALHADA) ---
   parachela_superfamilias: {
-    title: "Parachela - Passo 4",
-    question:
-      "Garras internas e externas semelhantes em forma (ganchos com ângulo reto) ou de formas diferentes (garras externas tipo Hypsibius com arco)?",
+    title: "Ordem Parachela: Superfamílias",
+    question: "1. Observe a simetria das garras duplas:",
     options: [
       {
-        text: "Sim - Garras semelhantes (ganchos com ângulo reto)",
-        next: "isohypsibioidea",
+        text: '1. Garras duplas "assimétricas" (sequência 2-1-2-1).',
+        next: "hypsibioidea_isohypsibioidea",
+        image: "assets/key-images/garras-assimetricas.jpg", // Imagem mantida
       },
       {
-        text: "Não - Garras diferentes (externas tipo Hypsibius)",
-        next: "hypsibioidea",
+        text: '1’. Garras duplas "simétricas" (sequência 2-1-1-2); tubo bucal com lâmina ventral.',
+        next: "macrobiotoidea_familias",
+        image: "assets/key-images/garras-simetricas.jpg", // Imagem mantida
       },
     ],
   },
-  // Isohypsibioidea
-  isohypsibioidea: {
-    title: "Isohypsibioidea - Passo 5",
-    question: "Lâmina ventral no tubo bucal presente?",
+  
+  // --- Superfamílias Hypsibioidea & Isohypsibioidea ---
+  hypsibioidea_isohypsibioidea: {
+    title: "Superfamílias Isohypsibioidea e Hypsibiidae",
+    question: "2(1). Observe a forma das garras internas e externas:",
     options: [
-      { text: "Sim - Lâmina ventral presente", next: "doryphoribius" },
-      { text: "Não - Lâmina ventral ausente", next: "isohypsibiidae_lamelas" },
+      {
+        text: "2. Garras internas e externas de tamanho e forma semelhantes (tipo Isohypsibius, ângulo reto).",
+        next: "isohypsibiidae_generos_1",
+        image: "assets/key-images/garras-isohypsibius.jpg", // Imagem mantida
+      },
+      {
+        text: "2’. Garras internas e externas de tamanho e forma claramente diferentes (tipo Hypsibius, arco).",
+        next: "hypsibiidae_generos_1",
+        image: "assets/key-images/garras-hypsibius.jpg", // Imagem mantida
+      },
     ],
   },
-  // Resultado: Doryphoribius
-  doryphoribius: {
-    title: "Resultado",
-    result: "Doryphoribius",
-    description: "Limnoterrestre - com lâmina ventral no tubo bucal",
-  },
-  // Isohypsibiidae - lamelas
-  isohypsibiidae_lamelas: {
-    title: "Isohypsibiidae - Passo 6",
-    question:
-      "Lamelas peribuccais ao redor da abertura bucal presentes (cerca de 30) ou ausentes?",
+
+  // --- Superfamília Macrobiotoidea ---
+  macrobiotoidea_familias: {
+    title: "Superfamília Macrobiotoidea: Famílias",
+    question: "1. Observe o formato das garras:",
     options: [
-      { text: "Sim - Lamelas peribuccais presentes", next: "pseudobiotus" },
-      { text: "Não - Lamelas peribuccais ausentes", next: "isohypsibius" },
+      {
+        text: "1. Garras em formato L ou V (ramos divergindo da base); gancho evidente na lâmina ventral.",
+        next: "murrayidae_generos",
+        image: "assets/key-images/garras-V-L.jpg", // Imagem mantida
+      },
+      {
+        text: "1’. Garras em formato Y (ramos fundidos por um trecho); sem gancho evidente na lâmina ventral.",
+        next: "macrobiotidae_generos_1",
+        image: "assets/key-images/garras-Y.jpg", // Imagem mantida
+      },
     ],
   },
-  // Resultado: Pseudobiotus
-  pseudobiotus: {
-    title: "Resultado",
-    result: "Pseudobiotus",
-    description: "Muitas lamelas peribuccais (cerca de 30)",
+  murrayidae_generos: {
+    title: "Família Murrayidae: Gêneros",
+    question: "1. Observe as garras e espessamentos:",
+    options: [
+      {
+        text: "1. Garras em forma de L bem desenvolvidas, com espessamentos cuticulares conectando a base.",
+        next: "dactylobiotus_result",
+        image: "assets/key-results/Dactylobiotus.jpg", // Placeholder
+      },
+      {
+        text: "1’. Garras em forma de V, sem espessamentos cuticulares; com lunulas.",
+        next: "murrayon_result",
+        image: "assets/key-results/Murrayon.jpg", // Placeholder
+      },
+    ],
   },
-  // Resultado: Isohypsibius
-  isohypsibius: {
-    title: "Resultado",
-    result: "Isohypsibius",
-    description: "Lamelas peribuccais ausentes",
+  dactylobiotus_result: {
+    title: "Resultado: Gênero Dactylobiotus",
+    result: "Gênero Dactylobiotus",
+    description:
+      "Garras em forma de L muito bem desenvolvidas, com espessamentos cuticulares conectando a base das garras em cada perna.",
+    image: "assets/key-results/Dactylobiotus.jpg", // Placeholder
   },
-  // Resultado: Hypsibioidea
-  hypsibioidea: {
-    title: "Resultado",
-    result: "Hypsibioidea → Família Hypsibiidae",
-    description: "Garras externas tipo Hypsibius com arco característico",
+  murrayon_result: {
+    title: "Resultado: Gênero Murrayon",
+    result: "Gênero Murrayon",
+    description:
+      "Garras em forma de V, sem espessamentos cuticulares conectando a base das garras em cada perna, com lunulas; limnoterrestres.",
+    image: "assets/key-results/Murrayon.jpg", // Placeholder
+  },
+  macrobiotidae_generos_1: {
+    title: "Família Macrobiotidae: Gêneros (Passo 1/3)",
+    question: "1. Conte os macroplacóides:",
+    options: [
+      {
+        text: "1. Três macroplacóides.",
+        next: "macrobiotidae_generos_2",
+        image: "assets/tardigrade-icon.png", // Placeholder
+      },
+      {
+        text: "1’. Dois macroplacóides; microplacóide (se presente) próximo ao segundo.",
+        next: "macrobiotus_result",
+        image: "assets/key-results/Macrobiotus.jpg", // Placeholder
+      },
+    ],
+  },
+  macrobiotus_result: {
+    title: "Resultado: Gênero Macrobiotus",
+    result: "Gênero Macrobiotus",
+    description:
+      "Dois macroplacóides; microplacóide, se presente, próximo ao segundo macroplacóide; cutícula com ou sem poros; ovos com processos de vários tipos.",
+    image: "assets/key-results/Macrobiotus.jpg", // Placeholder
+  },
+  macrobiotidae_generos_2: {
+    title: "Família Macrobiotidae: Gêneros (Passo 2/3)",
+    question: "2(1). Observe os macroplacóides:",
+    options: [
+      {
+        text: "2. Macroplacóides em forma de haste; lamelas bucais presentes.",
+        next: "macrobiotidae_generos_3",
+        image: "assets/tardigrade-icon.png", // Placeholder
+      },
+      {
+        text: "2’. Macroplacóides redondos; microplacóide presente; lamelas bucais ausentes.",
+        next: "minibiotus_result",
+        image: "assets/key-results/Minibiotus.jpg", // Placeholder
+      },
+    ],
+  },
+  minibiotus_result: {
+    title: "Resultado: Gênero Minibiotus",
+    result: "Gênero Minibiotus",
+    description:
+      "Macroplacóides redondos; microplacóide presente; lamelas bucais ausentes; pápulas presentes.",
+    image: "assets/key-results/Minibiotus.jpg", // Placeholder
+  },
+  macrobiotidae_generos_3: {
+    title: "Família Macrobiotidae: Gêneros (Passo 3/3)",
+    question: "3(2). Observe a posição do microplacóide (se presente):",
+    options: [
+      {
+        text: "3. Microplacóide sempre presente e claramente próximo ao terceiro macroplacóide.",
+        next: "mesobiotus_result",
+        image: "assets/key-results/Mesobiotus.jpg", // Placeholder
+      },
+      {
+        text: "3’. Microplacóide, se presente, distante do terceiro macroplacóide.",
+        next: "paramacrobiotus_result",
+        image: "assets/key-results/Paramacrobiotus.jpg", // Placeholder
+      },
+    ],
+  },
+  mesobiotus_result: {
+    title: "Resultado: Gênero Mesobiotus",
+    result: "Gênero Mesobiotus",
+    description:
+      "Microplacóide sempre presente e claramente próximo ao terceiro macroplacóide (menos que seu comprimento); garra característica com septo interno.",
+    image: "assets/key-results/Mesobiotus.jpg", // Placeholder
+  },
+  paramacrobiotus_result: {
+    title: "Resultado: Gênero Paramacrobiotus",
+    result: "Gênero Paramacrobiotus",
+    description:
+      "Microplacóide, se presente, distante do terceiro macroplacóide mais que seu comprimento; ovos sempre com grandes processos reticulados.",
+    image: "assets/key-results/Paramacrobiotus.jpg", // Placeholder
+  },
+
+  // --- Família Isohypsibiidae ---
+  isohypsibiidae_generos_1: {
+    title: "Família Isohypsibiidae: Gêneros (Passo 1/3)",
+    question: "1. Observe as garras:",
+    options: [
+      {
+        text: "1. Ramo secundário de cada garra formando um ângulo reto (tipo Isohypsibius).",
+        next: "isohypsibiidae_generos_2",
+        image: "assets/key-images/garras-isohypsibius.jpg", // Imagem mantida
+      },
+      {
+        text: "1’. Garra externa tipo Hypsibius com ramo primário muito longo; garra interna tipo Isohypsibius.",
+        next: "ramajendas_result",
+        image: "assets/key-results/Ramajendas.jpg", // Placeholder
+      },
+    ],
+  },
+  ramajendas_result: {
+    title: "Resultado: Gênero Ramajendas",
+    result: "Gênero Ramajendas",
+    description:
+      "Garra externa do tipo Hypsibius com um ramo primário extremamente longo e esbelto; garra interna do tipo Isohypsibius.",
+    image: "assets/key-results/Ramajendas.jpg", // Placeholder
+  },
+  isohypsibiidae_generos_2: {
+    title: "Família Isohypsibiidae: Gêneros (Passo 2/3)",
+    question: "2(1). Observe a lâmina ventral no tubo bucal:",
+    options: [
+      {
+        text: "2. Lâmina ventral ausente.",
+        next: "isohypsibiidae_generos_3",
+        image: "assets/key-images/lamina-ventral-ausente.jpg", // Imagem mantida
+      },
+      {
+        text: "2’. Lâmina ventral presente.",
+        next: "doryphoribius_result",
+        image: "assets/key-images/lamina-ventral-presente.jpg", // Imagem mantida
+      },
+    ],
+  },
+  doryphoribius_result: {
+    title: "Resultado: Gênero Doryphoribius",
+    result: "Gênero Doryphoribius",
+    description: "Lâmina ventral presente no tubo bucal; limnoterrestre.",
+    image: "assets/key-results/Doryphoribius.jpg", // Imagem mantida
+  },
+  isohypsibiidae_generos_3: {
+    title: "Família Isohypsibiidae: Gêneros (Passo 3/3)",
+    question: "3(2). Observe as lamelas peribuccais (ao redor da boca):",
+    options: [
+      {
+        text: "3. Lamelas peribuccais ausentes.",
+        next: "isohypsibius_result",
+        image: "assets/key-images/lamelas-ausentes.jpg", // Imagem mantida
+      },
+      {
+        text: "3’. Lamelas peribuccais presentes (pode ser difícil de ver).",
+        next: "isohypsibiidae_generos_4", // Leva ao passo Pseudobiotus/Thulinius
+        image: "assets/key-images/lamelas-presentes.jpg", // Imagem mantida
+      },
+    ],
+  },
+  isohypsibius_result: {
+    title: "Resultado: Gênero Isohypsibius",
+    result: "Gênero Isohypsibius",
+    description: "Lamelas peribuccais ao redor da abertura bucal ausentes.",
+    image: "assets/key-results/Isohypsibius.jpg", // Imagem mantida
+  },
+  isohypsibiidae_generos_4: {
+    title: "Família Isohypsibiidae: Gêneros (Passo 4/4)",
+    question: "4(3). Conte as lamelas peribuccais:",
+    options: [
+      {
+        text: "4. Cerca de 30 lamelas peribuccais presentes.",
+        next: "pseudobiotus_result",
+        image: "assets/key-results/Pseudobiotus.jpg", // Imagem mantida
+      },
+      {
+        text: "4’. Doze lamelas peribuccais presentes, frequentemente fundidas.",
+        next: "thulinius_result",
+        image: "assets/key-results/Thulinius.jpg", // Placeholder
+      },
+    ],
+  },
+  pseudobiotus_result: {
+    title: "Resultado: Gênero Pseudobiotus",
+    result: "Gênero Pseudobiotus",
+    description: "Cerca de 30 lamelas peribuccais presentes.",
+    image: "assets/key-results/Pseudobiotus.jpg", // Imagem mantida
+  },
+  thulinius_result: {
+    title: "Resultado: Gênero Thulinius",
+    result: "Gênero Thulinius",
+    description:
+      "Doze lamelas peribuccais presentes, frequentemente fundidas; uma ou duas barras cuticulares sob as bases das garras.",
+    image: "assets/key-results/Thulinius.jpg", // Placeholder
+  },
+
+  // --- Família Hypsibiidae ---
+  hypsibiidae_generos_1: {
+    title: "Família Hypsibiidae: Gêneros (Passo 1/4)",
+    question: "1. Observe as garras externas:",
+    options: [
+      {
+        text: "1. Garras externas do tipo Isohypsibius.",
+        next: "hypsibiidae_generos_2",
+        image: "assets/key-images/garras-isohypsibius.jpg", // Imagem mantida
+      },
+      {
+        text: "1’. Garras externas do tipo Hypsibius.",
+        next: "hypsibiidae_generos_3",
+        image: "assets/key-images/garras-hypsibius.jpg", // Imagem mantida
+      },
+    ],
+  },
+  hypsibiidae_generos_2: {
+    title: "Família Hypsibiidae: Gêneros (Passo 2/4)",
+    question: "2(1). Observe as garras internas:",
+    options: [
+      {
+        text: "2. Garras internas do tipo Isohypsibius modificado (ângulo > 90 graus).",
+        next: "mixibius_result",
+        image: "assets/key-results/Mixibius.jpg", // Placeholder
+      },
+      {
+        text: "2’. Garras internas do tipo Hypsibius.",
+        next: "acutuncus_result",
+        image: "assets/key-results/Acutuncus.jpg", // Placeholder
+      },
+    ],
+  },
+  mixibius_result: {
+    title: "Resultado: Gênero Mixibius",
+    result: "Gênero Mixibius",
+    description:
+      "Garras internas do tipo Isohypsibius modificado (ângulo > 90 graus); apofises assimétricas.",
+    image: "assets/key-results/Mixibius.jpg", // Placeholder
+  },
+  acutuncus_result: {
+    title: "Resultado: Gênero Acutuncus",
+    result: "Gênero Acutuncus",
+    description:
+      "Garras internas do tipo Hypsibius; apofises simétricas; ovos com processos postos livremente.",
+    image: "assets/key-results/Acutuncus.jpg", // Placeholder
+  },
+  hypsibiidae_generos_3: {
+    title: "Família Hypsibiidae: Gêneros (Passo 3/4)",
+    question: "3(1). Observe o tubo bucal:",
+    options: [
+      {
+        text: "3. Tubo bucal rígido, sem parte posterior flexível e espiral.",
+        next: "hypsibius_result",
+        image: "assets/key-results/Hypsibius.jpg", // Placeholder
+      },
+      {
+        text: "3’. Tubo bucal com parte posterior flexível e espiral (tubo faríngeo).",
+        next: "hypsibiidae_generos_4",
+        image: "assets/tardigrade-icon.png", // Placeholder
+      },
+    ],
+  },
+  hypsibius_result: {
+    title: "Resultado: Gênero Hypsibius",
+    result: "Gênero Hypsibius",
+    description:
+      "Tubo bucal rígido, sem parte posterior de composição flexível e espiral; limnoterrestre.",
+    image: "assets/key-results/Hypsibius.jpg", // Placeholder
+  },
+  hypsibiidae_generos_4: {
+    title: "Família Hypsibiidae: Gêneros (Passo 4/4)",
+    question: "4(3). Observe o espessamento no tubo bucal:",
+    options: [
+      {
+        text: "4. Espessamento em forma de gota (entre parte rígida e flexível) AUSENTE.",
+        next: "adropion_result",
+        image: "assets/key-results/Adropion.jpg", // Placeholder
+      },
+      {
+        text: "4’. Espessamento em forma de gota (entre parte rígida e flexível) PRESENTE.",
+        next: "hypsibiidae_generos_5",
+        image: "assets/tardigrade-icon.png", // Placeholder
+      },
+    ],
+  },
+  adropion_result: {
+    title: "Resultado: Gênero Adropion",
+    result: "Gênero Adropion",
+    description:
+      "Espessamento em forma de gota entre as porções rígidas e flexíveis do tubo bucal ausente.",
+    image: "assets/key-results/Adropion.jpg", // Placeholder
+  },
+  hypsibiidae_generos_5: {
+    title: "Família Hypsibiidae: Gêneros (Passo 5/5)",
+    question: "5(4). Observe os macroplacóides:",
+    options: [
+      {
+        text: "5. Dois macroplacóides semelhantes em comprimento, organizados em fileiras (parecem parênteses); septo presente.",
+        next: "pilatobius_result",
+        image: "assets/key-results/Pilatobius.jpg", // Placeholder
+      },
+      {
+        text: "5’. Dois macroplacóides sem septo OU três macroplacóides com ou sem septo.",
+        next: "diphascon_result",
+        image: "assets/key-results/Diphascon.jpg", // Placeholder
+      },
+    ],
+  },
+  pilatobius_result: {
+    title: "Resultado: Gênero Pilatobius",
+    result: "Gênero Pilatobius",
+    description:
+      "Dois macroplacoides semelhantes em comprimento, organizados em fileiras (parecem parênteses); septo presente.",
+    image: "assets/key-results/Pilatobius.jpg", // Placeholder
+  },
+  diphascon_result: {
+    title: "Resultado: Gênero Diphascon",
+    result: "Gênero Diphascon",
+    description:
+      "Dois macroplacoides sem septo ou três macroplacoides com ou sem septo.",
+    image: "assets/key-results/Diphascon.jpg", // Placeholder
   },
 };
 
-/**
- * Função: Avança para o próximo passo da chave
- * @param {string} stepId - ID do próximo passo
- */
-function nextStep(stepId) {
-  const step = keySteps[stepId]; // Busca dados do passo
-  if (!step) return; // Proteção
 
-  // Adiciona escolha atual ao histórico (pergunta + resposta)
+function nextStep(stepId) {
+  const step = keySteps[stepId];
+  if (!step) {
+      console.error("Passo da chave não encontrado:", stepId);
+      return;
+  }
+  
   const currentStepData = keySteps[currentStep];
   if (currentStepData && currentStepData.question) {
-    // Encontra qual opção foi escolhida
     const chosenOption = currentStepData.options?.find(
       (opt) => opt.next === stepId
     );
     const response = chosenOption
       ? chosenOption.text
       : "Resposta não identificada";
-
+    
+    // Adiciona ao histórico
     choiceHistory.push({
       question: currentStepData.question,
       answer: response,
     });
   }
 
-  // Verifica se é um resultado final ou próximo passo
+  // Atualiza o passo atual
+  currentStep = stepId;
+
   if (step.result) {
-    showResult(step); // Mostra resultado
+    showResult(step);
   } else {
-    showStep(step, stepId); // Mostra próximo passo
+    showStep(step);
   }
 }
 
-/**
- * Função: Mostra um passo da chave (pergunta + opções)
- * @param {Object} step - Dados do passo
- * @param {string} stepId - ID do passo
- */
-function showStep(step, stepId) {
-  currentStep = stepId; // Atualiza passo atual
-
-  // Atualiza título
+function showStep(step) {
   document.getElementById("step-title").textContent = step.title;
-
-  // CORREÇÃO: Remove "onclick" e usa "data-step" para consistência
   const content = document.getElementById("step-content");
   content.innerHTML = `
     <div class="key-question">
@@ -618,47 +859,44 @@ function showStep(step, stepId) {
         .map(
           (option) => `
         <button class="key-option" data-step="${option.next}">
-          ${escapeHtml(option.text)}
+          <img src="${option.image || 'assets/tardigrade-icon.png'}" alt="Imagem para ${escapeHtml(option.text)}" class="key-option-image">
+          <div class="key-option-text">${escapeHtml(option.text)}</div>
         </button>
       `
         )
         .join("")}
     </div>
   `;
-
-  updateChoiceHistory(); // Atualiza histórico
 }
 
-/**
- * Função: Mostra o resultado final da identificação
- * @param {Object} step - Dados do resultado
- */
+// (Função showResult ATUALIZADA para incluir "Parabéns!")
 function showResult(step) {
-  // Esconde passo, mostra resultado
   document.getElementById("key-step").style.display = "none";
   document.getElementById("key-result").style.display = "block";
+  
+  // Adiciona a mensagem de "Parabéns"
+  let parabensMsg = "";
+  if (step.result.toLowerCase().includes("gênero")) {
+      parabensMsg = `<h4>Parabéns, você achou o ${escapeHtml(step.result)}!</h4>`;
+  }
 
-  // Exibe resultado identificado
   document.getElementById("result-content").innerHTML = `
     <div class="result-card">
+      ${parabensMsg}
       <h4>Identificação: ${escapeHtml(step.result)}</h4>
       <p>${escapeHtml(step.description)}</p>
+      <img src="${step.image || 'assets/tardigrade-icon.png'}" alt="Imagem de ${escapeHtml(step.result)}" class="result-image">
     </div>
   `;
-
-  updateChoiceHistory(); // Atualiza histórico
+  // Não atualiza o histórico aqui, pois o histórico é atualizado no nextStep
 }
 
-/**
- * Função: Reinicia a chave dicotômica
- */
 function resetKey() {
-  currentStep = 1; // Volta ao passo 1
-  choiceHistory = []; // Limpa histórico
+  currentStep = "1"; // Reseta para o passo inicial (string "1")
+  choiceHistory = [];
   document.getElementById("key-step").style.display = "block";
   document.getElementById("key-result").style.display = "none";
-
-  // Oculta exibição do caminho
+  
   const pathDisplay = document.getElementById("path-display");
   const pathBtn = document.getElementById("path-btn");
   if (pathDisplay) {
@@ -667,57 +905,40 @@ function resetKey() {
   if (pathBtn) {
     pathBtn.innerHTML = '<i class="fas fa-route"></i> Mostrar Caminho';
   }
-
-  showStep(keySteps[1], 1); // Mostra primeiro passo
-}
-
-/**
- * Função: Atualiza o HTML do histórico de escolhas
- */
-function updateChoiceHistory() {
-  const historyList = document.getElementById("choice-history");
-  historyList.innerHTML = choiceHistory
-    .map((entry, index) => {
-      if (typeof entry === "object") {
-        return `<li><strong>Passo ${index + 1}:</strong> ${escapeHtml(
-          entry.question
-        )}<br><em>Resposta: ${escapeHtml(entry.answer)}</em></li>`;
-      } else {
-        return `<li>${escapeHtml(entry)}</li>`;
-      }
-    })
-    .join("");
+  
+  // Mostra o primeiro passo
+  if(keySteps[currentStep]) {
+    showStep(keySteps[currentStep]);
+  } else {
+    console.error("Passo inicial '1' não encontrado na chave.");
+  }
 }
 
 // ============================================================
-// TABELA DE REGISTROS
+// TABELA DE REGISTROS (Atualizada)
 // ============================================================
-
-/**
- * Função: Renderiza a tabela de registros recentes
- * Mostra os 10 registros mais recentes (ou filtrados)
- */
 function renderRecordsTable() {
   const tbody = document.getElementById("records-body");
-  if (!tbody) return; // Proteção
-
-  // Pega registros filtrados e limita a 10
-  const records = getFilteredRecords().slice(0, 10);
-
-  // Gera HTML das linhas da tabela (com escapeHtml)
+  if (!tbody) return;
+  const records = getFilteredRecords().slice(0, 10); // Mostra os 10 últimos
+  
+  if (records.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Nenhum registro encontrado.</td></tr>';
+      return;
+  }
+  
   tbody.innerHTML = records
     .map(
       (record) => `
     <tr>
       <td>${escapeHtml(record.classe || record.ordem)}</td>
       <td>${escapeHtml(record.familia)}</td>
-      <td>${escapeHtml(record.genero)}</td>
-      <td><em>${escapeHtml(record.genero)} ${escapeHtml(record.especie)}</em></td>
+      <td><i>${escapeHtml(record.genero)}</i></td>
       <td>${escapeHtml(record.localidade)}</td>
       <td>${escapeHtml(record.pesquisador)}</td>
       <td>${new Date(record.data).toLocaleDateString("pt-BR")}</td>
       <td>
-        <button class="btn btn-sm btn-danger btn-delete" data-id="${
+        <button class="btn-action btn-delete" data-id="${
           record.id
         }" aria-label="Excluir registro">
           <i class="fas fa-trash" aria-hidden="true"></i>
@@ -729,23 +950,11 @@ function renderRecordsTable() {
     .join("");
 }
 
-/**
- * Função: Deleta um registro
- * @param {string} id - ID do registro a ser deletado
- */
 function handleDeleteRecord(id) {
-  // Pede confirmação
   if (confirm("Deseja realmente excluir este registro?")) {
-    // Remove registro do array
-    tardiRecords = tardiRecords.filter((record) => record.id !== id); // CORREÇÃO
-
-    // Atualiza LocalStorage
-    localStorage.setItem("tardiRecords", JSON.stringify(tardiRecords)); // CORREÇÃO
-
-    // Mostra notificação
+    tardiRecords = tardiRecords.filter((record) => record.id !== id);
+    localStorage.setItem("tardiRecords", JSON.stringify(tardiRecords));
     showNotification("Registro excluído com sucesso!", "success");
-
-    // Atualiza visualizações
     renderAll();
   }
 }
@@ -753,21 +962,11 @@ function handleDeleteRecord(id) {
 // ============================================================
 // NOTIFICAÇÕES (Toast Messages)
 // ============================================================
-
-/**
- * Função: Mostra notificação temporária na tela
- * @param {string} message - Mensagem a ser exibida
- * @param {string} type - Tipo: 'success', 'error', 'info'
- */
 function showNotification(message, type = "info") {
   const notification = document.getElementById("notification");
   if (!notification) return;
-
-  // Define texto e classe CSS
   notification.textContent = message;
   notification.className = `notification ${type} show`;
-
-  // Remove após 3 segundos
   setTimeout(() => {
     notification.classList.remove("show");
   }, 3000);
@@ -776,29 +975,126 @@ function showNotification(message, type = "info") {
 // ============================================================
 // RENDERIZAÇÃO GERAL
 // ============================================================
-
-/**
- * Função: Atualiza todas as visualizações
- * Chama: estatísticas, tabela e marcadores do mapa
- */
 function renderAll() {
-  updateStats(); // Atualiza contadores
-  renderRecordsTable(); // Atualiza tabela
-  renderMarkers(); // Atualiza marcadores do mapa
+  updateStats();
+  renderRecordsTable();
+  renderMarkers();
+  // Galeria de estruturas é renderizada ao entrar na seção
 }
 
 // ============================================================
-// INICIALIZAÇÃO DA APLICAÇÃO
-// Executado quando o DOM estiver pronto
+// DADOS E FUNÇÕES DO GUIA DE ESTRUTURAS (Sem alterações)
 // ============================================================
+const tardigradeStructures = [
+    {
+        id: "cirros-laterais-A",
+        name: "Cirros Laterais A",
+        description: "Estruturas sensoriais em forma de seta (cA) localizadas lateralmente na cabeça. Essenciais para diferenciar Heterotardigrada (presentes) de Eutardigrada (ausentes).",
+        image: "assets/key-images/cirro-A-presente.jpg"
+    },
+    {
+        id: "cirro-mediano",
+        name: "Cirro Mediano",
+        description: "Uma única estrutura sensorial no centro da cabeça. Comum em Arthrotardigrada, mas ausente em Echiniscoidea.",
+        image: "assets/key-images/cirro-mediano-presente.jpg"
+    },
+    {
+        id: "placas-dorsais",
+        name: "Placas Dorsais e Laterais",
+        description: "Armadura cuticular protetora encontrada em Echiniscoidea (ex: Echiniscus). Ausente em Eutardigrada.",
+        image: "assets/key-images/4-garras-placas.jpg"
+    },
+    {
+        id: "papilas-cefalicas",
+        name: "Papilas Cefálicas",
+        description: "Pequenas protuberâncias sensoriais na cabeça, características da Ordem Apochela (ex: Milnesium).",
+        image: "assets/key-images/apochela-cabeca.jpg"
+    },
+    {
+        id: "garras-assimetricas",
+        name: "Garras Assimétricas (2-1-2-1)",
+        description: "Garras de tamanhos ou formas diferentes, com sequência 2-1-2-1. Típico de Hypsibioidea e Isohypsibioidea.",
+        image: "assets/key-images/garras-assimetricas.jpg"
+    },
+    {
+        id: "garras-simetricas",
+        name: "Garras Simétricas (2-1-1-2)",
+        description: "Garras semelhantes em tamanho e forma, com sequência 2-1-1-2. Característica de Macrobiotoidea.",
+        image: "assets/key-images/garras-simetricas.jpg"
+    },
+    {
+        id: "garras-tipo-Y",
+        name: "Garras Tipo Y (Macrobiotidae)",
+        description: "Garras onde os ramos primário e secundário são fundidos por um trecho, formando um 'Y'.",
+        image: "assets/key-images/garras-Y.jpg"
+    },
+    {
+        id: "garras-tipo-V-L",
+        name: "Garras Tipo V ou L (Murrayidae)",
+        description: "Garras onde os ramos divergem diretamente da base, sem um trecho fundido, formando um 'V' ou 'L'.",
+        image: "assets/key-images/garras-V-L.jpg"
+    },
+    {
+        id: "garras-tipo-isohypsibius",
+        name: "Garras Tipo Isohypsibius",
+        description: "Garras onde o ramo secundário forma um ângulo reto (ou maior) com a base da garra.",
+        image: "assets/key-images/garras-isohypsibius.jpg"
+    },
+    {
+        id: "garras-tipo-hypsibius",
+        name: "Garras Tipo Hypsibius",
+        description: "Garras externas onde o ramo secundário forma um arco comum com a porção basal.",
+        image: "assets/key-images/garras-hypsibius.jpg"
+    },
+    {
+        id: "lamina-ventral",
+        name: "Lâmina Ventral",
+        description: "Uma estrutura presente no tubo bucal de alguns gêneros, como Doryphoribius.",
+        image: "assets/key-images/lamina-ventral-presente.jpg"
+    },
+    {
+        id: "lamelas-peribuccais",
+        name: "Lamelas Peribuccais",
+        description: "Anel de lamelas delicadas ao redor da boca. Presentes em gêneros como Pseudobiotus.",
+        image: "assets/key-images/lamelas-presentes.jpg"
+    }
+];
 
-/**
- * Função: Inicializa todos os event listeners e componentes
- */
+function renderStructures() {
+    const container = document.getElementById("estrutura-cards-container");
+    if (!container) return;
+
+    const searchTerm = document.getElementById("estrutura-search").value.toLowerCase();
+    
+    const filteredStructures = tardigradeStructures.filter(estrutura =>
+        estrutura.name.toLowerCase().includes(searchTerm) ||
+        estrutura.description.toLowerCase().includes(searchTerm)
+    );
+
+    if (filteredStructures.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); grid-column: 1 / -1;">Nenhuma estrutura encontrada.</p>';
+        return;
+    }
+
+    container.innerHTML = filteredStructures.map(estrutura => `
+        <div class="estrutura-card" data-id="${estrutura.id}">
+            <div class="estrutura-card-image-container">
+                <img src="${estrutura.image || 'assets/tardigrade-icon.png'}" alt="${escapeHtml(estrutura.name)}" class="estrutura-card-image">
+            </div>
+            <div class="estrutura-card-content">
+                <h4 class="estrutura-card-title">${escapeHtml(estrutura.name)}</h4>
+                <p class="estrutura-card-description">${escapeHtml(estrutura.description)}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+
+// ============================================================
+// INICIALIZAÇÃO DA APLICAÇÃO (Atualizada)
+// ============================================================
 function init() {
-  // ===== EVENT LISTENERS PARA NAVEGAÇÃO (CORRIGIDO) =====
-
-  // 1. Botões de abrir/fechar menu mobile
+  // Event Listeners para Navegação
   const menuToggleTriggers = document.querySelectorAll(
     ".mobile-menu-btn, .mobile-nav-close"
   );
@@ -806,42 +1102,50 @@ function init() {
     trigger.addEventListener("click", toggleMobileMenu);
   });
 
-  // 2. Links de navegação (Desktop, Mobile, Botões da Home, Botões "Voltar")
+  // Gatilhos de navegação atualizados
   const sectionNavTriggers = document.querySelectorAll(
     '.desktop-nav a[href^="#"], .mobile-nav-item[href^="#"], .menu-btn[data-section], .back-btn[data-section]'
   );
   sectionNavTriggers.forEach((trigger) => {
     trigger.addEventListener("click", (e) => {
-      e.preventDefault(); // Impede navegação padrão
-      // Pega o ID da seção do data-attribute OU do href
+      e.preventDefault();
+      
+      // Ignora botões desabilitados (placeholders)
+      if (trigger.disabled) return; 
+      
       const sectionId =
         trigger.dataset.section || trigger.getAttribute("href").substring(1);
-      showSection(sectionId); // Mostra seção
+      showSection(sectionId);
     });
   });
 
-  // ===== EVENT LISTENER PARA FORMULÁRIO =====
+  // Event Listener para Formulário
   const form = document.getElementById("form");
   if (form) {
     form.addEventListener("submit", handleFormSubmit);
   }
 
-  // ===== EVENT LISTENER PARA BOTÃO DE LOCALIZAÇÃO =====
+  // Event Listener para Botão de Localização
   const getLocationBtn = document.getElementById("getLocation");
   if (getLocationBtn) {
     getLocationBtn.addEventListener("click", getLocation);
   }
 
-  // ===== EVENT LISTENER PARA FILTRO DE GRUPOS =====
+  // Event Listener para Filtro de Grupos (Mapa)
   const grupoFilter = document.getElementById("grupo-filter");
   if (grupoFilter) {
-    grupoFilter.addEventListener("change", renderAll); // Re-renderiza ao mudar filtro
+    grupoFilter.addEventListener("change", renderAll);
+  }
+  
+  // Event Listener para Filtro da Galeria de Estruturas
+  const estruturaSearch = document.getElementById("estrutura-search");
+  if (estruturaSearch) {
+      estruturaSearch.addEventListener("input", renderStructures);
   }
 
-  // ===== EVENT LISTENERS PARA DELEGAÇÃO (Botões dinâmicos) =====
-
-  // 1. Botões de Delete na tabela
+  // Event Listeners para Delegação (Delete e Chave)
   document.addEventListener("click", (e) => {
+    // Botão Deletar
     const deleteButton = e.target.closest(".btn-delete");
     if (deleteButton) {
       const id = deleteButton.dataset.id;
@@ -849,7 +1153,7 @@ function init() {
     }
   });
 
-  // 2. Botões da Chave Dicotômica (usa data-step)
+  // Listener da Chave Dicotômica
   const keyStepContainer = document.getElementById("key-step");
   if (keyStepContainer) {
     keyStepContainer.addEventListener("click", (event) => {
@@ -860,7 +1164,7 @@ function init() {
     });
   }
 
-  // ===== EVENT LISTENERS PARA BOTÕES DA CHAVE (Reset/Path) =====
+  // Event Listeners para Botões da Chave (Reset/Path)
   const resetKeyBtn = document.getElementById("reset-key-btn");
   if (resetKeyBtn) {
     resetKeyBtn.addEventListener("click", resetKey);
@@ -871,71 +1175,56 @@ function init() {
     pathBtn.addEventListener("click", showPath);
   }
 
-  // ===== INICIALIZAÇÃO DA PÁGINA =====
-
-  // Mostra seção inicial (Home)
+  // Inicialização da Página
   showSection("home");
-  // Renderiza dados iniciais
-  renderAll();
+  // O renderAll() será chamado dentro do initMap() se necessário,
+  // ou pode ser chamado aqui se o mapa não for a primeira tela.
+  // Vamos garantir que os dados iniciais (tabela, stats) sejam carregados.
+  updateStats();
+  renderRecordsTable();
+  renderStructures(); // Renderiza a galeria (para o filtro)
 }
 
-// ===== EXECUTA INICIALIZAÇÃO =====
-// Verifica se DOM já está pronto
+// Executa Inicialização
 if (document.readyState === "loading") {
-  // Ainda carregando: aguarda evento DOMContentLoaded
   document.addEventListener("DOMContentLoaded", init);
 } else {
-  // Já está pronto: executa imediatamente
   init();
 }
 
-/**
- * Função: Mostra o caminho percorrido até o momento
- */
+// ============================================================
+// FUNÇÕES UTILITÁRES (showPath, escapeHtml)
+// ============================================================
 function showPath() {
   const pathDisplay = document.getElementById("path-display");
   const pathSteps = document.getElementById("path-steps");
   const pathBtn = document.getElementById("path-btn");
-
   if (!pathDisplay || !pathSteps || !pathBtn) return;
-
+  
   if (pathDisplay.style.display === "none" || !pathDisplay.style.display) {
-    // Mostrar caminho
     if (choiceHistory.length === 0) {
       pathSteps.innerHTML =
         '<li style="text-align: center; font-style: italic;">Nenhuma escolha feita ainda.</li>';
     } else {
       pathSteps.innerHTML = choiceHistory
-        .map((entry, index) => {
-          if (typeof entry === "object") {
+        .map((entry) => {
             return `<li><strong>${escapeHtml(
               entry.question
             )}</strong><br><em>→ ${escapeHtml(entry.answer)}</em></li>`;
-          } else {
-            return `<li><strong>Pergunta ${index +
-              1}:</strong> ${escapeHtml(entry)}</li>`;
-          }
         })
         .join("");
     }
-
     pathDisplay.style.display = "block";
     pathBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Ocultar Caminho';
   } else {
-    // Ocultar caminho
     pathDisplay.style.display = "none";
     pathBtn.innerHTML = '<i class="fas fa-route"></i> Mostrar Caminho';
   }
 }
 
-/**
- * Função: Escape HTML para prevenir XSS
- * @param {string} text - Texto para escapar
- * @returns {string} - Texto escapado
- */
 function escapeHtml(text) {
   if (typeof text !== 'string') {
-    return text; // Retorna o valor original se não for string
+    return text;
   }
   const div = document.createElement("div");
   div.textContent = text;
