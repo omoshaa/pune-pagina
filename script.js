@@ -36,15 +36,15 @@ function showSection(sectionId) {
   sections.forEach((section) => {
     section.classList.add("hidden");
   });
-  
+
   // Seção "home" é a hero-section
   if (sectionId === "home") {
-      document.getElementById("home").classList.remove("hidden");
+    document.getElementById("home").classList.remove("hidden");
   } else {
-      const targetSection = document.getElementById(sectionId);
-      if (targetSection) {
-        targetSection.classList.remove("hidden");
-      }
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+      targetSection.classList.remove("hidden");
+    }
   }
 
   // Lógica pós-exibição
@@ -63,7 +63,7 @@ function showSection(sectionId) {
       renderStructures();
     }
   }, 300);
-  
+
   window.scrollTo({
     top: 0,
     behavior: "smooth",
@@ -247,16 +247,43 @@ let tardiRecords = JSON.parse(localStorage.getItem("tardiRecords")) || [
 // MAPA DE TAXONOMIA (Para formulário simplificado)
 // ============================================================
 const GENUS_TAXONOMY_MAP = {
-    "Macrobiotus": { classe: "Eutardigrada", ordem: "Parachela", familia: "Macrobiotidae" },
-    "Echiniscus": { classe: "Heterotardigrada", ordem: "Echiniscoidea", familia: "Echiniscidae" },
-    "Milnesium": { classe: "Eutardigrada", ordem: "Apochela", familia: "Milnesiidae" },
-    "Mesobiotus": { classe: "Eutardigrada", ordem: "Parachela", familia: "Macrobiotidae" },
-    "Pseudoechiniscus": { classe: "Heterotardigrada", ordem: "Echiniscoidea", familia: "Echiniscidae" },
-    "Paramacrobiotus": { classe: "Eutardigrada", ordem: "Parachela", familia: "Macrobiotidae" },
-    "Outro": { classe: "Indeterminado", ordem: "Indeterminado", familia: "Indeterminado" }
-    // Adicionar outros gêneros da chave aqui...
+  Macrobiotus: {
+    classe: "Eutardigrada",
+    ordem: "Parachela",
+    familia: "Macrobiotidae",
+  },
+  Echiniscus: {
+    classe: "Heterotardigrada",
+    ordem: "Echiniscoidea",
+    familia: "Echiniscidae",
+  },
+  Milnesium: {
+    classe: "Eutardigrada",
+    ordem: "Apochela",
+    familia: "Milnesiidae",
+  },
+  Mesobiotus: {
+    classe: "Eutardigrada",
+    ordem: "Parachela",
+    familia: "Macrobiotidae",
+  },
+  Pseudoechiniscus: {
+    classe: "Heterotardigrada",
+    ordem: "Echiniscoidea",
+    familia: "Echiniscidae",
+  },
+  Paramacrobiotus: {
+    classe: "Eutardigrada",
+    ordem: "Parachela",
+    familia: "Macrobiotidae",
+  },
+  Outro: {
+    classe: "Indeterminado",
+    ordem: "Indeterminado",
+    familia: "Indeterminado",
+  },
+  // Adicionar outros gêneros da chave aqui...
 };
-
 
 // ============================================================
 // VARIÁVEIS GLOBAIS
@@ -309,7 +336,9 @@ function renderMarkers() {
         <h4>${escapeHtml(record.classe)} - <i>${escapeHtml(
       record.genero
     )}</i></h4>
-        <p><strong>Gênero:</strong> <i>${escapeHtml(record.genero)} ${escapeHtml(record.especie)}</i></p>
+        <p><strong>Gênero:</strong> <i>${escapeHtml(
+          record.genero
+        )} ${escapeHtml(record.especie)}</i></p>
         <p><strong>Local:</strong> ${escapeHtml(record.localidade)}</p>
         <p><strong>Pesquisador:</strong> ${escapeHtml(record.pesquisador)}</p>
         <p><strong>Data:</strong> ${new Date(record.data).toLocaleDateString(
@@ -328,29 +357,34 @@ function getFilteredRecords() {
   const grupoFilter = document.getElementById("grupo-filter")?.value;
   const generoFilter = document.getElementById("genero-filter")?.value;
 
-  return tardiRecords.filter(record => {
-      const grupoMatch = !grupoFilter || record.classe === grupoFilter || record.ordem === grupoFilter;
-      const generoMatch = !generoFilter || record.genero === generoFilter;
-      return grupoMatch && generoMatch;
+  return tardiRecords.filter((record) => {
+    const grupoMatch =
+      !grupoFilter ||
+      record.classe === grupoFilter ||
+      record.ordem === grupoFilter;
+    const generoMatch = !generoFilter || record.genero === generoFilter;
+    return grupoMatch && generoMatch;
   });
 }
 
-// NOVO: Popula o filtro de Gênero
+// Popula o filtro de Gênero
 function populateGeneroFilter() {
-    const generoFilter = document.getElementById("genero-filter");
-    if (!generoFilter) return;
+  const generoFilter = document.getElementById("genero-filter");
+  if (!generoFilter) return;
 
-    const generos = [...new Set(tardiRecords.map(r => r.genero))].sort();
-    
-    // Limpa opções antigas (exceto a primeira "Todos")
-    generoFilter.innerHTML = '<option value="">Todos os Gêneros</option>';
-    
-    generos.forEach(genero => {
-        const option = document.createElement('option');
-        option.value = genero;
-        option.textContent = genero;
-        generoFilter.appendChild(option);
-    });
+  const generos = [...new Set(tardiRecords.map((r) => r.genero))]
+    .filter((g) => g && g.trim() !== "" && g !== "Outro")
+    .sort();
+
+  // Limpa opções antigas (exceto a primeira "Todos")
+  generoFilter.innerHTML = '<option value="">Todos os Gêneros</option>';
+
+  generos.forEach((genero) => {
+    const option = document.createElement("option");
+    option.value = genero;
+    option.textContent = genero;
+    generoFilter.appendChild(option);
+  });
 }
 
 // ============================================================
@@ -358,11 +392,13 @@ function populateGeneroFilter() {
 // ============================================================
 function updateStats() {
   const totalRegistros = tardiRecords.length;
-  const totalGrupos = [...new Set(tardiRecords.map((r) => r.classe))].filter(g => g !== 'Indeterminado').length;
-  const totalGeneros = [
-    ...new Set(tardiRecords.map((r) => r.genero)),
-  ].filter(g => g !== 'Outro').length;
-  
+  const totalGrupos = [...new Set(tardiRecords.map((r) => r.classe))].filter(
+    (g) => g !== "Indeterminado"
+  ).length;
+  const totalGeneros = [...new Set(tardiRecords.map((r) => r.genero))].filter(
+    (g) => g !== "Outro"
+  ).length;
+
   document.getElementById("total-registros").textContent = totalRegistros;
   document.getElementById("total-grupos").textContent = totalGrupos;
   document.getElementById("total-especies").textContent = totalGeneros; // ID no HTML ainda é "total-especies", mas agora conta Gêneros
@@ -381,37 +417,37 @@ function handleFormSubmit(e) {
     id: generateId(),
     latitude: parseFloat(formData.get("latitude")),
     longitude: parseFloat(formData.get("longitude")),
-    
+
     // Preenchido automaticamente pelo GENUS_TAXONOMY_MAP
     classe: taxonomia.classe,
     ordem: taxonomia.ordem,
     familia: taxonomia.familia,
-    
+
     // Preenchido pelo formulário
     genero: genero,
     especie: formData.get("especie") || "",
-    
+
     localidade: formData.get("localidade"),
     habitat: formData.get("habitat"),
     pesquisador: formData.get("pesquisador"),
     instituicao: formData.get("instituicao") || "",
-    
+
     fotos: [], // O preview de fotos não é salvo no localStorage
     data: new Date().toISOString(),
   };
 
   tardiRecords.push(newRecord);
   localStorage.setItem("tardiRecords", JSON.stringify(tardiRecords));
-  
+
   showNotification("Registro salvo com sucesso!", "success");
   e.target.reset();
-  
+
   // Limpa o preview de imagens
   const previewContainer = document.getElementById("image-preview");
   if (previewContainer) {
     previewContainer.innerHTML = "";
   }
-  
+
   renderAll(); // Atualiza mapa, tabela e filtros
   showSection("mapa-tardigrada"); // Leva o usuário ao mapa
 }
@@ -439,573 +475,661 @@ function getLocation() {
 
 // NOVO: Função para preview de imagens
 function handleImagePreview(event) {
-    const previewContainer = document.getElementById("image-preview");
-    if (!previewContainer) return;
-    
-    previewContainer.innerHTML = ""; // Limpa previews anteriores
-    
-    const files = event.target.files;
-    if (files.length > 5) {
-        showNotification("Você só pode enviar até 5 fotos.", "error");
-        event.target.value = ""; // Limpa a seleção
-        return;
-    }
+  const previewContainer = document.getElementById("image-preview");
+  if (!previewContainer) return;
 
-    for (const file of files) {
-        if (!file.type.startsWith("image/")) continue;
-        
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            const img = document.createElement("img");
-            img.src = e.target.result;
-            img.alt = "Preview da imagem";
-            img.classList.add("preview-image"); // (Estilo será adicionado no CSS)
-            previewContainer.appendChild(img);
-        }
-        
-        reader.readAsDataURL(file);
-    }
+  previewContainer.innerHTML = ""; // Limpa previews anteriores
+
+  const files = event.target.files;
+  if (files.length > 5) {
+    showNotification("Você só pode enviar até 5 fotos.", "error");
+    event.target.value = ""; // Limpa a seleção
+    return;
+  }
+
+  for (const file of files) {
+    if (!file.type.startsWith("image/")) continue;
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const img = document.createElement("img");
+      img.src = e.target.result;
+      img.alt = "Preview da imagem";
+      img.classList.add("preview-image"); // (Estilo será adicionado no CSS)
+      previewContainer.appendChild(img);
+    };
+
+    reader.readAsDataURL(file);
+  }
 }
 
-
+// CHAVE DICOTÔMICA COMPLETA - TARDIGRADA
 // ============================================================
-// CHAVE DICOTÔMICA (Máquina de Estados ATUALIZADA)
-// ============================================================
+// Baseada em: Damborenea, C., Rogers, D. C., & Thorp, J. H. (2020).
+// Thorp and Covich's Freshwater Invertebrates (Fourth Edition)
+// Volume 3: Keys to Nearctic Fauna, Chapter 25: Phylum Tardigrada, p. 679–696.
+// Adaptado por: Prof. Danilo de Castro Santos (PUNE/TardiStudy)
 
-// (Esta é a nova chave baseada no seu documento)
 const keySteps = {
-  "1": {
-    title: "Filo Tardigrada: Classe",
-    question: "1. Observe a cabeça do espécime:",
+  // ============================================================
+  // PASSO INICIAL: FILO TARDIGRADA → CLASSES
+  // ============================================================
+  1: {
+    title: "Filo Tardigrada: Classes",
+    question: "1. Observe a presença de cirros laterais A na cabeça (Fig. 1):",
     options: [
       {
-        text: "1. Cirros laterais A presentes (Seta ou cA).",
+        text: "1. Cirros laterais A presentes.",
         next: "heterotardigrada_ordens",
-        image: "assets/key-images/cirro-A-presente.jpg", // Imagem mantida do script original
+        image: "assets/key-images/fig1-cirros-A-presentes.jpg",
       },
       {
-        text: "1’. Cirros laterais A ausentes.",
+        text: "1'. Cirros laterais A ausentes.",
         next: "eutardigrada_ordens",
-        image: "assets/key-images/cirro-A-ausente.jpg", // Imagem mantida do script original
+        image: "assets/key-images/fig1-cirros-A-ausentes.jpg",
       },
     ],
   },
-  // --- HETEROTARDIGRADA ---
+
+  // ============================================================
+  // CLASSE HETEROTARDIGRADA
+  // ============================================================
+
+  // HETEROTARDIGRADA: Ordens
   heterotardigrada_ordens: {
     title: "Classe Heterotardigrada: Ordens",
-    question: "1. Observe o cirro mediano (centro da cabeça):",
+    question: "1. Observe o cirro mediano e a inserção das garras (Fig. 2):",
     options: [
       {
         text: "1. Cirro mediano geralmente presente; dígitos ou garras inseridos diretamente na perna.",
         next: "arthrotardigrada_result",
-        image: "assets/key-images/cirro-mediano-presente.jpg", // Imagem mantida
+        image: "assets/key-images/fig2-arthrotardigrada.jpg",
       },
       {
-        text: "1’. Cirro mediano ausente; cada garra e uma papila inserida na perna.",
+        text: "1'. Cirro mediano ausente; cada garra e uma papila inserida na perna.",
         next: "echiniscoidea_familias",
-        image: "assets/key-images/cirro-mediano-ausente.jpg", // Imagem mantida
+        image: "assets/key-images/fig2-echiniscoidea.jpg",
       },
     ],
   },
+
+  // ORDEM ARTHROTARDIGRADA (resultado final)
   arthrotardigrada_result: {
     title: "Resultado: Ordem Arthrotardigrada",
     result: "Ordem Arthrotardigrada",
     description:
-      "Uma espécie: Styraconyx hallasi [acidental, marinho, mas também encontrado em fontes da Gronelândia].",
-    image: "assets/key-results/Arthrotardigrada.jpg", // Imagem mantida
+      "Uma espécie: Styraconyx hallasi. Tardigrado marinho encontrado acidentalmente em fontes da Groenlândia.",
+    image: "assets/key-results/Styraconyx.jpg",
   },
+
+  // ORDEM ECHINISCOIDEA: Famílias
   echiniscoidea_familias: {
     title: "Ordem Echiniscoidea: Famílias",
-    question: "1. Observe as garras e placas:",
+    question:
+      "1. Observe o número de garras por perna e as placas dorsais (Fig. 3):",
     options: [
       {
         text: "1. Quatro garras por perna em adultos; com placas dorsais-laterais.",
-        next: "echiniscus_generos_1", // Inicia a chave de gêneros de Echiniscidae
-        image: "assets/key-images/4-garras-placas.jpg", // Imagem mantida
+        next: "echiniscidae_generos_1",
+        image: "assets/key-images/fig3-4garras-placas.jpg",
       },
       {
-        text: "1'. Duas garras nas pernas I-III, uma garra na perna IV em adultos; cutícula sem placas dorsais.",
+        text: "1'. Duas garras nas pernas I–III, uma garra na perna IV em adultos; cutícula sem placas dorsais.",
         next: "carphaniidae_result",
-        image: "assets/key-images/2-garras-sem-placas.jpg", // Imagem mantida
+        image: "assets/key-images/fig3-2garras-sem-placas.jpg",
       },
     ],
   },
+
+  // FAMÍLIA CARPHANIIDAE (resultado final)
   carphaniidae_result: {
     title: "Resultado: Família Carphaniidae",
-    result: "Gênero Carphania (Família Carphaniidae)",
+    result: "Gênero Carphania",
     description:
-      "Um gênero: Carphania. Duas garras nas pernas I-III, uma garra na perna IV em adultos; cutícula sem placas dorsais; cirrus A muito curto.",
-    image: "assets/tardigrade-icon.png", // Usuário informou "SEM IMAGEM"
+      "Um gênero: Carphania. Duas garras nas pernas I–III, uma garra na perna IV; cutícula sem placas dorsais; cirrus A muito curto.",
+    image: "assets/tardigrade-icon.png",
   },
-  echiniscus_generos_1: {
-    title: "Família Echiniscidae: Gêneros (Passo 1/2)",
-    question: "1. Observe a placa pseudosegmentar:",
+
+  // FAMÍLIA ECHINISCIDAE: Chave para gêneros
+  echiniscidae_generos_1: {
+    title: "Família Echiniscidae: Gêneros (1/2)",
+    question: "1. Observe a placa pseudosegmentar (Fig. 4):",
     options: [
       {
         text: "1. Placa pseudosegmentar ausente.",
-        next: "echiniscus_generos_2",
-        image: "assets/tardigrade-icon.png", // Placeholder
+        next: "echiniscidae_generos_2",
+        image: "assets/key-images/fig4-pseudosegmentar-ausente.jpg",
       },
       {
-        text: "1’. Placa pseudosegmentar presente (entre a segunda placa em pares e a placa terminal).",
+        text: "1'. Placa pseudosegmentar presente (entre a segunda placa em pares e a placa terminal).",
         next: "pseudechiniscus_result",
-        image: "assets/key-results/Pseudechiniscus.jpg", // Placeholder
+        image: "assets/key-images/fig4-pseudosegmentar-presente.jpg",
       },
     ],
   },
+
   pseudechiniscus_result: {
     title: "Resultado: Gênero Pseudechiniscus",
     result: "Gênero Pseudechiniscus",
     description:
-      "Placa pseudosegmentar presente entre a segunda placa em pares e a placa terminal.",
-    image: "assets/key-results/Pseudechiniscus.jpg", // Placeholder
+      "Placa pseudosegmentar presente entre a segunda placa em pares e a placa terminal (Fig. 4).",
+    image: "assets/key-results/Pseudechiniscus.jpg",
   },
-  echiniscus_generos_2: {
-    title: "Família Echiniscidae: Gêneros (Passo 2/2)",
-    question: "2. Observe a placa terminal:",
+
+  echiniscidae_generos_2: {
+    title: "Família Echiniscidae: Gêneros (2/2)",
+    question: "2(1). Observe a placa terminal (Fig. 5):",
     options: [
       {
         text: "2. Placa terminal entalhada.",
         next: "echiniscus_result",
-        image: "assets/key-results/Echiniscus.jpg", // Placeholder
+        image: "assets/key-images/fig5-placa-entalhada.jpg",
       },
       {
-        text: "2’. Placa terminal dividida por suturas; olhos em manchas pretas.",
+        text: "2'. Placa terminal dividida por suturas; olhos em manchas pretas.",
         next: "hypechiniscus_result",
-        image: "assets/key-results/Hypechiniscus.jpg", // Placeholder
+        image: "assets/key-images/fig5-placa-dividida.jpg",
       },
     ],
   },
+
   echiniscus_result: {
     title: "Resultado: Gênero Echiniscus",
     result: "Gênero Echiniscus",
-    description: "Placa terminal entalhada.",
-    image: "assets/key-results/Echiniscus.jpg", // Placeholder
+    description: "Placa terminal entalhada (Fig. 5).",
+    image: "assets/key-results/Echiniscus.jpg",
   },
+
   hypechiniscus_result: {
     title: "Resultado: Gênero Hypechiniscus",
     result: "Gênero Hypechiniscus",
-    description: "Placa terminal dividida por suturas; olhos em manchas pretas.",
-    image: "assets/key-results/Hypechiniscus.jpg", // Placeholder
+    description:
+      "Placa terminal dividida por suturas; olhos em manchas pretas (Fig. 5).",
+    image: "assets/key-results/Hypechiniscus.jpg",
   },
 
-  // --- EUTARDIGRADA ---
+  // ============================================================
+  // CLASSE EUTARDIGRADA
+  // ============================================================
+
+  // EUTARDIGRADA: Ordens
   eutardigrada_ordens: {
     title: "Classe Eutardigrada: Ordens",
-    question: "1. Observe a cabeça e os ganchos:",
+    question: "1. Observe as papilas cefálicas e os ganchos (Fig. 6):",
     options: [
       {
         text: "1. Cabeça sem papilas cefálicas; geralmente 2 ganchos duplos por perna.",
-        next: "parachela_superfamilias", // Continua para Parachela
-        image: "assets/key-images/parachela-cabeca.jpg", // Imagem mantida
+        next: "parachela_superfamilias",
+        image: "assets/key-images/fig6-sem-papilas.jpg",
       },
       {
-        text: "1’. Cabeça com papilas cefálicas (incluindo duas papilas laterais); ganchos com ramo secundário não conectado ao primário.",
-        next: "apochela_result",
-        image: "assets/key-images/apochela-cabeca.jpg", // Imagem mantida
+        text: "1'. Cabeça com papilas cefálicas (incluindo duas papilas laterais); ganchos com ramo secundário não conectado ao primário.",
+        next: "milnesium_result",
+        image: "assets/key-images/fig6-com-papilas.jpg",
       },
     ],
   },
-  apochela_result: {
+
+  // ORDEM APOCHELA (resultado final)
+  milnesium_result: {
     title: "Resultado: Ordem Apochela",
-    result: "Gênero Milnesium (Ordem Apochela)",
+    result: "Gênero Milnesium",
     description:
-      "Cabeça com papilas cefálicas; ganchos com ramo secundário não conectado ao primário; ovos lisos colocados dentro do exúvio; limnoterrestre.",
-    image: "assets/key-results/Milnesium.jpg", // Imagem mantida
+      "Cabeça com papilas cefálicas; ganchos com ramo secundário não conectado ao primário; ovos lisos colocados dentro do exúvio; limnoterrestre (Fig. 7).",
+    image: "assets/key-results/Milnesium.jpg",
   },
 
-  // --- PARACHELA (CHAVE DETALHADA) ---
+  // ============================================================
+  // ORDEM PARACHELA
+  // ============================================================
+
+  // PARACHELA: Superfamílias
   parachela_superfamilias: {
     title: "Ordem Parachela: Superfamílias",
-    question: "1. Observe a simetria das garras duplas:",
+    question:
+      "1. Observe a simetria das garras duplas (sequência de garras nas pernas I–IV) (Fig. 8):",
     options: [
       {
-        text: '1. Garras duplas "assimétricas" (sequência 2-1-2-1).',
+        text: '1. Garras duplas "assimétricas" (sequência 2-1-2-1); tubo bucal sem lâmina ventral.',
         next: "hypsibioidea_isohypsibioidea",
-        image: "assets/key-images/garras-assimetricas.jpg", // Imagem mantida
+        image: "assets/key-images/fig8-garras-assimetricas.jpg",
       },
       {
-        text: '1’. Garras duplas "simétricas" (sequência 2-1-1-2); tubo bucal com lâmina ventral.',
+        text: '1\'. Garras duplas "simétricas" (sequência 2-1-1-2); tubo bucal com lâmina ventral.',
         next: "macrobiotoidea_familias",
-        image: "assets/key-images/garras-simetricas.jpg", // Imagem mantida
+        image: "assets/key-images/fig8-garras-simetricas.jpg",
       },
     ],
   },
-  
-  // --- Superfamílias Hypsibioidea & Isohypsibioidea ---
+
+  // ============================================================
+  // SUPERFAMÍLIAS HYPSIBIOIDEA & ISOHYPSIBIOIDEA
+  // ============================================================
+
   hypsibioidea_isohypsibioidea: {
-    title: "Superfamílias Isohypsibioidea e Hypsibiidae",
-    question: "2(1). Observe a forma das garras internas e externas:",
+    title: "Superfamílias Isohypsibioidea e Hypsibioidea",
+    question: "2(1). Observe a forma das garras internas e externas (Fig. 9):",
     options: [
       {
-        text: "2. Garras internas e externas de tamanho e forma semelhantes (tipo Isohypsibius, ângulo reto).",
+        text: "2. Garras internas e externas de tamanho e forma semelhantes (tipo Isohypsibius, com ramos formando ângulo reto).",
         next: "isohypsibiidae_generos_1",
-        image: "assets/key-images/garras-isohypsibius.jpg", // Imagem mantida
+        image: "assets/key-images/fig9-garras-isohypsibius.jpg",
       },
       {
-        text: "2’. Garras internas e externas de tamanho e forma claramente diferentes (tipo Hypsibius, arco).",
+        text: "2'. Garras internas e externas de tamanho e forma claramente diferentes (tipo Hypsibius, com ramo secundário formando um arco).",
         next: "hypsibiidae_generos_1",
-        image: "assets/key-images/garras-hypsibius.jpg", // Imagem mantida
+        image: "assets/key-images/fig9-garras-hypsibius.jpg",
       },
     ],
   },
 
-  // --- Superfamília Macrobiotoidea ---
-  macrobiotoidea_familias: {
-    title: "Superfamília Macrobiotoidea: Famílias",
-    question: "1. Observe o formato das garras:",
-    options: [
-      {
-        text: "1. Garras em formato L ou V (ramos divergindo da base); gancho evidente na lâmina ventral.",
-        next: "murrayidae_generos",
-        image: "assets/key-images/garras-V-L.jpg", // Imagem mantida
-      },
-      {
-        text: "1’. Garras em formato Y (ramos fundidos por um trecho); sem gancho evidente na lâmina ventral.",
-        next: "macrobiotidae_generos_1",
-        image: "assets/key-images/garras-Y.jpg", // Imagem mantida
-      },
-    ],
-  },
-  murrayidae_generos: {
-    title: "Família Murrayidae: Gêneros",
-    question: "1. Observe as garras e espessamentos:",
-    options: [
-      {
-        text: "1. Garras em forma de L bem desenvolvidas, com espessamentos cuticulares conectando a base.",
-        next: "dactylobiotus_result",
-        image: "assets/key-results/Dactylobiotus.jpg", // Placeholder
-      },
-      {
-        text: "1’. Garras em forma de V, sem espessamentos cuticulares; com lunulas.",
-        next: "murrayon_result",
-        image: "assets/key-results/Murrayon.jpg", // Placeholder
-      },
-    ],
-  },
-  dactylobiotus_result: {
-    title: "Resultado: Gênero Dactylobiotus",
-    result: "Gênero Dactylobiotus",
-    description:
-      "Garras em forma de L muito bem desenvolvidas, com espessamentos cuticulares conectando a base das garras em cada perna.",
-    image: "assets/key-results/Dactylobiotus.jpg", // Placeholder
-  },
-  murrayon_result: {
-    title: "Resultado: Gênero Murrayon",
-    result: "Gênero Murrayon",
-    description:
-      "Garras em forma de V, sem espessamentos cuticulares conectando a base das garras em cada perna, com lunulas; limnoterrestres.",
-    image: "assets/key-results/Murrayon.jpg", // Placeholder
-  },
-  macrobiotidae_generos_1: {
-    title: "Família Macrobiotidae: Gêneros (Passo 1/3)",
-    question: "1. Conte os macroplacóides:",
-    options: [
-      {
-        text: "1. Três macroplacóides.",
-        next: "macrobiotidae_generos_2",
-        image: "assets/tardigrade-icon.png", // Placeholder
-      },
-      {
-        text: "1’. Dois macroplacóides; microplacóide (se presente) próximo ao segundo.",
-        next: "macrobiotus_result",
-        image: "assets/key-results/Macrobiotus.jpg", // Placeholder
-      },
-    ],
-  },
-  macrobiotus_result: {
-    title: "Resultado: Gênero Macrobiotus",
-    result: "Gênero Macrobiotus",
-    description:
-      "Dois macroplacóides; microplacóide, se presente, próximo ao segundo macroplacóide; cutícula com ou sem poros; ovos com processos de vários tipos.",
-    image: "assets/key-results/Macrobiotus.jpg", // Placeholder
-  },
-  macrobiotidae_generos_2: {
-    title: "Família Macrobiotidae: Gêneros (Passo 2/3)",
-    question: "2(1). Observe os macroplacóides:",
-    options: [
-      {
-        text: "2. Macroplacóides em forma de haste; lamelas bucais presentes.",
-        next: "macrobiotidae_generos_3",
-        image: "assets/tardigrade-icon.png", // Placeholder
-      },
-      {
-        text: "2’. Macroplacóides redondos; microplacóide presente; lamelas bucais ausentes.",
-        next: "minibiotus_result",
-        image: "assets/key-results/Minibiotus.jpg", // Placeholder
-      },
-    ],
-  },
-  minibiotus_result: {
-    title: "Resultado: Gênero Minibiotus",
-    result: "Gênero Minibiotus",
-    description:
-      "Macroplacóides redondos; microplacóide presente; lamelas bucais ausentes; pápulas presentes.",
-    image: "assets/key-results/Minibiotus.jpg", // Placeholder
-  },
-  macrobiotidae_generos_3: {
-    title: "Família Macrobiotidae: Gêneros (Passo 3/3)",
-    question: "3(2). Observe a posição do microplacóide (se presente):",
-    options: [
-      {
-        text: "3. Microplacóide sempre presente e claramente próximo ao terceiro macroplacóide.",
-        next: "mesobiotus_result",
-        image: "assets/key-results/Mesobiotus.jpg", // Placeholder
-      },
-      {
-        text: "3’. Microplacóide, se presente, distante do terceiro macroplacóide.",
-        next: "paramacrobiotus_result",
-        image: "assets/key-results/Paramacrobiotus.jpg", // Placeholder
-      },
-    ],
-  },
-  mesobiotus_result: {
-    title: "Resultado: Gênero Mesobiotus",
-    result: "Gênero Mesobiotus",
-    description:
-      "Microplacóide sempre presente e claramente próximo ao terceiro macroplacóide (menos que seu comprimento); garra característica com septo interno.",
-    image: "assets/key-results/Mesobiotus.jpg", // Placeholder
-  },
-  paramacrobiotus_result: {
-    title: "Resultado: Gênero Paramacrobiotus",
-    result: "Gênero Paramacrobiotus",
-    description:
-      "Microplacóide, se presente, distante do terceiro macroplacóide mais que seu comprimento; ovos sempre com grandes processos reticulados.",
-    image: "assets/key-results/Paramacrobiotus.jpg", // Placeholder
-  },
+  // ============================================================
+  // FAMÍLIA ISOHYPSIBIIDAE
+  // ============================================================
 
-  // --- Família Isohypsibiidae ---
   isohypsibiidae_generos_1: {
-    title: "Família Isohypsibiidae: Gêneros (Passo 1/3)",
-    question: "1. Observe as garras:",
+    title: "Família Isohypsibiidae: Gêneros (1/4)",
+    question: "1. Observe o tipo de garras (Fig. 9):",
     options: [
       {
-        text: "1. Ramo secundário de cada garra formando um ângulo reto (tipo Isohypsibius).",
+        text: "1. Ramo secundário de cada garra formando um ângulo reto com o ramo primário (tipo Isohypsibius).",
         next: "isohypsibiidae_generos_2",
-        image: "assets/key-images/garras-isohypsibius.jpg", // Imagem mantida
+        image: "assets/key-images/fig9-garras-isohypsibius.jpg",
       },
       {
-        text: "1’. Garra externa tipo Hypsibius com ramo primário muito longo; garra interna tipo Isohypsibius.",
+        text: "1'. Garra externa do tipo Hypsibius com ramo primário extremamente longo e esbelto; garra interna do tipo Isohypsibius.",
         next: "ramajendas_result",
-        image: "assets/key-results/Ramajendas.jpg", // Placeholder
+        image: "assets/key-results/Ramajendas.jpg",
       },
     ],
   },
+
   ramajendas_result: {
     title: "Resultado: Gênero Ramajendas",
     result: "Gênero Ramajendas",
     description:
-      "Garra externa do tipo Hypsibius com um ramo primário extremamente longo e esbelto; garra interna do tipo Isohypsibius.",
-    image: "assets/key-results/Ramajendas.jpg", // Placeholder
+      "Garra externa do tipo Hypsibius com ramo primário extremamente longo e esbelto; garra interna do tipo Isohypsibius.",
+    image: "assets/key-results/Ramajendas.jpg",
   },
+
   isohypsibiidae_generos_2: {
-    title: "Família Isohypsibiidae: Gêneros (Passo 2/3)",
-    question: "2(1). Observe a lâmina ventral no tubo bucal:",
+    title: "Família Isohypsibiidae: Gêneros (2/4)",
+    question: "2(1). Observe a lâmina ventral no tubo bucal (Fig. 10):",
     options: [
       {
         text: "2. Lâmina ventral ausente.",
         next: "isohypsibiidae_generos_3",
-        image: "assets/key-images/lamina-ventral-ausente.jpg", // Imagem mantida
+        image: "assets/key-images/fig10-lamina-ventral-ausente.jpg",
       },
       {
-        text: "2’. Lâmina ventral presente.",
+        text: "2'. Lâmina ventral presente.",
         next: "doryphoribius_result",
-        image: "assets/key-images/lamina-ventral-presente.jpg", // Imagem mantida
+        image: "assets/key-images/fig10-lamina-ventral-presente.jpg",
       },
     ],
   },
+
   doryphoribius_result: {
     title: "Resultado: Gênero Doryphoribius",
     result: "Gênero Doryphoribius",
-    description: "Lâmina ventral presente no tubo bucal; limnoterrestre.",
-    image: "assets/key-results/Doryphoribius.jpg", // Imagem mantida
+    description:
+      "Lâmina ventral presente no tubo bucal (Fig. 10); limnoterrestre.",
+    image: "assets/key-results/Doryphoribius.jpg",
   },
+
   isohypsibiidae_generos_3: {
-    title: "Família Isohypsibiidae: Gêneros (Passo 3/3)",
-    question: "3(2). Observe as lamelas peribuccais (ao redor da boca):",
+    title: "Família Isohypsibiidae: Gêneros (3/4)",
+    question:
+      "3(2). Observe as lamelas peribuccais ao redor da abertura bucal (Fig. 11):",
     options: [
       {
         text: "3. Lamelas peribuccais ausentes.",
         next: "isohypsibius_result",
-        image: "assets/key-images/lamelas-ausentes.jpg", // Imagem mantida
+        image: "assets/key-images/fig11-lamelas-ausentes.jpg",
       },
       {
-        text: "3’. Lamelas peribuccais presentes (pode ser difícil de ver).",
-        next: "isohypsibiidae_generos_4", // Leva ao passo Pseudobiotus/Thulinius
-        image: "assets/key-images/lamelas-presentes.jpg", // Imagem mantida
+        text: "3'. Lamelas peribuccais presentes (pode ser difícil de ver).",
+        next: "isohypsibiidae_generos_4",
+        image: "assets/key-images/fig11-lamelas-presentes.jpg",
       },
     ],
   },
+
   isohypsibius_result: {
     title: "Resultado: Gênero Isohypsibius",
     result: "Gênero Isohypsibius",
-    description: "Lamelas peribuccais ao redor da abertura bucal ausentes.",
-    image: "assets/key-results/Isohypsibius.jpg", // Imagem mantida
+    description:
+      "Lamelas peribuccais ao redor da abertura bucal ausentes (Fig. 11).",
+    image: "assets/key-results/Isohypsibius.jpg",
   },
+
   isohypsibiidae_generos_4: {
-    title: "Família Isohypsibiidae: Gêneros (Passo 4/4)",
-    question: "4(3). Conte as lamelas peribuccais:",
+    title: "Família Isohypsibiidae: Gêneros (4/4)",
+    question: "4(3). Conte as lamelas peribuccais (Fig. 11):",
     options: [
       {
         text: "4. Cerca de 30 lamelas peribuccais presentes.",
         next: "pseudobiotus_result",
-        image: "assets/key-results/Pseudobiotus.jpg", // Imagem mantida
+        image: "assets/key-results/Pseudobiotus.jpg",
       },
       {
-        text: "4’. Doze lamelas peribuccais presentes, frequentemente fundidas.",
+        text: "4'. Doze lamelas peribuccais presentes, frequentemente fundidas.",
         next: "thulinius_result",
-        image: "assets/key-results/Thulinius.jpg", // Placeholder
+        image: "assets/key-results/Thulinius.jpg",
       },
     ],
   },
+
   pseudobiotus_result: {
     title: "Resultado: Gênero Pseudobiotus",
     result: "Gênero Pseudobiotus",
-    description: "Cerca de 30 lamelas peribuccais presentes.",
-    image: "assets/key-results/Pseudobiotus.jpg", // Imagem mantida
+    description: "Cerca de 30 lamelas peribuccais presentes (Fig. 11).",
+    image: "assets/key-results/Pseudobiotus.jpg",
   },
+
   thulinius_result: {
     title: "Resultado: Gênero Thulinius",
     result: "Gênero Thulinius",
     description:
-      "Doze lamelas peribuccais presentes, frequentemente fundidas; uma ou duas barras cuticulares sob as bases das garras.",
-    image: "assets/key-results/Thulinius.jpg", // Placeholder
+      "Doze lamelas peribuccais presentes, frequentemente fundidas; uma ou duas barras cuticulares sob as bases das garras (Fig. 11).",
+    image: "assets/key-results/Thulinius.jpg",
   },
 
-  // --- Família Hypsibiidae ---
+  // ============================================================
+  // FAMÍLIA HYPSIBIIDAE
+  // ============================================================
+
   hypsibiidae_generos_1: {
-    title: "Família Hypsibiidae: Gêneros (Passo 1/4)",
-    question: "1. Observe as garras externas:",
+    title: "Família Hypsibiidae: Gêneros (1/5)",
+    question: "1. Observe o tipo das garras externas (Fig. 9):",
     options: [
       {
-        text: "1. Garras externas do tipo Isohypsibius.",
+        text: "1. Garras externas do tipo Isohypsibius (ramo secundário formando ângulo reto).",
         next: "hypsibiidae_generos_2",
-        image: "assets/key-images/garras-isohypsibius.jpg", // Imagem mantida
+        image: "assets/key-images/fig9-garras-isohypsibius.jpg",
       },
       {
-        text: "1’. Garras externas do tipo Hypsibius.",
+        text: "1'. Garras externas do tipo Hypsibius (ramo secundário formando arco).",
         next: "hypsibiidae_generos_3",
-        image: "assets/key-images/garras-hypsibius.jpg", // Imagem mantida
+        image: "assets/key-images/fig9-garras-hypsibius.jpg",
       },
     ],
   },
+
   hypsibiidae_generos_2: {
-    title: "Família Hypsibiidae: Gêneros (Passo 2/4)",
-    question: "2(1). Observe as garras internas:",
+    title: "Família Hypsibiidae: Gêneros (2/5)",
+    question: "2(1). Observe o tipo das garras internas (Fig. 9):",
     options: [
       {
-        text: "2. Garras internas do tipo Isohypsibius modificado (ângulo > 90 graus).",
+        text: "2. Garras internas do tipo Isohypsibius modificado (ângulo > 90 graus); apofises assimétricas.",
         next: "mixibius_result",
-        image: "assets/key-results/Mixibius.jpg", // Placeholder
+        image: "assets/key-results/Mixibius.jpg",
       },
       {
-        text: "2’. Garras internas do tipo Hypsibius.",
+        text: "2'. Garras internas do tipo Hypsibius; apofises simétricas.",
         next: "acutuncus_result",
-        image: "assets/key-results/Acutuncus.jpg", // Placeholder
+        image: "assets/key-results/Acutuncus.jpg",
       },
     ],
   },
+
   mixibius_result: {
     title: "Resultado: Gênero Mixibius",
     result: "Gênero Mixibius",
     description:
-      "Garras internas do tipo Isohypsibius modificado (ângulo > 90 graus); apofises assimétricas.",
-    image: "assets/key-results/Mixibius.jpg", // Placeholder
+      "Garras internas do tipo Isohypsibius modificado (ângulo > 90 graus); apofises assimétricas (Fig. 9).",
+    image: "assets/key-results/Mixibius.jpg",
   },
+
   acutuncus_result: {
     title: "Resultado: Gênero Acutuncus",
     result: "Gênero Acutuncus",
     description:
-      "Garras internas do tipo Hypsibius; apofises simétricas; ovos com processos postos livremente.",
-    image: "assets/key-results/Acutuncus.jpg", // Placeholder
+      "Garras internas do tipo Hypsibius; apofises simétricas; ovos com processos postos livremente (Fig. 9).",
+    image: "assets/key-results/Acutuncus.jpg",
   },
+
   hypsibiidae_generos_3: {
-    title: "Família Hypsibiidae: Gêneros (Passo 3/4)",
-    question: "3(1). Observe o tubo bucal:",
+    title: "Família Hypsibiidae: Gêneros (3/5)",
+    question: "3(1). Observe a estrutura do tubo bucal (Fig. 12):",
     options: [
       {
-        text: "3. Tubo bucal rígido, sem parte posterior flexível e espiral.",
+        text: "3. Tubo bucal rígido, sem parte posterior de composição flexível e espiral.",
         next: "hypsibius_result",
-        image: "assets/key-results/Hypsibius.jpg", // Placeholder
+        image: "assets/key-images/fig12-tubo-rigido.jpg",
       },
       {
-        text: "3’. Tubo bucal com parte posterior flexível e espiral (tubo faríngeo).",
+        text: "3'. Tubo bucal com parte posterior de composição flexível e espiral (tubo faríngeo).",
         next: "hypsibiidae_generos_4",
-        image: "assets/tardigrade-icon.png", // Placeholder
+        image: "assets/key-images/fig12-tubo-flexivel.jpg",
       },
     ],
   },
+
   hypsibius_result: {
     title: "Resultado: Gênero Hypsibius",
     result: "Gênero Hypsibius",
     description:
-      "Tubo bucal rígido, sem parte posterior de composição flexível e espiral; limnoterrestre.",
-    image: "assets/key-results/Hypsibius.jpg", // Placeholder
+      "Tubo bucal rígido, sem parte posterior de composição flexível e espiral (Fig. 12); limnoterrestre.",
+    image: "assets/key-results/Hypsibius.jpg",
   },
+
   hypsibiidae_generos_4: {
-    title: "Família Hypsibiidae: Gêneros (Passo 4/4)",
-    question: "4(3). Observe o espessamento no tubo bucal:",
+    title: "Família Hypsibiidae: Gêneros (4/5)",
+    question:
+      "4(3). Observe o espessamento em forma de gota no tubo bucal (Fig. 12):",
     options: [
       {
-        text: "4. Espessamento em forma de gota (entre parte rígida e flexível) AUSENTE.",
+        text: "4. Espessamento em forma de gota (entre as porções rígidas e flexíveis) AUSENTE.",
         next: "adropion_result",
-        image: "assets/key-results/Adropion.jpg", // Placeholder
+        image: "assets/key-images/fig12-sem-gota.jpg",
       },
       {
-        text: "4’. Espessamento em forma de gota (entre parte rígida e flexível) PRESENTE.",
+        text: "4'. Espessamento em forma de gota (entre as porções rígidas e flexíveis) PRESENTE.",
         next: "hypsibiidae_generos_5",
-        image: "assets/tardigrade-icon.png", // Placeholder
+        image: "assets/key-images/fig12-com-gota.jpg",
       },
     ],
   },
+
   adropion_result: {
     title: "Resultado: Gênero Adropion",
     result: "Gênero Adropion",
     description:
-      "Espessamento em forma de gota entre as porções rígidas e flexíveis do tubo bucal ausente.",
-    image: "assets/key-results/Adropion.jpg", // Placeholder
+      "Espessamento em forma de gota entre as porções rígidas e flexíveis do tubo bucal ausente (Fig. 12).",
+    image: "assets/key-results/Adropion.jpg",
   },
+
   hypsibiidae_generos_5: {
-    title: "Família Hypsibiidae: Gêneros (Passo 5/5)",
-    question: "5(4). Observe os macroplacóides:",
+    title: "Família Hypsibiidae: Gêneros (5/5)",
+    question:
+      "5(4). Observe os macroplacóides (estruturas na faringe) (Fig. 13):",
     options: [
       {
         text: "5. Dois macroplacóides semelhantes em comprimento, organizados em fileiras (parecem parênteses); septo presente.",
         next: "pilatobius_result",
-        image: "assets/key-results/Pilatobius.jpg", // Placeholder
+        image: "assets/key-images/fig13-dois-macroplacoides-septo.jpg",
       },
       {
-        text: "5’. Dois macroplacóides sem septo OU três macroplacóides com ou sem septo.",
+        text: "5'. Dois macroplacóides sem septo OU três macroplacóides com ou sem septo.",
         next: "diphascon_result",
-        image: "assets/key-results/Diphascon.jpg", // Placeholder
+        image: "assets/key-images/fig13-macroplacoides-variados.jpg",
       },
     ],
   },
+
   pilatobius_result: {
     title: "Resultado: Gênero Pilatobius",
     result: "Gênero Pilatobius",
     description:
-      "Dois macroplacoides semelhantes em comprimento, organizados em fileiras (parecem parênteses); septo presente.",
-    image: "assets/key-results/Pilatobius.jpg", // Placeholder
+      "Dois macroplacóides semelhantes em comprimento, organizados em fileiras (parecem parênteses); septo presente (Fig. 13).",
+    image: "assets/key-results/Pilatobius.jpg",
   },
+
   diphascon_result: {
     title: "Resultado: Gênero Diphascon",
     result: "Gênero Diphascon",
     description:
-      "Dois macroplacoides sem septo ou três macroplacoides com ou sem septo.",
-    image: "assets/key-results/Diphascon.jpg", // Placeholder
+      "Dois macroplacóides sem septo ou três macroplacóides com ou sem septo (Fig. 13).",
+    image: "assets/key-results/Diphascon.jpg",
+  },
+
+  // ============================================================
+  // SUPERFAMÍLIA MACROBIOTOIDEA
+  // ============================================================
+
+  macrobiotoidea_familias: {
+    title: "Superfamília Macrobiotoidea: Famílias",
+    question: "1. Observe o formato das garras e a lâmina ventral (Fig. 14):",
+    options: [
+      {
+        text: "1. Garras em formato L ou V (ramos das garras divergindo desde a base); gancho evidente na lâmina ventral.",
+        next: "murrayidae_generos",
+        image: "assets/key-images/fig14-garras-L-V.jpg",
+      },
+      {
+        text: "1'. Garras em formato Y (ramos das garras fundidos por um trecho); sem gancho evidente na lâmina ventral.",
+        next: "macrobiotidae_generos_1",
+        image: "assets/key-images/fig14-garras-Y.jpg",
+      },
+    ],
+  },
+
+  // ============================================================
+  // FAMÍLIA MURRAYIDAE
+  // ============================================================
+
+  murrayidae_generos: {
+    title: "Família Murrayidae: Gêneros",
+    question: "1. Observe as garras e espessamentos cuticulares (Fig. 14):",
+    options: [
+      {
+        text: "1. Garras em forma de L muito bem desenvolvidas, com espessamentos cuticulares conectando a base das garras em cada perna.",
+        next: "dactylobiotus_result",
+        image: "assets/key-results/Dactylobiotus.jpg",
+      },
+      {
+        text: "1'. Garras em forma de V, sem espessamentos cuticulares conectando a base das garras em cada perna, com lunulas.",
+        next: "murrayon_result",
+        image: "assets/key-results/Murrayon.jpg",
+      },
+    ],
+  },
+
+  dactylobiotus_result: {
+    title: "Resultado: Gênero Dactylobiotus",
+    result: "Gênero Dactylobiotus",
+    description:
+      "Garras em forma de L muito bem desenvolvidas, com espessamentos cuticulares conectando a base das garras em cada perna (Fig. 14); limnoterrestres.",
+    image: "assets/key-results/Dactylobiotus.jpg",
+  },
+
+  murrayon_result: {
+    title: "Resultado: Gênero Murrayon",
+    result: "Gênero Murrayon",
+    description:
+      "Garras em forma de V, sem espessamentos cuticulares conectando a base das garras em cada perna, com lunulas (Fig. 14); limnoterrestres.",
+    image: "assets/key-results/Murrayon.jpg",
+  },
+
+  // ============================================================
+  // FAMÍLIA MACROBIOTIDAE
+  // ============================================================
+
+  macrobiotidae_generos_1: {
+    title: "Família Macrobiotidae: Gêneros (1/3)",
+    question: "1. Conte os macroplacóides na faringe (Fig. 13):",
+    options: [
+      {
+        text: "1. Três macroplacóides.",
+        next: "macrobiotidae_generos_2",
+        image: "assets/key-images/fig13-tres-macroplacoides.jpg",
+      },
+      {
+        text: "1'. Dois macroplacóides; microplacóide, se presente, próximo ao segundo macroplacóide.",
+        next: "macrobiotus_result",
+        image: "assets/key-results/Macrobiotus.jpg",
+      },
+    ],
+  },
+
+  macrobiotus_result: {
+    title: "Resultado: Gênero Macrobiotus",
+    result: "Gênero Macrobiotus",
+    description:
+      "Dois macroplacóides; microplacóide, se presente, próximo ao segundo macroplacóide; cutícula com ou sem poros; ovos com processos de vários tipos (Fig. 13).",
+    image: "assets/key-results/Macrobiotus.jpg",
+  },
+
+  macrobiotidae_generos_2: {
+    title: "Família Macrobiotidae: Gêneros (2/3)",
+    question:
+      "2(1). Observe a forma dos macroplacóides e lamelas bucais (Fig. 13):",
+    options: [
+      {
+        text: "2. Macroplacóides em forma de haste; lamelas bucais presentes.",
+        next: "macrobiotidae_generos_3",
+        image: "assets/key-images/fig13-macroplacoides-haste.jpg",
+      },
+      {
+        text: "2'. Macroplacóides redondos; microplacóide presente; lamelas bucais ausentes.",
+        next: "minibiotus_result",
+        image: "assets/key-results/Minibiotus.jpg",
+      },
+    ],
+  },
+
+  minibiotus_result: {
+    title: "Resultado: Gênero Minibiotus",
+    result: "Gênero Minibiotus",
+    description:
+      "Macroplacóides redondos; microplacóide presente; lamelas bucais ausentes; pápulas presentes (Fig. 13).",
+    image: "assets/key-results/Minibiotus.jpg",
+  },
+
+  macrobiotidae_generos_3: {
+    title: "Família Macrobiotidae: Gêneros (3/3)",
+    question:
+      "3(2). Observe a posição do microplacóide (se presente) (Fig. 13):",
+    options: [
+      {
+        text: "3. Microplacóide sempre presente e claramente próximo ao terceiro macroplacóide (menos que seu comprimento).",
+        next: "mesobiotus_result",
+        image: "assets/key-results/Mesobiotus.jpg",
+      },
+      {
+        text: "3'. Microplacóide, se presente, distante do terceiro macroplacóide (mais que seu comprimento).",
+        next: "paramacrobiotus_result",
+        image: "assets/key-results/Paramacrobiotus.jpg",
+      },
+    ],
+  },
+
+  mesobiotus_result: {
+    title: "Resultado: Gênero Mesobiotus",
+    result: "Gênero Mesobiotus",
+    description:
+      "Microplacóide sempre presente e claramente próximo ao terceiro macroplacóide (menos que seu comprimento); garra característica com septo interno (Fig. 13).",
+    image: "assets/key-results/Mesobiotus.jpg",
+  },
+
+  paramacrobiotus_result: {
+    title: "Resultado: Gênero Paramacrobiotus",
+    result: "Gênero Paramacrobiotus",
+    description:
+      "Microplacóide, se presente, distante do terceiro macroplacóide (mais que seu comprimento); ovos sempre com grandes processos reticulados (Fig. 13).",
+    image: "assets/key-results/Paramacrobiotus.jpg",
   },
 };
-
 
 function nextStep(stepId) {
   const step = keySteps[stepId];
   if (!step) {
-      console.error("Passo da chave não encontrado:", stepId);
-      return;
+    console.error("Passo da chave não encontrado:", stepId);
+    return;
   }
-  
+
   const currentStepData = keySteps[currentStep];
   if (currentStepData && currentStepData.question) {
     const chosenOption = currentStepData.options?.find(
@@ -1014,7 +1138,7 @@ function nextStep(stepId) {
     const response = chosenOption
       ? chosenOption.text
       : "Resposta não identificada";
-    
+
     // Adiciona ao histórico
     choiceHistory.push({
       question: currentStepData.question,
@@ -1044,7 +1168,11 @@ function showStep(step) {
         .map(
           (option) => `
         <button class="key-option" data-step="${option.next}">
-          <img src="${option.image || 'assets/tardigrade-icon.png'}" alt="Imagem para ${escapeHtml(option.text)}" class="key-option-image">
+          <img src="${
+            option.image || "assets/tardigrade-icon.png"
+          }" alt="Imagem para ${escapeHtml(
+            option.text
+          )}" class="key-option-image">
           <div class="key-option-text">${escapeHtml(option.text)}</div>
         </button>
       `
@@ -1058,11 +1186,11 @@ function showStep(step) {
 function showResult(step) {
   document.getElementById("key-step").style.display = "none";
   document.getElementById("key-result").style.display = "block";
-  
+
   // Adiciona a mensagem de "Parabéns"
   let parabensMsg = "";
   if (step.result.toLowerCase().includes("gênero")) {
-      parabensMsg = `<h4>Parabéns, você achou o ${escapeHtml(step.result)}!</h4>`;
+    parabensMsg = `<h4>Parabéns, você achou o ${escapeHtml(step.result)}!</h4>`;
   }
 
   document.getElementById("result-content").innerHTML = `
@@ -1070,7 +1198,9 @@ function showResult(step) {
       ${parabensMsg}
       <h4>Identificação: ${escapeHtml(step.result)}</h4>
       <p>${escapeHtml(step.description)}</p>
-      <img src="${step.image || 'assets/tardigrade-icon.png'}" alt="Imagem de ${escapeHtml(step.result)}" class="result-image">
+      <img src="${
+        step.image || "assets/tardigrade-icon.png"
+      }" alt="Imagem de ${escapeHtml(step.result)}" class="result-image">
     </div>
   `;
   // Não atualiza o histórico aqui, pois o histórico é atualizado no nextStep
@@ -1081,7 +1211,7 @@ function resetKey() {
   choiceHistory = [];
   document.getElementById("key-step").style.display = "block";
   document.getElementById("key-result").style.display = "none";
-  
+
   const pathDisplay = document.getElementById("path-display");
   const pathBtn = document.getElementById("path-btn");
   if (pathDisplay) {
@@ -1090,9 +1220,9 @@ function resetKey() {
   if (pathBtn) {
     pathBtn.innerHTML = '<i class="fas fa-route"></i> Mostrar Caminho';
   }
-  
+
   // Mostra o primeiro passo
-  if(keySteps[currentStep]) {
+  if (keySteps[currentStep]) {
     showStep(keySteps[currentStep]);
   } else {
     console.error("Passo inicial '1' não encontrado na chave.");
@@ -1105,15 +1235,18 @@ function resetKey() {
 function renderRecordsTable() {
   const tbody = document.getElementById("records-body");
   if (!tbody) return;
-  
+
   // Ordena por data mais recente
-  const records = getFilteredRecords().sort((a, b) => new Date(b.data) - new Date(a.data)); 
-  
+  const records = getFilteredRecords().sort(
+    (a, b) => new Date(b.data) - new Date(a.data)
+  );
+
   if (records.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Nenhum registro encontrado.</td></tr>';
-      return;
+    tbody.innerHTML =
+      '<tr><td colspan="8" style="text-align: center;">Nenhum registro encontrado.</td></tr>';
+    return;
   }
-  
+
   tbody.innerHTML = records
     .map(
       (record) => `
@@ -1121,8 +1254,11 @@ function renderRecordsTable() {
       <td>${escapeHtml(record.ordem)}</td>
       <td><i>${escapeHtml(record.genero)}</i></td>
       <td><i>${escapeHtml(record.especie || "N/A")}</i></td>
-      <td style="font-size: 0.85rem;">${record.latitude.toFixed(4)}, ${record.longitude.toFixed(4)}</td>
+      <td style="font-size: 0.85rem;">${record.latitude.toFixed(
+        4
+      )}, ${record.longitude.toFixed(4)}</td>
       <td>${escapeHtml(record.pesquisador)}</td>
+      <td>${escapeHtml(record.instituicao || "N/A")}</td>
       <td>${new Date(record.data).toLocaleDateString("pt-BR")}</td>
       <td>
         <button class="btn-action btn-delete" data-id="${
@@ -1174,109 +1310,136 @@ function renderAll() {
 // DADOS E FUNÇÕES DO GUIA DE ESTRUTURAS (Sem alterações)
 // ============================================================
 const tardigradeStructures = [
-    {
-        id: "cirros-laterais-A",
-        name: "Cirros Laterais A",
-        description: "Estruturas sensoriais em forma de seta (cA) localizadas lateralmente na cabeça. Essenciais para diferenciar Heterotardigrada (presentes) de Eutardigrada (ausentes).",
-        image: "assets/key-images/cirro-A-presente.jpg"
-    },
-    {
-        id: "cirro-mediano",
-        name: "Cirro Mediano",
-        description: "Uma única estrutura sensorial no centro da cabeça. Comum em Arthrotardigrada, mas ausente em Echiniscoidea.",
-        image: "assets/key-images/cirro-mediano-presente.jpg"
-    },
-    {
-        id: "placas-dorsais",
-        name: "Placas Dorsais e Laterais",
-        description: "Armadura cuticular protetora encontrada em Echiniscoidea (ex: Echiniscus). Ausente em Eutardigrada.",
-        image: "assets/key-images/4-garras-placas.jpg"
-    },
-    {
-        id: "papilas-cefalicas",
-        name: "Papilas Cefálicas",
-        description: "Pequenas protuberâncias sensoriais na cabeça, características da Ordem Apochela (ex: Milnesium).",
-        image: "assets/key-images/apochela-cabeca.jpg"
-    },
-    {
-        id: "garras-assimetricas",
-        name: "Garras Assimétricas (2-1-2-1)",
-        description: "Garras de tamanhos ou formas diferentes, com sequência 2-1-2-1. Típico de Hypsibioidea e Isohypsibioidea.",
-        image: "assets/key-images/garras-assimetricas.jpg"
-    },
-    {
-        id: "garras-simetricas",
-        name: "Garras Simétricas (2-1-1-2)",
-        description: "Garras semelhantes em tamanho e forma, com sequência 2-1-1-2. Característica de Macrobiotoidea.",
-        image: "assets/key-images/garras-simetricas.jpg"
-    },
-    {
-        id: "garras-tipo-Y",
-        name: "Garras Tipo Y (Macrobiotidae)",
-        description: "Garras onde os ramos primário e secundário são fundidos por um trecho, formando um 'Y'.",
-        image: "assets/key-images/garras-Y.jpg"
-    },
-    {
-        id: "garras-tipo-V-L",
-        name: "Garras Tipo V ou L (Murrayidae)",
-        description: "Garras onde os ramos divergem diretamente da base, sem um trecho fundido, formando um 'V' ou 'L'.",
-        image: "assets/key-images/garras-V-L.jpg"
-    },
-    {
-        id: "garras-tipo-isohypsibius",
-        name: "Garras Tipo Isohypsibius",
-        description: "Garras onde o ramo secundário forma um ângulo reto (ou maior) com a base da garra.",
-        image: "assets/key-images/garras-isohypsibius.jpg"
-    },
-    {
-        id: "garras-tipo-hypsibius",
-        name: "Garras Tipo Hypsibius",
-        description: "Garras externas onde o ramo secundário forma um arco comum com a porção basal.",
-        image: "assets/key-images/garras-hypsibius.jpg"
-    },
-    {
-        id: "lamina-ventral",
-        name: "Lâmina Ventral",
-        description: "Uma estrutura presente no tubo bucal de alguns gêneros, como Doryphoribius.",
-        image: "assets/key-images/lamina-ventral-presente.jpg"
-    },
-    {
-        id: "lamelas-peribuccais",
-        name: "Lamelas Peribuccais",
-        description: "Anel de lamelas delicadas ao redor da boca. Presentes em gêneros como Pseudobiotus.",
-        image: "assets/key-images/lamelas-presentes.jpg"
-    }
+  {
+    id: "cirros-laterais-A",
+    name: "Cirros Laterais A",
+    description:
+      "Estruturas sensoriais em forma de seta (cA) localizadas lateralmente na cabeça. Essenciais para diferenciar Heterotardigrada (presentes) de Eutardigrada (ausentes).",
+    image: "assets/key-images/cirro-A-presente.jpg",
+  },
+  {
+    id: "cirro-mediano",
+    name: "Cirro Mediano",
+    description:
+      "Uma única estrutura sensorial no centro da cabeça. Comum em Arthrotardigrada, mas ausente em Echiniscoidea.",
+    image: "assets/key-images/cirro-mediano-presente.jpg",
+  },
+  {
+    id: "placas-dorsais",
+    name: "Placas Dorsais e Laterais",
+    description:
+      "Armadura cuticular protetora encontrada em Echiniscoidea (ex: Echiniscus). Ausente em Eutardigrada.",
+    image: "assets/key-images/4-garras-placas.jpg",
+  },
+  {
+    id: "papilas-cefalicas",
+    name: "Papilas Cefálicas",
+    description:
+      "Pequenas protuberâncias sensoriais na cabeça, características da Ordem Apochela (ex: Milnesium).",
+    image: "assets/key-images/apochela-cabeca.jpg",
+  },
+  {
+    id: "garras-assimetricas",
+    name: "Garras Assimétricas (2-1-2-1)",
+    description:
+      "Garras de tamanhos ou formas diferentes, com sequência 2-1-2-1. Típico de Hypsibioidea e Isohypsibioidea.",
+    image: "assets/key-images/garras-assimetricas.jpg",
+  },
+  {
+    id: "garras-simetricas",
+    name: "Garras Simétricas (2-1-1-2)",
+    description:
+      "Garras semelhantes em tamanho e forma, com sequência 2-1-1-2. Característica de Macrobiotoidea.",
+    image: "assets/key-images/garras-simetricas.jpg",
+  },
+  {
+    id: "garras-tipo-Y",
+    name: "Garras Tipo Y (Macrobiotidae)",
+    description:
+      "Garras onde os ramos primário e secundário são fundidos por um trecho, formando um 'Y'.",
+    image: "assets/key-images/garras-Y.jpg",
+  },
+  {
+    id: "garras-tipo-V-L",
+    name: "Garras Tipo V ou L (Murrayidae)",
+    description:
+      "Garras onde os ramos divergem diretamente da base, sem um trecho fundido, formando um 'V' ou 'L'.",
+    image: "assets/key-images/garras-V-L.jpg",
+  },
+  {
+    id: "garras-tipo-isohypsibius",
+    name: "Garras Tipo Isohypsibius",
+    description:
+      "Garras onde o ramo secundário forma um ângulo reto (ou maior) com a base da garra.",
+    image: "assets/key-images/garras-isohypsibius.jpg",
+  },
+  {
+    id: "garras-tipo-hypsibius",
+    name: "Garras Tipo Hypsibius",
+    description:
+      "Garras externas onde o ramo secundário forma um arco comum com a porção basal.",
+    image: "assets/key-images/garras-hypsibius.jpg",
+  },
+  {
+    id: "lamina-ventral",
+    name: "Lâmina Ventral",
+    description:
+      "Uma estrutura presente no tubo bucal de alguns gêneros, como Doryphoribius.",
+    image: "assets/key-images/lamina-ventral-presente.jpg",
+  },
+  {
+    id: "lamelas-peribuccais",
+    name: "Lamelas Peribuccais",
+    description:
+      "Anel de lamelas delicadas ao redor da boca. Presentes em gêneros como Pseudobiotus.",
+    image: "assets/key-images/lamelas-presentes.jpg",
+  },
 ];
 
 function renderStructures() {
-    const container = document.getElementById("estrutura-cards-container");
-    if (!container) return;
+  const container = document.getElementById("estrutura-cards-container");
+  if (!container) return;
 
-    const searchTerm = document.getElementById("estrutura-search").value.toLowerCase();
-    
-    const filteredStructures = tardigradeStructures.filter(estrutura =>
-        estrutura.name.toLowerCase().includes(searchTerm) ||
-        estrutura.description.toLowerCase().includes(searchTerm)
-    );
+  const searchTerm = document
+    .getElementById("estrutura-search")
+    .value.toLowerCase();
 
-    if (filteredStructures.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); grid-column: 1 / -1;">Nenhuma estrutura encontrada.</p>';
-        return;
-    }
+  const filteredStructures = tardigradeStructures.filter(
+    (estrutura) =>
+      estrutura.name.toLowerCase().includes(searchTerm) ||
+      estrutura.description.toLowerCase().includes(searchTerm)
+  );
 
-    container.innerHTML = filteredStructures.map(estrutura => `
+  if (filteredStructures.length === 0) {
+    container.innerHTML =
+      '<p style="text-align: center; color: var(--text-secondary); grid-column: 1 / -1;">Nenhuma estrutura encontrada.</p>';
+    return;
+  }
+
+  container.innerHTML = filteredStructures
+    .map(
+      (estrutura) => `
         <div class="estrutura-card" data-id="${estrutura.id}">
             <div class="estrutura-card-image-container">
-                <img src="${estrutura.image || 'assets/tardigrade-icon.png'}" alt="${escapeHtml(estrutura.name)}" class="estrutura-card-image">
+                <img src="${
+                  estrutura.image || "assets/tardigrade-icon.png"
+                }" alt="${escapeHtml(
+        estrutura.name
+      )}" class="estrutura-card-image">
             </div>
             <div class="estrutura-card-content">
-                <h4 class="estrutura-card-title">${escapeHtml(estrutura.name)}</h4>
-                <p class="estrutura-card-description">${escapeHtml(estrutura.description)}</p>
+                <h4 class="estrutura-card-title">${escapeHtml(
+                  estrutura.name
+                )}</h4>
+                <p class="estrutura-card-description">${escapeHtml(
+                  estrutura.description
+                )}</p>
             </div>
         </div>
-    `).join('');
+    `
+    )
+    .join("");
 }
-
 
 // ============================================================
 // INICIALIZAÇÃO DA APLICAÇÃO (Atualizada)
@@ -1297,10 +1460,10 @@ function init() {
   sectionNavTriggers.forEach((trigger) => {
     trigger.addEventListener("click", (e) => {
       e.preventDefault();
-      
+
       // Ignora botões desabilitados (placeholders)
-      if (trigger.disabled) return; 
-      
+      if (trigger.disabled) return;
+
       const sectionId =
         trigger.dataset.section || trigger.getAttribute("href").substring(1);
       showSection(sectionId);
@@ -1318,11 +1481,11 @@ function init() {
   if (getLocationBtn) {
     getLocationBtn.addEventListener("click", getLocation);
   }
-  
+
   // NOVO: Event Listener para Preview de Imagem
   const fotoInput = document.getElementById("foto");
   if (fotoInput) {
-      fotoInput.addEventListener("change", handleImagePreview);
+    fotoInput.addEventListener("change", handleImagePreview);
   }
 
   // Event Listener para Filtro de Grupos (Mapa)
@@ -1330,17 +1493,17 @@ function init() {
   if (grupoFilter) {
     grupoFilter.addEventListener("change", renderAll);
   }
-  
-  // NOVO: Event Listener para Filtro de Gênero (Mapa)
+
+  // Event Listener para Filtro de Gênero (Mapa)
   const generoFilter = document.getElementById("genero-filter");
   if (generoFilter) {
     generoFilter.addEventListener("change", renderAll);
   }
-  
+
   // Event Listener para Filtro da Galeria de Estruturas
   const estruturaSearch = document.getElementById("estrutura-search");
   if (estruturaSearch) {
-      estruturaSearch.addEventListener("input", renderStructures);
+    estruturaSearch.addEventListener("input", renderStructures);
   }
 
   // Event Listeners para Delegação (Delete e Chave)
@@ -1397,7 +1560,7 @@ function showPath() {
   const pathSteps = document.getElementById("path-steps");
   const pathBtn = document.getElementById("path-btn");
   if (!pathDisplay || !pathSteps || !pathBtn) return;
-  
+
   if (pathDisplay.style.display === "none" || !pathDisplay.style.display) {
     if (choiceHistory.length === 0) {
       pathSteps.innerHTML =
@@ -1405,9 +1568,9 @@ function showPath() {
     } else {
       pathSteps.innerHTML = choiceHistory
         .map((entry) => {
-            return `<li><strong>${escapeHtml(
-              entry.question
-            )}</strong><br><em>→ ${escapeHtml(entry.answer)}</em></li>`;
+          return `<li><strong>${escapeHtml(
+            entry.question
+          )}</strong><br><em>→ ${escapeHtml(entry.answer)}</em></li>`;
         })
         .join("");
     }
@@ -1420,7 +1583,7 @@ function showPath() {
 }
 
 function escapeHtml(text) {
-  if (typeof text !== 'string') {
+  if (typeof text !== "string") {
     return text;
   }
   const div = document.createElement("div");

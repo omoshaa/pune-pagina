@@ -38,7 +38,7 @@
           <a href="#mapa-tardigrada" class="nav-item">Mapa</a>
           <a href="#identificacao" class="nav-item">Identificação</a>
           <a href="#sobre-tardigrados" class="nav-item">Sobre Tardígrados</a>
-          <a href="#sobre" class="nav-item">Sobre o Projeto</a>
+          <a href="#sobre" class="nav-item">Projeto PUNE</a>
         </div>
 
         <button class="mobile-menu-btn" aria-label="Menu">
@@ -71,7 +71,7 @@
               </a>
               <a href="#sobre" class="mobile-nav-item">
                 <i class="fas fa-info-circle" aria-hidden="true"></i>
-                <span>Sobre o Projeto</span>
+                <span>Projeto PUNE</span>
               </a>
             </nav>
           </div>
@@ -112,8 +112,8 @@
 
             <button class="menu-btn" data-section="sobre">
               <i class="fas fa-info-circle" aria-hidden="true"></i>
-              <h3>Sobre o Projeto</h3>
-              <p>Conheça a equipe, objetivos e parceiros</p>
+              <h3>Sobre o Projeto PUNE</h3>
+              <p>Conheça o Projeto Urso Na Escola, equipe e objetivos</p>
             </button>
           </div>
         </div>
@@ -121,10 +121,12 @@
 
       <section id="mapa-tardigrada" class="container section hidden">
         <div class="section-header">
-          <button class="back-btn" data-section="home">
-            <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
-          </button>
-          <h2>Mapa de Tardigrada</h2>
+          <div>
+            <button class="back-btn" data-section="home">
+              <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
+            </button>
+            <h2>Mapa de Tardigrada</h2>
+          </div>
         </div>
 
         <div class="stats-container">
@@ -142,18 +144,28 @@
           </div>
         </div>
 
-        <div
-          class="filter-container"
-          style="display: flex; gap: 10px; margin-bottom: 20px"
-        >
-          <select id="grupo-filter" style="flex: 1">
-            <option value="">Todos os Grupos</option>
-            <option value="Heterotardigrada">Heterotardigrada</option>
-            <option value="Eutardigrada">Eutardigrada</option>
-          </select>
-          <select id="genero-filter" style="flex: 1">
-            <option value="">Todos os Gêneros</option>
-          </select>
+        <div class="filter-container">
+          <div class="filter-group">
+            <label for="grupo-filter">
+              <i class="fas fa-layer-group" aria-hidden="true"></i>
+              Filtrar por Grupo
+            </label>
+            <select id="grupo-filter" class="filter-select">
+              <option value="">Todos os Grupos</option>
+              <option value="Heterotardigrada">Heterotardigrada</option>
+              <option value="Eutardigrada">Eutardigrada</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="genero-filter">
+              <i class="fas fa-dna" aria-hidden="true"></i>
+              Filtrar por Gênero
+            </label>
+            <select id="genero-filter" class="filter-select">
+              <option value="">Todos os Gêneros</option>
+            </select>
+          </div>
         </div>
 
         <div id="map"></div>
@@ -169,6 +181,7 @@
                   <th>Espécie</th>
                   <th>Coordenadas</th>
                   <th>Pesquisador</th>
+                  <th>Instituição</th>
                   <th>Data</th>
                   <th>Ações</th>
                 </tr>
@@ -181,10 +194,12 @@
 
       <section id="cadastrar" class="container section hidden">
         <div class="section-header">
-          <button class="back-btn" data-section="identificacao">
-            <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
-          </button>
-          <h2>Cadastrar Novo Achado</h2>
+          <div>
+            <button class="back-btn" data-section="identificacao">
+              <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
+            </button>
+            <h2>Cadastrar Novo Achado</h2>
+          </div>
         </div>
 
         <form id="form">
@@ -314,10 +329,12 @@
 
       <section id="chave-dicotomica" class="container section hidden">
         <div class="section-header">
-          <button class="back-btn" data-section="identificacao">
-            <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
-          </button>
-          <h2>Chave Dicotômica — Tardigrada</h2>
+          <div>
+            <button class="back-btn" data-section="identificacao">
+              <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
+            </button>
+            <h2>Chave Dicotômica — Tardigrada</h2>
+          </div>
         </div>
 
         <div class="dichotomous-key">
@@ -358,22 +375,64 @@
           </div>
 
           <div class="key-citation">
-            <small
-              ><em
-                >Base: Chave de Damborenea, Rogers & Thorp (2020) e outras
-                referências. Adaptado por Danilo de Castro Santos.</em
-              ></small
-            >
+            <h4>Referências Bibliográficas</h4>
+            <div class="references-list">
+              <p>
+                <strong
+                  >Damborenea, C., Rogers, D. C., & Thorp, J. H. (2020).</strong
+                >
+                <em>Thorp and Covich's Freshwater Invertebrates</em> (Fourth
+                Edition), Volume 3: Keys to Nearctic Fauna, Chapter 25: Phylum
+                Tardigrada, pp. 679–696. Academic Press.
+                https://doi.org/10.1016/B978-0-12-385026-3.00025-2
+              </p>
+              <p>
+                <strong
+                  >Bertolani, R., Guidetti, R., Marchioro, T., Altiero, T.,
+                  Rebecchi, L., & Cesari, M. (2014).</strong
+                >
+                Phylogeny of Eutardigrada: new molecular data and their
+                morphological support lead to the identification of new
+                evolutionary lineages.
+                <em>Molecular Phylogenetics and Evolution</em>, 76, 110–126.
+              </p>
+              <p>
+                <strong>Guidetti, R., & Bertolani, R. (2005).</strong>
+                Tardigrade taxonomy: an updated check list of the taxa and a
+                list of characters for their identification.
+                <em>Zootaxa</em>, 845, 1–46.
+              </p>
+              <p>
+                <strong
+                  >Kaczmarek, Ł., Michalczyk, Ł., & McInnes, S. J.
+                  (2016).</strong
+                >
+                Annotated zoogeography of non-marine Tardigrada. Part III: North
+                America and Greenland.
+                <em>Zootaxa</em>, 4203(1), 1–249.
+              </p>
+            </div>
+            <p style="margin-top: 1rem">
+              <small
+                ><em
+                  >Chave dicotômica adaptada para o Projeto PUNE (Projeto Urso
+                  Na Escola) por Prof. Danilo de Castro Santos, sob consultoria
+                  do Prof. Dr. André Garraffoni (UNICAMP - LEOM).</em
+                ></small
+              >
+            </p>
           </div>
         </div>
       </section>
 
       <section id="identificacao" class="container section hidden">
         <div class="section-header">
-          <button class="back-btn" data-section="home">
-            <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
-          </button>
-          <h2>Identificação de Tardígrados</h2>
+          <div>
+            <button class="back-btn" data-section="home">
+              <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
+            </button>
+            <h2>Identificação de Tardígrados</h2>
+          </div>
         </div>
 
         <div class="key-intro">
@@ -424,10 +483,12 @@
 
       <section id="guia-estruturas" class="container section hidden">
         <div class="section-header">
-          <button class="back-btn" data-section="identificacao">
-            <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
-          </button>
-          <h2>Guia de Estruturas</h2>
+          <div>
+            <button class="back-btn" data-section="identificacao">
+              <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
+            </button>
+            <h2>Guia de Estruturas</h2>
+          </div>
         </div>
 
         <div class="key-intro">
@@ -456,10 +517,12 @@
 
       <section id="sobre-tardigrados" class="container section hidden">
         <div class="section-header">
-          <button class="back-btn" data-section="home">
-            <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
-          </button>
-          <h2>Sobre os Tardígrados</h2>
+          <div>
+            <button class="back-btn" data-section="home">
+              <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
+            </button>
+            <h2>Sobre os Tardígrados</h2>
+          </div>
         </div>
 
         <div class="about-content">
@@ -487,111 +550,164 @@
 
       <section id="sobre" class="container section hidden">
         <div class="section-header">
-          <button class="back-btn" data-section="home">
-            <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
-          </button>
-          <h2>Sobre o TardiStudy</h2>
+          <div>
+            <button class="back-btn" data-section="home">
+              <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
+            </button>
+            <h2>Sobre o Projeto PUNE</h2>
+          </div>
+          <p class="section-subtitle">Projeto Urso Na Escola</p>
         </div>
 
         <div class="about-content">
-          <div class="about-section">
-            <h3>
-              <i class="fas fa-history" aria-hidden="true"></i> História do
-              Projeto (PUNE)
-            </h3>
-            <p>
-              O TardiStudy nasceu do "Projeto Urso Na Escola" (PUNE), focado em
-              <strong
-                >integrar o ensino de biologia com a tecnologia, utilizando os
-                tardígrados como modelo de estudo.</strong
-              >
+          <div class="about-section featured-section">
+            <div class="section-icon">
+              <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+            </div>
+            <h3>O que é o PUNE?</h3>
+            <p class="highlight-text">
+              O <strong>PUNE (Projeto Urso Na Escola)</strong> é uma iniciativa
+              educacional inovadora que utiliza os tardígrados - conhecidos como
+              "ursos d'água" - como modelo para integrar o ensino de biologia
+              com a tecnologia. O projeto promove a ciência cidadã, permitindo
+              que estudantes e professores contribuam ativamente para o
+              conhecimento científico sobre esses fascinantes microorganismos.
             </p>
           </div>
 
           <div class="about-section">
-            <h3>
-              <i class="fas fa-users" aria-hidden="true"></i> Equipe do Projeto
-            </h3>
+            <div class="section-icon">
+              <i class="fas fa-bullseye" aria-hidden="true"></i>
+            </div>
+            <h3>Objetivos do Projeto</h3>
+            <ul class="objectives-list">
+              <li>
+                <i class="fas fa-check-circle" aria-hidden="true"></i>
+                <span
+                  >Democratizar o acesso ao conhecimento sobre Tardigrada
+                  através de ferramentas digitais acessíveis</span
+                >
+              </li>
+              <li>
+                <i class="fas fa-check-circle" aria-hidden="true"></i>
+                <span
+                  >Criar uma plataforma interativa para identificação e
+                  catalogação de tardígrados encontrados em diferentes
+                  regiões</span
+                >
+              </li>
+              <li>
+                <i class="fas fa-check-circle" aria-hidden="true"></i>
+                <span
+                  >Promover a colaboração científica entre estudantes,
+                  professores e pesquisadores da área</span
+                >
+              </li>
+              <li>
+                <i class="fas fa-check-circle" aria-hidden="true"></i>
+                <span
+                  >Desenvolver um banco de dados científico-educacional sobre a
+                  diversidade e distribuição de Tardigrada no Brasil</span
+                >
+              </li>
+              <li>
+                <i class="fas fa-check-circle" aria-hidden="true"></i>
+                <span
+                  >Formar uma rede de colaboração científica e educacional
+                  envolvendo escolas, universidades e pesquisadores</span
+                >
+              </li>
+              <li>
+                <i class="fas fa-check-circle" aria-hidden="true"></i>
+                <span
+                  >Contribuir para o avanço do conhecimento sobre os organismos
+                  mais resistentes do planeta</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="about-section">
+            <div class="section-icon">
+              <i class="fas fa-users" aria-hidden="true"></i>
+            </div>
+            <h3>Equipe do Projeto</h3>
             <div class="team-grid">
               <div class="team-member">
-                <h4>CEO da Página</h4>
-                <p>
-                  <strong>Prof. Danilo de Castro Santos</strong><br />
+                <div class="member-icon">
+                  <i class="fas fa-user-tie" aria-hidden="true"></i>
+                </div>
+                <h4>Coordenador do Projeto</h4>
+                <p class="member-name">Prof. Danilo de Castro Santos</p>
+                <p class="member-info">
                   Mestrando na Universidade Estadual de Campinas<br />
                   Departamento de Biologia Animal
                 </p>
               </div>
+
               <div class="team-member">
+                <div class="member-icon">
+                  <i class="fas fa-code" aria-hidden="true"></i>
+                </div>
                 <h4>Programador</h4>
-                <p>
-                  <strong>Moisés Filipe</strong><br />
-                  Desenvolvedor Full Stack
-                  <a href="https://github.com/omoshaa">GitHub</a>
+                <p class="member-name">Moisés Filipe</p>
+                <p class="member-info">
+                  Desenvolvedor Full Stack<br />
+                  <a
+                    href="https://github.com/omoshaa"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <i class="fab fa-github"></i> GitHub
+                  </a>
                 </p>
               </div>
+
               <div class="team-member">
-                <h4>Integrantes do projeto</h4>
-                <p>
-                  <strong
-                    >(Nome dos alunos participantes dos anos de 2025)</strong
-                  ><br />
-                  Universidade [Nome]
+                <div class="member-icon">
+                  <i class="fas fa-user-graduate" aria-hidden="true"></i>
+                </div>
+                <h4>Integrantes do Projeto</h4>
+                <p class="member-name">Alunos Participantes</p>
+                <p class="member-info">
+                  Estudantes das escolas parceiras<br />
+                  Ano: 2025
                 </p>
               </div>
+
               <div class="team-member">
+                <div class="member-icon">
+                  <i class="fas fa-microscope" aria-hidden="true"></i>
+                </div>
                 <h4>Consultoria Científica</h4>
-                <p>
-                  <strong>Prof. Dr. André Reinaldo Senna Garraffoni</strong
-                  ><br />
-                  Professor da Universidade Estadual de Campinas
+                <p class="member-name">
+                  Prof. Dr. André Reinaldo Senna Garraffoni
+                </p>
+                <p class="member-info">
+                  Professor da Universidade Estadual de Campinas<br />
+                  Especialista em Tardigrada
                 </p>
               </div>
+
               <div class="team-member">
-                <h4>Parceria</h4>
-                <p>
-                  <strong
-                    >Laboratório de Evolução de Organismo Meiofaunais
-                    (LEOM)</strong
-                  ><br />
-                  Universidade Estadual de Campinas (UNICAMP)
+                <div class="member-icon">
+                  <i class="fas fa-flask" aria-hidden="true"></i>
+                </div>
+                <h4>Parceria Institucional</h4>
+                <p class="member-name">LEOM - UNICAMP</p>
+                <p class="member-info">
+                  Laboratório de Evolução de Organismos Meiofaunais<br />
+                  Universidade Estadual de Campinas
                 </p>
               </div>
             </div>
           </div>
 
           <div class="about-section">
-            <h3>
-              <i class="fas fa-bullseye" aria-hidden="true"></i> Objetivos do
-              Projeto
-            </h3>
-            <ul>
-              <li>
-                Facilitar o ensino e aprendizado da taxonomia de Tardigrada
-              </li>
-              <li>
-                Criar uma plataforma interativa para identificação de
-                tardígrados
-              </li>
-              <li>
-                Promover a colaboração científica entre estudantes e
-                pesquisadores da área
-              </li>
-              <li>
-                Desenvolver um banco de dados educacional sobre a diversidade de
-                Tardigrada
-              </li>
-              <li>
-                Contribuir para o conhecimento dos organismos mais resistentes
-                do planeta
-              </li>
-            </ul>
-          </div>
-
-          <div class="about-section">
-            <h3>
-              <i class="fas fa-code" aria-hidden="true"></i> Tecnologias
-              Utilizadas
-            </h3>
+            <div class="section-icon">
+              <i class="fas fa-code" aria-hidden="true"></i>
+            </div>
+            <h3>Tecnologias Utilizadas</h3>
             <div class="tech-grid">
               <div class="tech-item">
                 <i class="fab fa-html5" aria-hidden="true"></i>
@@ -612,17 +728,31 @@
             </div>
           </div>
 
-          <div class="about-section">
-            <h3><i class="fas fa-envelope" aria-hidden="true"></i> Contato</h3>
+          <div class="about-section contact-section">
+            <div class="section-icon">
+              <i class="fas fa-envelope" aria-hidden="true"></i>
+            </div>
+            <h3>Entre em Contato</h3>
             <p>
-              Para mais informações sobre o projeto TardiStudy, entre em
-              contato:
+              Para mais informações sobre o projeto TardiStudy, colaborações ou
+              dúvidas:
             </p>
-            <p>
-              <strong>E-mail:</strong>
-              danilocastros@prof.educacao.sp.gov.br<br />
-              <strong>Instagram:</strong> @ursonaescola
-            </p>
+            <div class="contact-info">
+              <div class="contact-item">
+                <i class="fas fa-envelope" aria-hidden="true"></i>
+                <div>
+                  <strong>E-mail</strong>
+                  <p>danilocastros@prof.educacao.sp.gov.br</p>
+                </div>
+              </div>
+              <div class="contact-item">
+                <i class="fab fa-instagram" aria-hidden="true"></i>
+                <div>
+                  <strong>Instagram</strong>
+                  <p>@ursonaescola</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
